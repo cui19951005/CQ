@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service.iml" group="CQ-sdk-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_main.iml" group="CQ-sdk-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_test.iml" group="CQ-sdk-service" />
+    </modules>
+  </component>
+</project>

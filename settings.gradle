@@ -1,0 +1,3 @@
+rootProject.name = 'CQ'
+include("CQ-sdk-service")
+
