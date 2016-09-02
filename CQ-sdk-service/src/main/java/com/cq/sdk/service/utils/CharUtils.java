@@ -1,9 +1,4 @@
 package com.cq.sdk.service.utils;
-import com.cq.sdk.service.potential.Trusteeship;
-import com.cq.sdk.service.potential.utils.InjectionType;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**

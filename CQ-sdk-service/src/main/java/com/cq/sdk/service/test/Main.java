@@ -11,7 +11,7 @@ import com.cq.sdk.service.utils.Logger;
 /**
  * Created by admin on 2016/9/2.
  */
-@Entrance("com.cq.sdk.service.*")
+@Entrance(value = "com.cq.sdk.service.*",injectionType = InjectionType.Annotation)
 public class Main {
     @Autowired
     UserService userService;

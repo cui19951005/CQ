@@ -29,11 +29,12 @@ public class Trusteeship {
             this.mainClass=mainClass;
            for(Method method : mainClass.getDeclaredMethods()){
                Execute execute=method.getAnnotation(Execute.class);
-               if(entrance !=null){
+               if(execute !=null){
                    this.mainMethod=mainClass.getName()+"."+method.getName();
                    break;
                }
            }
+           this.injectionType=entrance.injectionType();
         }
         this.init();
         this.start();
