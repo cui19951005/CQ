@@ -1,7 +1,5 @@
 package com.cq.sdk.service.utils;
-
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
+import com.cq.sdk.service.sun.ParameterizedTypeImpl;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -375,7 +373,7 @@ public class Json {
                                 listClazz = new ClassSuper(temp.getRawType());
                                 listClazz.setParams(temp.getActualTypeArguments());
                             }else{//无嵌套
-                                listClazz = new ClassSuper(Class.forName(itemType.getTypeName()));
+                                listClazz = new ClassSuper(Class.forName(itemType.toString()));
                             }
                         }
                     }else if(fieldType instanceof  Class){//泛型无参数
@@ -410,7 +408,7 @@ public class Json {
                                     classSuper.setParams(parameterizedType.getActualTypeArguments());
                                     key=Json.convert(json,classSuper,entry.getValue());
                                 }else{
-                                    key=Json.convert(json,new ClassSuper(type.getParams()[0].getTypeName()),entry.getKey());
+                                    key=Json.convert(json,new ClassSuper(type.getParams()[0].toString()),entry.getKey());
                                 }
                                 Object value=null;
                                 if(type.getParams()[1] instanceof ParameterizedTypeImpl){//泛型套泛型
@@ -419,7 +417,7 @@ public class Json {
                                     classSuper.setParams(parameterizedType.getActualTypeArguments());
                                     value=Json.convert(json,classSuper,entry.getValue());
                                 }else{
-                                    value=Json.convert(json,new ClassSuper(type.getParams()[1].getTypeName()),entry.getValue());
+                                    value=Json.convert(json,new ClassSuper(type.getParams()[1].toString()),entry.getValue());
                                 }
                                 map.put(key,value);
                             }

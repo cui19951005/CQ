@@ -116,10 +116,5 @@ public class CharUtils {
         }
         return charBuffer.getValue();
     }
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        Trusteeship trusteeship=new Trusteeship("com.cq.sdk.service.*","com.cq.sdk.service.android.qq.utils.Tea.main", InjectionType.Annotation);
-        trusteeship.init();
-        trusteeship.start();
 
-    }
 }

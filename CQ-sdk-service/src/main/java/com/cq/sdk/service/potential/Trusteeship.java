@@ -1,14 +1,12 @@
 package com.cq.sdk.service.potential;
 
-import com.cq.sdk.service.potential.annotation.Autowired;
-import com.cq.sdk.service.potential.annotation.Component;
-import com.cq.sdk.service.potential.annotation.Repository;
-import com.cq.sdk.service.potential.annotation.Service;
+import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.potential.utils.InjectionType;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,17 +22,35 @@ public class Trusteeship {
     private Class mainClass;
     private InjectionType injectionType=InjectionType.AutoAll;//默认采用全部注入
 
+    public Trusteeship(Class mainClass) {
+        Entrance entrance= (Entrance) mainClass.getAnnotation(Entrance.class);
+        if(entrance!=null){
+            this.packagePath=entrance.value();
+            this.mainClass=mainClass;
+           for(Method method : mainClass.getDeclaredMethods()){
+               Execute execute=method.getAnnotation(Execute.class);
+               if(entrance !=null){
+                   this.mainMethod=mainClass.getName()+"."+method.getName();
+                   break;
+               }
+           }
+        }
+        this.init();
+        this.start();
+    }
+
     public Trusteeship(String packagePath, String mainMethod) {
-        this.packagePath = packagePath;
-        this.mainMethod = mainMethod;
+        this(packagePath,mainMethod,InjectionType.AutoAll);
     }
 
     public Trusteeship(String packagePath, String mainMethod, InjectionType injectionType) {
         this.packagePath = packagePath;
         this.mainMethod = mainMethod;
         this.injectionType=injectionType;
+        this.init();
+        this.start();
     }
-    public void init(){
+    private void init(){
         try {
             this.rootDir = this.getClass().getResource("/").getFile().substring(1);
             String absPath=this.rootDir+packagePath.replace(".","/").replace("*","");
@@ -62,7 +78,7 @@ public class Trusteeship {
             }
         }
     }
-    public void start(){
+    private void start(){
         try {
             int index=this.mainMethod.lastIndexOf(".");
             String method=this.mainMethod.substring(index+1);
