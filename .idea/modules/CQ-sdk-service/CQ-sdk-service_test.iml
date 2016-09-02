@@ -10,6 +10,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="CQ-sdk-service_main" />
+    <orderEntry type="library" name="Gradle: org.mybatis:mybatis:3.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.alibaba:druid:1.0.25" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="CQ-sdk-service_main" />
 </module>

@@ -3,13 +3,17 @@ package com.cq.sdk.service.potential.annotation;
 import java.lang.annotation.*;
 
 /**
- * Created by admin on 2016/9/1.
+ * Created by CuiYaLei on 2016/9/2.
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Autowired {
-    boolean value() default true;
+public @interface Property {
+    /**
+     * 配置文件中前缀jdbc.
+     * @return
+     */
+    String value() default "";
 
 
 }

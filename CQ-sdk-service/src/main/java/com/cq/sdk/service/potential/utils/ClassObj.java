@@ -10,7 +10,10 @@ public class ClassObj {
     public ClassObj(Class clazz) {
         this.clazz = clazz;
     }
-
+    public ClassObj(Object object){
+        this.clazz=object.getClass();
+        this.object=object;
+    }
     public Class getClazz() {
         return clazz;
     }

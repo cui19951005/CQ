@@ -15,5 +15,7 @@ subprojects {
     }
 
     dependencies {
+        compile "org.mybatis:mybatis:3.4.1"
+        compile "com.alibaba:druid:1.0.25"
     }
 }

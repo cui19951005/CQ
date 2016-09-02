@@ -1,5 +1,7 @@
 package com.cq.sdk.service.utils;
 
+import java.lang.reflect.Method;
+
 /**
  * Created by CuiYaLei on 2016/8/20.
  */
@@ -97,7 +99,18 @@ public class Logger {
                 }
             }
             return sb.toString();
+        }else if(object.getClass().isPrimitive()){
+            return object.toString();
+        }else{
+            try {
+                Method method=object.getClass().getMethod("toString");
+                if(method.isAnnotationPresent(Override.class)){
+                    return object.toString();
+                }
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
-        return Json.toJson(object);
+        return object.toString();
     }
 }

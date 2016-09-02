@@ -5,11 +5,11 @@ import com.cq.sdk.service.android.qq.NetworkService;
 import com.cq.sdk.service.android.qq.UserService;
 import com.cq.sdk.service.android.qq.inter.NetworkReceive;
 import com.cq.sdk.service.android.qq.utils.*;
+import com.cq.sdk.service.android.qq.utils.Validate;
 import com.cq.sdk.service.potential.annotation.Autowired;
 import com.cq.sdk.service.potential.annotation.Service;
 import com.cq.sdk.service.utils.*;
 import com.cq.sdk.service.utils.Number;
-
 /**
  * Created by CuiYaLei on 2016/8/13.
  */

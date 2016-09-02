@@ -12,10 +12,4 @@ public class Validate {
         Matcher matcher=pattern.matcher(val);
         return matcher.matches();
     }
-    public static final boolean qqAccount(String val){
-        if(val.length()>=5 && val.length()<13 && Validate.number(val)){
-            return true;
-        }
-        return false;
-    }
 }
