@@ -1,6 +1,4 @@
 package com.cq.sdk.service.android.qq.impl;
-
-import com.cq.sdk.service.android.qq.CommonService;
 import com.cq.sdk.service.android.qq.NetworkService;
 import com.cq.sdk.service.android.qq.inter.NetworkReceive;
 import com.cq.sdk.service.android.qq.struct.IPAddress;

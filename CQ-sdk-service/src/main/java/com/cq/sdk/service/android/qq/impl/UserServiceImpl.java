@@ -3,7 +3,6 @@ package com.cq.sdk.service.android.qq.impl;
 import com.cq.sdk.service.android.qq.CommonService;
 import com.cq.sdk.service.android.qq.NetworkService;
 import com.cq.sdk.service.android.qq.UserService;
-import com.cq.sdk.service.android.qq.auxiliary.MsgHandle;
 import com.cq.sdk.service.android.qq.inter.NetworkReceive;
 import com.cq.sdk.service.android.qq.utils.*;
 import com.cq.sdk.service.potential.annotation.Autowired;

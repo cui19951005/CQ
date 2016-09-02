@@ -1,6 +1,5 @@
 package com.cq.sdk.service.utils;
 
-import sun.misc.FloatingDecimal;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -211,19 +210,6 @@ public class CharBuffer  implements Appendable {
         this.append(CharUtils.valueOf(l));
         return this;
     }
-
-
-    public CharBuffer append(float f) {
-        FloatingDecimal.appendTo(f,this);
-        return this;
-    }
-
-
-    public CharBuffer append(double d) {
-        FloatingDecimal.appendTo(d,this);
-        return this;
-    }
-
 
     public char[] substring(int start) {
         return substring(start, count);

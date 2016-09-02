@@ -1,6 +1,5 @@
 package com.cq.sdk.service.android.qq.impl;
 
-import com.cq.sdk.service.android.qq.CommonService;
 import com.cq.sdk.service.android.qq.NetworkService;
 import com.cq.sdk.service.android.qq.QQService;
 import com.cq.sdk.service.android.qq.struct.StructGroupMsg;
@@ -8,7 +7,6 @@ import com.cq.sdk.service.potential.annotation.Autowired;
 import com.cq.sdk.service.potential.annotation.Service;
 import com.cq.sdk.service.utils.ByteSet;
 import com.cq.sdk.service.utils.Logger;
-import com.sun.deploy.ref.AppRef;
 
 /**
  * Created by CuiYaLei on 2016/8/21.

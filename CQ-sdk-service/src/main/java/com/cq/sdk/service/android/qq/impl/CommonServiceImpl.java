@@ -12,7 +12,6 @@ import com.cq.sdk.service.potential.annotation.Service;
 import com.cq.sdk.service.utils.*;
 import com.cq.sdk.service.android.qq.utils.Constants;
 import com.cq.sdk.service.utils.Number;
-import com.sun.org.apache.bcel.internal.generic.GOTO;
 
 /**
  * Created by CuiYaLei on 2016/8/20.

@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
  */
 public class Date extends java.util.Date   {
     private DateTime dateTime=new DateTime();
-    private static int[] months=new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private static final int[] months=new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public Date(){
         this(System.currentTimeMillis());
     }

@@ -199,7 +199,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             Byte[] bytes=(Byte[]) obj;
             byte[] temp=new byte[bytes.length];
             for(int i=0;i<temp.length;i++){
-                temp[i]=bytes[i]==null?0:bytes[i];
+                temp[i]=(byte) (bytes[i]==null?0:bytes[i]);
             }
             return this.equals(temp);
         }else if(obj instanceof byte[]){
