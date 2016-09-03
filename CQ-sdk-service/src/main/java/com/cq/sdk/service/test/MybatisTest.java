@@ -12,6 +12,7 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
+import java.io.InputStream;
 
 /**
  * Created by admin on 2016/9/2.
@@ -24,13 +25,21 @@ public class MybatisTest implements MybatisTrusteeship {
         return druidDataSource;
     }
 
-    public Object sqlSessionFactory(DataSource dataSource) {//XMLConfigBuilder范例
-        Configuration configuration=new Configuration();
-        TransactionFactory transactionFactory=new JdbcTransactionFactory();//事物Configuration构造方法
-        Environment environment=new Environment("jdbc",transactionFactory,dataSource);
-        configuration.setEnvironment(environment);
-        configuration.addMappers("com.cq.sdk.service.test.dao");
-        return new SqlSessionFactoryBuilder().build(configuration);
+    public Object transactionFactory() {
+        return new JdbcTransactionFactory();
+    }
+
+    public String mappers() {
+        return "classpath*:mapper/*.xml";
+    }
+
+
+    public Object sqlSessionFactory(Object configuration) {//XMLConfigBuilder范例
+       /* Configuration mappers=new Configuration();
+        Environment environment=new Environment("jdbc", (TransactionFactory) transactionFactory,dataSource);
+        mappers.setEnvironment(environment);
+        mappers.addLoadedResource();*/
+        return new SqlSessionFactoryBuilder().build((Configuration) configuration);
     }
 
     public Object sqlSession(Object sqlSessionFactory) {
@@ -38,6 +47,6 @@ public class MybatisTest implements MybatisTrusteeship {
     }
 
     public String mapperLocation() {
-        return "com.cq.sdk.service.test.dao.*";
+        return "com.cq.sdk.service.test.dao.entity.*";
     }
 }

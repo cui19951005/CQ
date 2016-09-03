@@ -17,5 +17,7 @@ subprojects {
     dependencies {
         compile "org.mybatis:mybatis:3.4.1"
         compile "com.alibaba:druid:1.0.25"
+        compile "org.mybatis.generator:mybatis-generator-core:1.3.4"
+        compile "mysql:mysql-connector-java:5.1.39"
     }
 }

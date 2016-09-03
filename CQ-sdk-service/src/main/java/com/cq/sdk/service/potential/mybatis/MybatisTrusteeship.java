@@ -11,11 +11,22 @@ public interface MybatisTrusteeship {
      * @return DataSource
      */
     DataSource dataSource();
+
+    /**
+     * 创建TransactionFactory
+     * @return
+     */
+    Object transactionFactory();
+
+    /**
+     * 创建mapper.xml文件包
+     */
+    String mappers();
     /**
      * 创建sqlSessionFactory
      * @return SqlSessionFactory
      */
-    Object sqlSessionFactory(DataSource dataSource);
+    Object sqlSessionFactory(Object configuration);
 
     /**
      * 创建sqlSession

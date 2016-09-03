@@ -171,7 +171,7 @@ public class Trusteeship {
                         String name=item.getName().substring(3,4).toLowerCase()+item.getName().substring(4);
                         String value = properties.getProperty(property.value() + name);
                         if(value!=null) {
-                           Class params= item.getParameterTypes()[0];
+                            Class params= item.getParameterTypes()[0];
                             if(params.isAssignableFrom(Integer.class) || params.getName().equals("int")){
                                 item.invoke(object, Integer.valueOf(value));
                             }else if(params.isAssignableFrom(Byte.class) || params.getName().equals("byte")){
@@ -205,18 +205,25 @@ public class Trusteeship {
      * @return
      */
     private ClassObj exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException {
-        for(ClassObj classObj :this.classList){
-            if(!field.getAnnotation(Autowired.class).value()){
-                if(this.isClassName(classObj.getClazz(),field.getName())){
-                    return classObj;
-                }
-            }else if(this.injectionType==InjectionType.AutoAll) {
-                if (classObj.getClazz() == clazz) {
-                    return classObj;
+        try {
+            if(!clazz.isInterface()){
+                return new ClassObj(clazz.newInstance());
+            }
+            for (ClassObj classObj : this.classList) {
+                if(!classObj.getClazz().isInterface()) {
+                    if (!field.getAnnotation(Autowired.class).value()) {
+                        if (this.isClassName(classObj.getClazz(), field.getName())) {
+                            return classObj;
+                        }
+                    } else if (this.isImplClass(classObj.getClazz(), clazz)) {
+                        return classObj;
+                    }
                 }
             }
+            return new ClassObj(clazz.newInstance());
+        }catch (Exception ex){
+            return null;
         }
-        return new ClassObj(clazz.newInstance());
     }
 
     /**

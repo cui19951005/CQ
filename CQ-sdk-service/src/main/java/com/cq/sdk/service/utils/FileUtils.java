@@ -2,6 +2,7 @@ package com.cq.sdk.service.utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,7 +68,7 @@ public class FileUtils {
     private static final boolean wildcard(int type,String str,String name){
         if(type==0 || type==1){//星号通配任何都通过
             return true;
-        }else if(type==2 && name.lastIndexOf(str.substring(0,str.length()-1))==name.length()-str.length()+1){
+        }else if(type==2 && name.lastIndexOf(str.substring(1,str.length()))==name.length()-str.length()+1){
             return true;
         }else if(type==3 && name.indexOf(str.substring(1))==0){
             return true;
@@ -108,5 +109,11 @@ public class FileUtils {
                 loadFile(file,fileList);
             }
         }
+    }
+
+    public static final List<File> findResources(Class clazz,String packName){
+        packName=packName.replace("classpath*:","").replace("classpath:","").replace("\\","/");
+        String[] array=packName.split("/");
+        return fileList(new ArrayList<File>(),new File(clazz.getResource("/"+array[0]).getFile()), Arrays.copyOfRange(array,1,array.length),0,true);
     }
 }
