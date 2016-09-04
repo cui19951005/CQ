@@ -6,13 +6,18 @@ package com.cq.sdk.service.potential.utils;
 public class ClassObj {
     private Class clazz;
     private Object object;
-
+    private Object invocationObj;
     public ClassObj(Class clazz) {
         this.clazz = clazz;
     }
     public ClassObj(Object object){
         this.clazz=object.getClass();
         this.object=object;
+    }
+    public ClassObj(Object object,Object invocationObj){
+        this.clazz=object.getClass();
+        this.object=object;
+        this.invocationObj=invocationObj;
     }
     public Class getClazz() {
         return clazz;
@@ -28,5 +33,13 @@ public class ClassObj {
 
     public void setObject(Object object) {
         this.object = object;
+    }
+
+    public Object getInvocationObj() {
+        return invocationObj;
+    }
+
+    public void setInvocationObj(Object invocationObj) {
+        this.invocationObj = invocationObj;
     }
 }

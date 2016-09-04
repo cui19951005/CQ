@@ -38,7 +38,6 @@ public class MybatisGenerateBean {
                 Object xMLMapperBuilderObj=xMLMapperBuilderCon.newInstance(new FileInputStream(file),configObj,file.getAbsolutePath(),configClass.getMethod("getSqlFragments").invoke(configObj));
                 xMLMapperBuilder.getMethod("parse").invoke(xMLMapperBuilderObj);
             }
-
             configClass.getMethod("setEnvironment",environment).invoke(configObj,envObj);
             Object sqlSessionFactory = mybatisTrusteeship.sqlSessionFactory(configObj);
             Object sqlSession = mybatisTrusteeship.sqlSession(sqlSessionFactory);

@@ -4,12 +4,14 @@ import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
 import com.cq.sdk.service.potential.mybatis.MybatisTrusteeship;
 import com.cq.sdk.service.potential.mybatis.utils.MybatisGenerateBean;
+import com.cq.sdk.service.potential.utils.AopClass;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.potential.utils.InjectionType;
 import com.cq.sdk.service.utils.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +26,8 @@ import java.util.Properties;
 public class Trusteeship {
     private String packagePath;
     private String mainMethod;
-    private List<ClassObj> classList=new ArrayList<ClassObj>();
+    private List<ClassObj> classList=new ArrayList();
+    private List<AopClass> aopList=new ArrayList<>();
     private String rootDir;
     private Class mainClass;
     private InjectionType injectionType=InjectionType.AutoAll;//默认采用全部注入
@@ -81,19 +84,27 @@ public class Trusteeship {
             File file = new File(path);
             for (File item : file.listFiles()) {
                 if (item.isFile()) {
-                    String clazz = item.getAbsolutePath().substring(this.rootDir.length()).replace("\\", "/").replace("/", ".");
-                    clazz = clazz.substring(0, clazz.length() - 6);
-                    ClassObj classObj = new ClassObj(Class.forName(clazz));
-                    Repository repository = (Repository) classObj.getClazz().getAnnotation(Repository.class);
-                    Service service = (Service) classObj.getClazz().getAnnotation(Service.class);
-                    Component component = (Component) classObj.getClazz().getAnnotation(Component.class);
-                    if ((!classObj.getClazz().isInterface() && (repository != null || service != null || component != null)) || classObj.getClazz().isInterface()) {
-                        this.classList.add(classObj);
-                    }
-                    if (this.isImplClass(classObj.getClazz(), MybatisTrusteeship.class)) {
-                        classObj.setObject(this.injection(classObj.getClazz()));
-                        AutowiredInterface autowiredInterface=MybatisGenerateBean.trusteeship((MybatisTrusteeship) classObj.getObject());
-                        this.classList.addAll(autowiredInterface.getBeanList());
+                    String clazzName = item.getAbsolutePath().substring(this.rootDir.length()).replace("\\", "/").replace("/", ".");
+                    clazzName = clazzName.substring(0, clazzName.length() - 6);
+                    Class clazz=Class.forName(clazzName);
+
+                    if(clazz!=null && clazz.getModifiers()==1) {//0默认修饰符1public
+                        Object object=this.createObj(clazz);
+                        Repository repository = (Repository) clazz.getAnnotation(Repository.class);
+                        Service service = (Service) clazz.getAnnotation(Service.class);
+                        Component component = (Component) clazz.getAnnotation(Component.class);
+                        Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
+                        if (!clazz.isInterface() && (repository != null || service != null || component != null)) {
+                            this.classList.add(new ClassObj(object));//不要接口
+                        }
+                        if(aspect!=null){
+                            this.aopList.add(this.analysisAopClass(object));
+                        }
+                        if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
+                            object =this.injection(clazz);
+                            AutowiredInterface autowiredInterface = MybatisGenerateBean.trusteeship((MybatisTrusteeship) object);
+                            this.classList.addAll(autowiredInterface.getBeanList());
+                        }
                     }
                 } else if (item.isDirectory()) {
                     this.loadClass(item.getAbsolutePath());
@@ -128,104 +139,55 @@ public class Trusteeship {
         if(clazz.isInterface()){
             ClassObj classObj=this.impl(clazz);
             if(classObj !=null &&classObj.getObject()==null){
-                classObj.setObject(this.injection(classObj.getClazz()));
+                classObj=new ClassObj(this.injection(classObj.getClazz()));
             }else{
                 return null;
             }
             object=classObj.getObject();
         }else{
-            object=clazz.newInstance();
+            object=this.createObj(clazz);
         }
         Field[] fields= clazz.getDeclaredFields();
         for(Field field : fields){
             field.setAccessible(true);
             Class type = field.getType();
-            ClassObj classObj = this.exists(type,field);
-            if (classObj != null) {
-                if (classObj.getObject() == null) {
-                    classObj.setObject(this.injection(classObj.getClazz()));
-                }
-                if(classObj.getObject()!=null) {
-                    injectionProperties(field,classObj.getObject());
-                    field.set(object, classObj.getObject());
-                }
+            Object obj = this.exists(type,field);
+            if (obj == null) {
+                obj=this.injection(type);
+            }
+            if(obj!=null) {
+                obj =this.addAop(obj);
+                injectionProperties(field,obj);
+                field.set(object, obj);
             }
         }
-        return object;
+        return this.addAop(object);
     }
 
-    /**
-     * 注入配置文件(set方法)
-     * @param field
-     * @param object
-     * @throws IllegalAccessException
-     */
-    private void injectionProperties(Field field,Object object) throws InvocationTargetException, IllegalAccessException {
-        Property property=field.getAnnotation(Property.class);
-        if(property != null){
-            Method[] methods=object.getClass().getMethods();
-            for(Method item : methods){
-                item.setAccessible(true);
-                if(item.getName().length()>3&& item.getName().substring(0,3).equals("set")) {
-                    for (Properties properties : this.propertiesList) {
-                        String name=item.getName().substring(3,4).toLowerCase()+item.getName().substring(4);
-                        String value = properties.getProperty(property.value() + name);
-                        if(value!=null) {
-                            Class params= item.getParameterTypes()[0];
-                            if(params.isAssignableFrom(Integer.class) || params.getName().equals("int")){
-                                item.invoke(object, Integer.valueOf(value));
-                            }else if(params.isAssignableFrom(Byte.class) || params.getName().equals("byte")){
-                                item.invoke(object, Byte.valueOf(value));
-                            }else if(params.isAssignableFrom(Short.class) || params.getName().equals("short")){
-                                item.invoke(object, Short.valueOf(value));
-                            }else if(params.isAssignableFrom(Long.class) || params.getName().equals("long")){
-                                item.invoke(object, Long.valueOf(value));
-                            }else if(params.isAssignableFrom(Boolean.class) || params.getName().equals("boolean")){
-                                item.invoke(object, Boolean.valueOf(value));
-                            }else if(params.isAssignableFrom(Float.class) || params.getName().equals("float")){
-                                item.invoke(object, Float.valueOf(value));
-                            }else if(params.isAssignableFrom(Double.class) || params.getName().equals("double")){
-                                item.invoke(object, Double.valueOf(value));
-                            }else if(params.isAssignableFrom(Character.class) || params.getName().equals("char")){
-                                item.invoke(object, value.charAt(0));
-                            }else{
-                                item.invoke(object, value);
-                            }
-
-                        }
-                    }
-                }
-            }
-
-        }
-    }
     /**
      * 类型是否存在总库
      * @param clazz
      * @return
      */
-    private ClassObj exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException {
-        try {
-            if(!clazz.isInterface()){
-                return new ClassObj(clazz.newInstance());
-            }
-            for (ClassObj classObj : this.classList) {
-                if(!classObj.getClazz().isInterface()) {
-                    if (!field.getAnnotation(Autowired.class).value()) {
-                        if (this.isClassName(classObj.getClazz(), field.getName())) {
-                            return classObj;
-                        }
-                    } else if (this.isImplClass(classObj.getClazz(), clazz)) {
-                        return classObj;
+    private Object exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException {
+        if(!clazz.isInterface()){
+            return this.createObj(clazz);
+        }
+        for (ClassObj classObj : this.classList) {
+            if(!classObj.getClazz().isInterface()) {
+                if (field.isAnnotationPresent(Autowired.class)&&!field.getAnnotation(Autowired.class).value()) {//
+                    if (this.isClassName(classObj.getClazz(), field.getName())) {
+                        return classObj.getObject();
+                    }
+                } else if(!(this.injectionType==InjectionType.Annotation &&!field.isAnnotationPresent(Autowired.class))) {
+                    if (this.isImplClass(classObj.getClazz(), clazz)) {//
+                        return classObj.getObject();
                     }
                 }
             }
-            return new ClassObj(clazz.newInstance());
-        }catch (Exception ex){
-            return null;
         }
+        return null;
     }
-
     /**
      * 根据名字比较是否一样
      * @param clazz
@@ -270,5 +232,97 @@ public class Trusteeship {
         }
         return false;
     }
+    private Object createObj(Class clazz) throws InstantiationException, IllegalAccessException {
+        Constructor[] constructors=clazz.getConstructors();
+        if(constructors.length==0){
+            return clazz.newInstance();
+        }
+        for(Constructor constructor : constructors){
+            if(constructor.getParameterCount()==0){
+                return clazz.newInstance();
+            }
+        }
+        return null;
+    }
 
+    /**
+     * 注入配置文件(set方法)
+     * @param field
+     * @param object
+     * @throws IllegalAccessException
+     */
+    public void injectionProperties(Field field, Object object) throws InvocationTargetException, IllegalAccessException {
+        Property property=field.getAnnotation(Property.class);
+        if(property != null){
+            Method[] methods=object.getClass().getMethods();
+            for(Method item : methods){
+                item.setAccessible(true);
+                if(item.getName().length()>3&& item.getName().substring(0,3).equals("set")) {
+                    for (Properties properties : propertiesList) {
+                        String name=item.getName().substring(3,4).toLowerCase()+item.getName().substring(4);
+                        String value = properties.getProperty(property.value() + name);
+                        if(value!=null) {
+                            Class params= item.getParameterTypes()[0];
+                            if(params.isAssignableFrom(Integer.class) || params.getName().equals("int")){
+                                item.invoke(object, Integer.valueOf(value));
+                            }else if(params.isAssignableFrom(Byte.class) || params.getName().equals("byte")){
+                                item.invoke(object, Byte.valueOf(value));
+                            }else if(params.isAssignableFrom(Short.class) || params.getName().equals("short")){
+                                item.invoke(object, Short.valueOf(value));
+                            }else if(params.isAssignableFrom(Long.class) || params.getName().equals("long")){
+                                item.invoke(object, Long.valueOf(value));
+                            }else if(params.isAssignableFrom(Boolean.class) || params.getName().equals("boolean")){
+                                item.invoke(object, Boolean.valueOf(value));
+                            }else if(params.isAssignableFrom(Float.class) || params.getName().equals("float")){
+                                item.invoke(object, Float.valueOf(value));
+                            }else if(params.isAssignableFrom(Double.class) || params.getName().equals("double")){
+                                item.invoke(object, Double.valueOf(value));
+                            }else if(params.isAssignableFrom(Character.class) || params.getName().equals("char")){
+                                item.invoke(object, value.charAt(0));
+                            }else{
+                                item.invoke(object, value);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+    private Object addAop(Object object) {
+        return new InvocationHandlerImpl(this.aopList).bind(object);
+    }
+    /**
+     * 将对象注解切面表达式存入对象
+     * @param object
+     * @return
+     */
+    private AopClass analysisAopClass(Object object){
+        AopClass aopClass=new AopClass();
+        aopClass.setObject(object);
+        for(Method method : object.getClass().getMethods()){
+            Pointcut pointcut=method.getAnnotation(Pointcut.class);
+            Before before=method.getAnnotation(Before.class);
+            AfterReturning afterReturning=method.getAnnotation(AfterReturning.class);
+            AfterThrowing afterThrowing=method.getAnnotation(AfterThrowing.class);
+            After after=method.getAnnotation(After.class);
+            Around around=method.getAnnotation(Around.class);
+            if(pointcut!=null) {
+                aopClass.setPointcut(pointcut.value());
+                aopClass.setName(method.getName());
+            }else if(before!=null){
+                aopClass.setBefore(before.value());
+            }else if(afterReturning != null){
+                aopClass.setReturning(afterReturning.value());
+            }else if(afterThrowing != null){
+                aopClass.setThrowing(afterThrowing.value());
+            }else if(after !=null){
+                aopClass.setAfter(after.value());
+            }else if(around != null){
+                aopClass.setRound(around.value());
+            }
+        }
+        return aopClass;
+    }
 }

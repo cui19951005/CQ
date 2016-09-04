@@ -36,8 +36,9 @@ public class Logger {
         stringBuilder.append(".");
         stringBuilder.append(nowClass.getMethodName());
         stringBuilder.append("(");
-        stringBuilder.append(nowClass.getClassName());
-        stringBuilder.append(":");
+        /*stringBuilder.append(nowClass.getClassName());
+        stringBuilder.append(":");*/
+        //太长了
         stringBuilder.append(nowClass.getLineNumber());
         stringBuilder.append(")");
         stringBuilder.append(":");

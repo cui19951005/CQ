@@ -1,23 +1,44 @@
-group 'CQ'
-version '1.0-SNAPSHOT'
 
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+  ext {
+    kotlin_version = '1.0.1-2'
+  }
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+  }
+
+}
 
 subprojects {
-    apply plugin: 'java'
 
-    sourceCompatibility = 1.5
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-        maven { url 'http://repository.primefaces.org' }
-        maven { url "https://jitpack.io"}
-    }
+  project.ext {
+  }
 
-    dependencies {
-        compile "org.mybatis:mybatis:3.4.1"
-        compile "com.alibaba:druid:1.0.25"
-        compile "org.mybatis.generator:mybatis-generator-core:1.3.4"
-        compile "mysql:mysql-connector-java:5.1.39"
-    }
+  apply plugin: 'java'
+
+  group 'com.collar'
+
+  sourceCompatibility = 1.8
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url 'http://repository.primefaces.org' }
+    maven { url "https://jitpack.io"}
+  }
+
+  dependencies {
+    compile "org.mybatis:mybatis:3.4.1"
+    compile "mysql:mysql-connector-java:5.1.39"
+    compile "com.alibaba:druid:1.0.25"
+    compile "cglib:cglib-nodep:3.2.4"
+  }
 }
+

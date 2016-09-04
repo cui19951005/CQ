@@ -11,5 +11,6 @@ public enum  InjectionType {
     /**
      * 采用注解方式
      */
-    Annotation()
+    Annotation();
+
 }

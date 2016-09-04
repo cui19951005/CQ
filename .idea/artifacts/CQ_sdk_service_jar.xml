@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="CQ-sdk-service:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/CQ_sdk_service_jar</output-path>
-    <root id="archive" name="CQ-sdk-service.jar" />
-  </artifact>
-</component>

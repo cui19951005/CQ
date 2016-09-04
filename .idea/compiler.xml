@@ -19,10 +19,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CQ-sdk-service_main" target="1.5" />
-      <module name="CQ-sdk-service_test" target="1.5" />
-      <module name="CQ-service_main" target="1.5" />
-      <module name="CQ-service_test" target="1.5" />
+      <module name="CQ-sdk-service_main" target="1.8" />
+      <module name="CQ-sdk-service_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

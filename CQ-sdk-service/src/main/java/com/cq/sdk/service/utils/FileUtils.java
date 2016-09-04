@@ -17,7 +17,7 @@ public class FileUtils {
      * @return
      */
     public static final List<File> findFileList(String packName){
-        String root=FileUtils.class.getResource("/").getFile();
+        String root=Thread.currentThread().getClass().getResource("/").getFile();
         root=root.substring(1);
         String[] array=packName.split("\\.");
         return fileList(new ArrayList<File>(),new File(root),array,0,true);
