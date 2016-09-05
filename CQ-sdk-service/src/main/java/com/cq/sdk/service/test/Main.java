@@ -20,39 +20,28 @@ import java.lang.reflect.Modifier;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by admin on 2016/9/2.
  */
 @Entrance(value = "com.cq.sdk.service.test.*",injectionType = InjectionType.Annotation)
 @LoadProperties({"test.properties"})
-public class Main implements MethodInterceptor {
+public class Main {
     @Autowired
     UserMapper userMapper;
     public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-      // new Trusteeship(Main.class);
+         new Trusteeship(Main.class);
        /* Enhancer enhancer=new Enhancer();
         enhancer.setSuperclass(a.class);
         enhancer.setCallback(new Main());
         enhancer.setClassLoader(a.class.getClassLoader());
         a= (com.cq.sdk.service.test.a) enhancer.create();
         a.println();*/
-        Logger.info(Tool.checkPointcutStr("static&fina","public static final"));
     }
     @Execute
-    public  final void main() {
+    public void main() {
         Logger.info(this.userMapper.selectByPrimaryKey("1000000000040"));
-    }
-
-    @Override
-    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        Object object=null;
-        object=method.invoke(new a());
-        return object;
-    }
-}
-final class a{
-    public void println(){
-      System.out.println("the is a class");
     }
 }

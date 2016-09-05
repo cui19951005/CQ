@@ -2,11 +2,16 @@ package com.cq.sdk.service.potential;
 
 import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
-import com.cq.sdk.service.potential.mybatis.MybatisTrusteeship;
-import com.cq.sdk.service.potential.mybatis.utils.MybatisGenerateBean;
+import com.cq.sdk.service.potential.sql.TransactionAop;
+import com.cq.sdk.service.potential.sql.TransactionManager;
+import com.cq.sdk.service.potential.sql.mybatis.MybatisTrusteeship;
+import com.cq.sdk.service.potential.sql.mybatis.utils.MybatisGenerateBean;
+import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
 import com.cq.sdk.service.potential.utils.AopClass;
+import com.cq.sdk.service.potential.utils.AopMethod;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.potential.utils.InjectionType;
+import com.cq.sdk.service.test.Main;
 import com.cq.sdk.service.utils.Logger;
 
 import java.io.File;
@@ -18,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * 托管类
@@ -32,6 +38,7 @@ public class Trusteeship {
     private Class mainClass;
     private InjectionType injectionType=InjectionType.AutoAll;//默认采用全部注入
     private List<Properties> propertiesList=new ArrayList<Properties>();
+    private TransactionManager transactionManager;
     public Trusteeship(Class mainClass) {
         Entrance entrance= (Entrance) mainClass.getAnnotation(Entrance.class);
         if(entrance!=null){
@@ -103,7 +110,25 @@ public class Trusteeship {
                         if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
                             object =this.injection(clazz);
                             AutowiredInterface autowiredInterface = MybatisGenerateBean.trusteeship((MybatisTrusteeship) object);
-                            this.classList.addAll(autowiredInterface.getBeanList());
+                            this.classList.addAll(autowiredInterface.beanList());
+                            this.transactionManager=autowiredInterface.transactionManager();
+                            this.classList.add(new ClassObj(transactionManager));
+                            TransactionAop  transactionAop=new TransactionAop();
+                            Method method=transactionAop.getClass().getMethod("round");
+                            AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
+                            for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
+                                AopClass aopClass = new AopClass();
+                                aopClass.setObject(transactionAop);
+                                aopClass.setName("pointcut");
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(".*");
+                                sb.append(transactionManager.getPackName());
+                                sb.append(transactionMethod.getName().replace("*",".*"));
+                                sb.append("\\(.*\\)");
+                                aopClass.setPointcut(Pattern.compile(sb.toString()));
+                                aopClass.setRound(aopMethod);
+                                this.aopList.add(aopClass);
+                            }
                         }
                     }
                 } else if (item.isDirectory()) {
@@ -309,18 +334,18 @@ public class Trusteeship {
             After after=method.getAnnotation(After.class);
             Around around=method.getAnnotation(Around.class);
             if(pointcut!=null) {
-                aopClass.setPointcut(pointcut.value());
+                aopClass.setPointcut(Pattern.compile(pointcut.value().replace("(..)","\\(*\\)").replace(".","\\.").replace("*",".*").replace("?",".")));
                 aopClass.setName(method.getName());
             }else if(before!=null){
-                aopClass.setBefore(before.value());
+                aopClass.setBefore(new AopMethod(before,object,method));
             }else if(afterReturning != null){
-                aopClass.setReturning(afterReturning.value());
+                aopClass.setReturning(new AopMethod(afterReturning,object,method));
             }else if(afterThrowing != null){
-                aopClass.setThrowing(afterThrowing.value());
+                aopClass.setThrowing(new AopMethod(afterThrowing,object,method));
             }else if(after !=null){
-                aopClass.setAfter(after.value());
+                aopClass.setAfter(new AopMethod(after,object,method));
             }else if(around != null){
-                aopClass.setRound(around.value());
+                aopClass.setRound(new AopMethod(around,object,method));
             }
         }
         return aopClass;

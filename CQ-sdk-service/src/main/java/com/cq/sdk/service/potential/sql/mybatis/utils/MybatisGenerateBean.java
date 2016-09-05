@@ -1,7 +1,8 @@
-package com.cq.sdk.service.potential.mybatis.utils;
+package com.cq.sdk.service.potential.sql.mybatis.utils;
 
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
-import com.cq.sdk.service.potential.mybatis.MybatisTrusteeship;
+import com.cq.sdk.service.potential.sql.TransactionManager;
+import com.cq.sdk.service.potential.sql.mybatis.MybatisTrusteeship;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.utils.FileUtils;
 import com.cq.sdk.service.utils.Logger;
@@ -23,13 +24,13 @@ public class MybatisGenerateBean {
     public static final AutowiredInterface trusteeship(MybatisTrusteeship mybatisTrusteeship){
         try {
             DataSource dataSource = mybatisTrusteeship.dataSource();
-            Object transactionFactory=mybatisTrusteeship.transactionFactory();
+            TransactionManager transactionManager=mybatisTrusteeship.transactionManager(dataSource);
             String mapper=mybatisTrusteeship.mappers();
             Class configClass=Class.forName("org.apache.ibatis.session.Configuration");
             Class environment=Class.forName("org.apache.ibatis.mapping.Environment");
             Class transactionFactoryClass=Class.forName("org.apache.ibatis.transaction.TransactionFactory");
             Constructor constructor=environment.getConstructor(String.class,transactionFactoryClass,DataSource.class);
-            Object envObj=constructor.newInstance("mybatis",transactionFactory,dataSource);
+            Object envObj=constructor.newInstance("mybatis",Class.forName("org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory").newInstance(),dataSource);
             Object configObj=configClass.newInstance();
             Class xMLMapperBuilder=Class.forName("org.apache.ibatis.builder.xml.XMLMapperBuilder");
             List<File> fileList=FileUtils.findResources(mybatisTrusteeship.getClass(),mapper);
@@ -39,8 +40,10 @@ public class MybatisGenerateBean {
                 xMLMapperBuilder.getMethod("parse").invoke(xMLMapperBuilderObj);
             }
             configClass.getMethod("setEnvironment",environment).invoke(configObj,envObj);
-            Object sqlSessionFactory = mybatisTrusteeship.sqlSessionFactory(configObj);
-            Object sqlSession = mybatisTrusteeship.sqlSession(sqlSessionFactory);
+            Class sqlSessionFactoryBuilder=Class.forName("org.apache.ibatis.session.SqlSessionFactoryBuilder");
+            Object sqlSessionFactoryBuilderObj=sqlSessionFactoryBuilder.newInstance();
+            Object sqlSessionFactory = sqlSessionFactoryBuilder.getMethod("build",configClass).invoke(sqlSessionFactoryBuilderObj,configObj);
+            Object sqlSession = sqlSessionFactory.getClass().getMethod("openSession").invoke(sqlSessionFactory);
             final List<ClassObj> objectList = new ArrayList<ClassObj>();
             fileList = FileUtils.findFileList(mybatisTrusteeship.mapperLocation());
             for (File file : fileList) {
@@ -48,7 +51,12 @@ public class MybatisGenerateBean {
                 objectList.add(classObj);
             }
             return new AutowiredInterface() {
-                public List<ClassObj> getBeanList() {
+                @Override
+                public TransactionManager transactionManager() {
+                    return transactionManager;
+                }
+
+                public List<ClassObj> beanList() {
                     return objectList;
                 }
             };

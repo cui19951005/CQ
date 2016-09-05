@@ -1,17 +1,19 @@
 package com.cq.sdk.service.potential.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by CuiYaLei on 2016/9/4.
  */
 public class AopClass {
     private Object object;
     private String name;
-    private String pointcut;
-    private String before;
-    private String after;
-    private String throwing;
-    private String round;
-    private String returning;
+    private Pattern pointcut;
+    private AopMethod before;
+    private AopMethod after;
+    private AopMethod throwing;
+    private AopMethod round;
+    private AopMethod returning;
 
     public Object getObject() {
         return object;
@@ -29,51 +31,51 @@ public class AopClass {
         this.name = name;
     }
 
-    public String getPointcut() {
+    public Pattern getPointcut() {
         return pointcut;
     }
 
-    public void setPointcut(String pointcut) {
+    public void setPointcut(Pattern pointcut) {
         this.pointcut = pointcut;
     }
 
-    public String getBefore() {
+    public AopMethod getBefore() {
         return before;
     }
 
-    public void setBefore(String before) {
+    public void setBefore(AopMethod before) {
         this.before = before;
     }
 
-    public String getAfter() {
+    public AopMethod getAfter() {
         return after;
     }
 
-    public void setAfter(String after) {
+    public void setAfter(AopMethod after) {
         this.after = after;
     }
 
-    public String getThrowing() {
+    public AopMethod getThrowing() {
         return throwing;
     }
 
-    public void setThrowing(String throwing) {
+    public void setThrowing(AopMethod throwing) {
         this.throwing = throwing;
     }
 
-    public String getRound() {
+    public AopMethod getRound() {
         return round;
     }
 
-    public void setRound(String round) {
+    public void setRound(AopMethod round) {
         this.round = round;
     }
 
-    public String getReturning() {
+    public AopMethod getReturning() {
         return returning;
     }
 
-    public void setReturning(String returning) {
+    public void setReturning(AopMethod returning) {
         this.returning = returning;
     }
 }

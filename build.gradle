@@ -1,20 +1,4 @@
 
-
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-
-  ext {
-    kotlin_version = '1.0.1-2'
-  }
-
-  repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-  }
-
-}
-
 subprojects {
 
   project.ext {
@@ -30,8 +14,9 @@ subprojects {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven { url 'http://repository.primefaces.org' }
     maven { url "https://jitpack.io"}
+    maven {url "http://maven.springframework.org/release/"}
+
   }
 
   dependencies {

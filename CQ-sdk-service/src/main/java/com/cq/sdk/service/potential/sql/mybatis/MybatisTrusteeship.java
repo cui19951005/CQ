@@ -1,4 +1,6 @@
-package com.cq.sdk.service.potential.mybatis;
+package com.cq.sdk.service.potential.sql.mybatis;
+
+import com.cq.sdk.service.potential.sql.TransactionManager;
 
 import javax.sql.DataSource;
 
@@ -16,24 +18,12 @@ public interface MybatisTrusteeship {
      * 创建TransactionFactory
      * @return
      */
-    Object transactionFactory();
+    TransactionManager transactionManager(DataSource dataSource);
 
     /**
      * 创建mapper.xml文件包
      */
     String mappers();
-    /**
-     * 创建sqlSessionFactory
-     * @return SqlSessionFactory
-     */
-    Object sqlSessionFactory(Object configuration);
-
-    /**
-     * 创建sqlSession
-     * @param sqlSessionFactory sqlSessionFactory
-     * @return SqlSession
-     */
-    Object sqlSession(Object sqlSessionFactory);
 
     /**
      * mapper 接口位置
