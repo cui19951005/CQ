@@ -2,16 +2,13 @@ package com.cq.sdk.service.potential;
 
 import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
-import com.cq.sdk.service.potential.sql.TransactionAop;
 import com.cq.sdk.service.potential.sql.TransactionManager;
 import com.cq.sdk.service.potential.sql.mybatis.MybatisTrusteeship;
 import com.cq.sdk.service.potential.sql.mybatis.utils.MybatisGenerateBean;
-import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
 import com.cq.sdk.service.potential.utils.AopClass;
 import com.cq.sdk.service.potential.utils.AopMethod;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.potential.utils.InjectionType;
-import com.cq.sdk.service.test.Main;
 import com.cq.sdk.service.utils.Logger;
 
 import java.io.File;
@@ -94,42 +91,11 @@ public class Trusteeship {
                     String clazzName = item.getAbsolutePath().substring(this.rootDir.length()).replace("\\", "/").replace("/", ".");
                     clazzName = clazzName.substring(0, clazzName.length() - 6);
                     Class clazz=Class.forName(clazzName);
-
                     if(clazz!=null && clazz.getModifiers()==1) {//0默认修饰符1public
                         Object object=this.createObj(clazz);
-                        Repository repository = (Repository) clazz.getAnnotation(Repository.class);
-                        Service service = (Service) clazz.getAnnotation(Service.class);
-                        Component component = (Component) clazz.getAnnotation(Component.class);
-                        Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
-                        if (!clazz.isInterface() && (repository != null || service != null || component != null)) {
-                            this.classList.add(new ClassObj(object));//不要接口
-                        }
-                        if(aspect!=null){
-                            this.aopList.add(this.analysisAopClass(object));
-                        }
-                        if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
-                            object =this.injection(clazz);
-                            AutowiredInterface autowiredInterface = MybatisGenerateBean.trusteeship((MybatisTrusteeship) object);
-                            this.classList.addAll(autowiredInterface.beanList());
-                            this.transactionManager=autowiredInterface.transactionManager();
-                            this.classList.add(new ClassObj(transactionManager));
-                            TransactionAop  transactionAop=new TransactionAop();
-                            Method method=transactionAop.getClass().getMethod("round");
-                            AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
-                            for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
-                                AopClass aopClass = new AopClass();
-                                aopClass.setObject(transactionAop);
-                                aopClass.setName("pointcut");
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(".*");
-                                sb.append(transactionManager.getPackName());
-                                sb.append(transactionMethod.getName().replace("*",".*"));
-                                sb.append("\\(.*\\)");
-                                aopClass.setPointcut(Pattern.compile(sb.toString()));
-                                aopClass.setRound(aopMethod);
-                                this.aopList.add(aopClass);
-                            }
-                        }
+                        this.addAutowiredManager(clazz,object);
+                        this.addAopManager(clazz,object);
+                        this.addDatabaseManager(clazz,object);
                     }
                 } else if (item.isDirectory()) {
                     this.loadClass(item.getAbsolutePath());
@@ -316,7 +282,7 @@ public class Trusteeship {
         }
     }
     private Object addAop(Object object) {
-        return new InvocationHandlerImpl(this.aopList).bind(object);
+        return new InvocationHandlerImpl(this.aopList,this.transactionManager).bind(object);
     }
     /**
      * 将对象注解切面表达式存入对象
@@ -334,7 +300,7 @@ public class Trusteeship {
             After after=method.getAnnotation(After.class);
             Around around=method.getAnnotation(Around.class);
             if(pointcut!=null) {
-                aopClass.setPointcut(Pattern.compile(pointcut.value().replace("(..)","\\(*\\)").replace(".","\\.").replace("*",".*").replace("?",".")));
+                aopClass.setPointcut(Pattern.compile(pointcut.value()));
                 aopClass.setName(method.getName());
             }else if(before!=null){
                 aopClass.setBefore(new AopMethod(before,object,method));
@@ -349,5 +315,44 @@ public class Trusteeship {
             }
         }
         return aopClass;
+    }
+    private void addAutowiredManager(Class clazz, Object object){
+        Repository repository = (Repository) clazz.getAnnotation(Repository.class);
+        Service service = (Service) clazz.getAnnotation(Service.class);
+        Component component = (Component) clazz.getAnnotation(Component.class);
+        if (!clazz.isInterface() && (repository != null || service != null || component != null)) {
+            this.classList.add(new ClassObj(object));//不要接口
+        }
+    }
+    private void addAopManager(Class clazz, Object object){
+        Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
+        if(aspect!=null){
+            this.aopList.add(this.analysisAopClass(object));
+        }
+    }
+    private void addDatabaseManager(Class clazz, Object object) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+        if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
+            object=this.injection(clazz);
+            AutowiredInterface autowiredInterface = MybatisGenerateBean.trusteeship((MybatisTrusteeship) object);
+            this.classList.addAll(autowiredInterface.beanList());
+            this.transactionManager=autowiredInterface.transactionManager();
+            /*this.classList.add(new ClassObj(transactionManager));
+            TransactionAop  transactionAop=new TransactionAop();
+            Method method=transactionAop.getClass().getMethod("round");
+            AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
+            for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
+                AopClass aopClass = new AopClass();
+                aopClass.setObject(transactionAop);
+                aopClass.setName("pointcut");
+                StringBuilder sb = new StringBuilder();
+                sb.append(".*");
+                sb.append(transactionManager.getPackName());
+                sb.append(transactionMethod.getName().replace("*",".*"));
+                sb.append("\\(.*\\)");
+                aopClass.setPointcut(Pattern.compile(sb.toString()));
+                aopClass.setRound(aopMethod);
+                this.aopList.add(aopClass);
+            }*/
+        }
     }
 }

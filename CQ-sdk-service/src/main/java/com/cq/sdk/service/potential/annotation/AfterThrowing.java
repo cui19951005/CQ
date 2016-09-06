@@ -10,5 +10,4 @@ import java.lang.annotation.*;
 @Documented()
 public @interface AfterThrowing {
     String value() default "";
-    String throwing() default "";
 }

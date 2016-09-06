@@ -6,23 +6,8 @@ import com.cq.sdk.service.potential.annotation.Entrance;
 import com.cq.sdk.service.potential.annotation.Execute;
 import com.cq.sdk.service.potential.annotation.LoadProperties;
 import com.cq.sdk.service.potential.utils.InjectionType;
-import com.cq.sdk.service.potential.utils.Tool;
 import com.cq.sdk.service.test.dao.entity.UserMapper;
 import com.cq.sdk.service.utils.Logger;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by admin on 2016/9/2.
  */
