@@ -29,7 +29,6 @@ public class Logger {
                 break;
             }
         }
-        System.out.println(Logger.class.getName());
         stringBuilder.append(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"));
         stringBuilder.append(":");
         stringBuilder.append(nowClass.getClassName());

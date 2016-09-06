@@ -59,9 +59,11 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             }
             sb.append(")");
             String methodName=sb.toString();
-            Matcher matcher=this.transactionManager.getPackPattern().matcher(methodName);
-            if(matcher.find()){
-                dataSource=this.transactionManager.getDataSource();
+            if(this.transactionManager!=null) {
+                Matcher matcher = this.transactionManager.getPackPattern().matcher(methodName);
+                if (matcher.find()) {
+                    dataSource = this.transactionManager.getDataSource();
+                }
             }
             aopClass=this.exists(sb.toString());
             if(aopClass!=null){
@@ -84,35 +86,30 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             }
         }catch (Exception ex){
             if(aopClass!=null && aopClass.getThrowing()!=null) {
-                AfterThrowing afterThrowing = (AfterThrowing) aopClass.getThrowing().getValue();
-                if (afterThrowing!=null) {
-                    Object[] params = new Object[aopClass.getThrowing().getMethod().getParameters().length];
-                    for (int i = 0; i < aopClass.getThrowing().getMethod().getParameterTypes().length; i++) {
-                        if(aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ex.getClass())) {
-                            params[i] = ex;
-                        }else if(aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ProceedingJoinPoint.class)){
-                            params[i]=new JoinPoint() {
-                                @Override
-                                public Object getThis() {
-                                    return InvocationHandlerImpl.this.object;
-                                }
+                Object[] params = new Object[aopClass.getThrowing().getMethod().getParameters().length];
+                for (int i = 0; i < aopClass.getThrowing().getMethod().getParameterTypes().length; i++) {
+                    if(aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ex.getClass())) {
+                        params[i] = ex;
+                    }else if(aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ProceedingJoinPoint.class)){
+                        params[i]=new JoinPoint() {
+                            @Override
+                            public Object getThis() {
+                                return InvocationHandlerImpl.this.object;
+                            }
 
-                                @Override
-                                public Method getMethod() {
-                                    return method;
-                                }
+                            @Override
+                            public Method getMethod() {
+                                return method;
+                            }
 
-                                @Override
-                                public Object[] getArgs() {
-                                    return objects;
-                                }
-                            };
-                        }
+                            @Override
+                            public Object[] getArgs() {
+                                return objects;
+                            }
+                        };
                     }
-                    aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing().getObject(), params);
                 }
-            } else {
-                aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing(),this.createParams(aopClass.getThrowing().getMethod(),method,objects));
+                aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing().getObject(), params);
             }
             if(dataSource!=null&&!dataSource.getConnection().isClosed()){
                 dataSource.getConnection().rollback();

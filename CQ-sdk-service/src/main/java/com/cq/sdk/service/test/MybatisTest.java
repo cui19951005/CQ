@@ -18,11 +18,12 @@ import java.util.List;
 /**
  * Created by admin on 2016/9/2.
  */
-public class MybatisTest {
+public class MybatisTest implements MybatisTrusteeship {
     @Autowired
     @Property("jdbc.")
     DruidDataSource druidDataSource;
     public DataSource dataSource() {
+        druidDataSource.setDefaultAutoCommit(false);
         return druidDataSource;
     }
 

@@ -10,6 +10,7 @@ import com.cq.sdk.service.potential.utils.AopMethod;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.potential.utils.InjectionType;
 import com.cq.sdk.service.utils.Logger;
+import com.cq.sdk.service.utils.PackUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -141,8 +142,16 @@ public class Trusteeship {
         Field[] fields= clazz.getDeclaredFields();
         for(Field field : fields){
             field.setAccessible(true);
+            if(field.getType().isPrimitive()){
+                continue;
+            }
             Class type = field.getType();
-            Object obj = this.exists(type,field);
+            Object obj =null;
+            if(type.isAssignableFrom(clazz)){
+                obj=object;
+            }else {
+                obj=this.exists(type, field);
+            }
             if (obj == null) {
                 obj=this.injection(type);
             }
@@ -300,7 +309,7 @@ public class Trusteeship {
             After after=method.getAnnotation(After.class);
             Around around=method.getAnnotation(Around.class);
             if(pointcut!=null) {
-                aopClass.setPointcut(Pattern.compile(pointcut.value()));
+                aopClass.setPointcut(PackUtils.generatePattern(pointcut.value()));
                 aopClass.setName(method.getName());
             }else if(before!=null){
                 aopClass.setBefore(new AopMethod(before,object,method));
