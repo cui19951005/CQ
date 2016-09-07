@@ -19,8 +19,14 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="CQ-sdk-service,hibernate_main" target="1.8" />
+      <module name="CQ-sdk-service,hibernate_test" target="1.8" />
+      <module name="CQ-sdk-service_,_hibernate_main" target="1.8" />
+      <module name="CQ-sdk-service_,_hibernate_test" target="1.8" />
       <module name="CQ-sdk-service_main" target="1.8" />
       <module name="CQ-sdk-service_test" target="1.8" />
+      <module name="hibernate_main" target="1.8" />
+      <module name="hibernate_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

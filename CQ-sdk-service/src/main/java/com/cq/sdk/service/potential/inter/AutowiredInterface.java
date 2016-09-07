@@ -1,6 +1,6 @@
 package com.cq.sdk.service.potential.inter;
 
-import com.cq.sdk.service.potential.sql.TransactionManager;
+import com.cq.sdk.service.potential.sql.tx.TransactionManager;
 import com.cq.sdk.service.potential.utils.ClassObj;
 
 import java.util.List;

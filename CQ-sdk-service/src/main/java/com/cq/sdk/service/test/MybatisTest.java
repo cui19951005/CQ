@@ -3,22 +3,18 @@ package com.cq.sdk.service.test;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.cq.sdk.service.potential.annotation.Autowired;
 import com.cq.sdk.service.potential.annotation.Property;
-import com.cq.sdk.service.potential.sql.TransactionManager;
-import com.cq.sdk.service.potential.sql.mybatis.MybatisTrusteeship;
+import com.cq.sdk.service.potential.sql.tx.TransactionManager;
 import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by admin on 2016/9/2.
  */
-public class MybatisTest implements MybatisTrusteeship {
+public class MybatisTest {//implements MybatisTrusteeship {
     @Autowired
     @Property("jdbc.")
     DruidDataSource druidDataSource;
@@ -27,9 +23,9 @@ public class MybatisTest implements MybatisTrusteeship {
         return druidDataSource;
     }
 
-    public TransactionManager transactionManager(DataSource dataSource) {
+    public TransactionManager transactionManager(Connection connection) {
         TransactionManager transactionManager=new TransactionManager();
-        transactionManager.setDataSource(dataSource);
+        transactionManager.setConnection(connection);
         transactionManager.setPackName("com.cq.sdk.service.test.*");
         List<TransactionMethod> transactionMethodList=new ArrayList<>();
         TransactionMethod transactionMethod=new TransactionMethod();
@@ -37,6 +33,10 @@ public class MybatisTest implements MybatisTrusteeship {
         transactionMethodList.add(transactionMethod);
         transactionManager.setTransactionMethodList(transactionMethodList);
         return transactionManager;
+    }
+
+    public Object configuration(Object configuration, DataSource dataSource) {
+        return configuration;
     }
 
     public String mappers() {

@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface Autowired {
     boolean value() default true;
-
+    String type() default "";
 
 }

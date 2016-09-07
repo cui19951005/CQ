@@ -1,9 +1,8 @@
-package com.cq.sdk.service.potential.sql;
+package com.cq.sdk.service.potential.sql.tx;
 
 import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
 import com.cq.sdk.service.utils.PackUtils;
 
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -11,24 +10,23 @@ import java.util.regex.Pattern;
  * Created by admin on 2016/9/5.
  */
 public class TransactionManager {
-    private DataSource dataSource;
+    private Transaction transaction;
     private Pattern packPattern;
     private List<TransactionMethod> transactionMethodList;
 
-    public DataSource getDataSource() {
-        return dataSource;
+    public Transaction getTransaction() {
+        return transaction;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public void setPackName(String name){
+        this.packPattern=PackUtils.generatePattern(name);
     }
-
-    public void setPackName(String packName) {
-       this.packPattern=PackUtils.generatePattern(packName);
-    }
-
     public Pattern getPackPattern() {
         return packPattern;
+    }
+
+    public void setPackPattern(Pattern packPattern) {
+        this.packPattern = packPattern;
     }
 
     public List<TransactionMethod> getTransactionMethodList() {

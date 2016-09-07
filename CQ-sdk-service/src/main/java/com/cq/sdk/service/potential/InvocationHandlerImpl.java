@@ -1,16 +1,16 @@
 package com.cq.sdk.service.potential;
 
-import com.cq.sdk.service.potential.annotation.AfterThrowing;
 import com.cq.sdk.service.potential.aop.JoinPoint;
 import com.cq.sdk.service.potential.aop.ProceedingJoinPoint;
-import com.cq.sdk.service.potential.sql.TransactionManager;
+import com.cq.sdk.service.potential.sql.tx.Transaction;
+import com.cq.sdk.service.potential.sql.tx.TransactionManager;
 import com.cq.sdk.service.potential.utils.AopClass;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import javax.sql.DataSource;
 import java.lang.reflect.*;
+import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -42,7 +42,7 @@ public class InvocationHandlerImpl implements MethodInterceptor {
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         Object object=null;
         AopClass aopClass=null;
-        DataSource dataSource=null;
+        Transaction transaction=null;
         try {
             StringBuilder sb=new StringBuilder();
             sb.append(Modifier.toString(method.getModifiers()));
@@ -62,7 +62,8 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             if(this.transactionManager!=null) {
                 Matcher matcher = this.transactionManager.getPackPattern().matcher(methodName);
                 if (matcher.find()) {
-                    dataSource = this.transactionManager.getDataSource();
+                    transaction=this.transactionManager.getTransaction();
+                    transaction.begin();
                 }
             }
             aopClass=this.exists(sb.toString());
@@ -81,8 +82,8 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             if(aopClass!=null && aopClass.getReturning()!=null){
                 aopClass.getReturning().getMethod().invoke(aopClass.getObject(),this.createParams(aopClass.getReturning().getMethod(),method,objects));
             }
-            if(dataSource!=null&&!dataSource.getConnection().isClosed()){
-                dataSource.getConnection().commit();
+            if(transaction!=null){
+                transaction.commit();
             }
         }catch (Exception ex){
             if(aopClass!=null && aopClass.getThrowing()!=null) {
@@ -111,8 +112,8 @@ public class InvocationHandlerImpl implements MethodInterceptor {
                 }
                 aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing().getObject(), params);
             }
-            if(dataSource!=null&&!dataSource.getConnection().isClosed()){
-                dataSource.getConnection().rollback();
+            if(transaction!=null){
+                transaction.rollback();
             }
         }finally {
             if(aopClass!=null && aopClass.getAfter()!=null){

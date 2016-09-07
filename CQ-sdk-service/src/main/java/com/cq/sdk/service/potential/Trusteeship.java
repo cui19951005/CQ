@@ -2,9 +2,9 @@ package com.cq.sdk.service.potential;
 
 import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
-import com.cq.sdk.service.potential.sql.TransactionManager;
-import com.cq.sdk.service.potential.sql.mybatis.MybatisTrusteeship;
-import com.cq.sdk.service.potential.sql.mybatis.utils.MybatisGenerateBean;
+import com.cq.sdk.service.potential.sql.tx.TransactionManager;
+import com.cq.sdk.service.potential.sql.frame.MybatisTrusteeship;
+import com.cq.sdk.service.potential.sql.frame.utils.GenerateBean;
 import com.cq.sdk.service.potential.utils.AopClass;
 import com.cq.sdk.service.potential.utils.AopMethod;
 import com.cq.sdk.service.potential.utils.ClassObj;
@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 /**
  * 托管类
@@ -342,7 +341,7 @@ public class Trusteeship {
     private void addDatabaseManager(Class clazz, Object object) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
             object=this.injection(clazz);
-            AutowiredInterface autowiredInterface = MybatisGenerateBean.trusteeship((MybatisTrusteeship) object);
+            AutowiredInterface autowiredInterface = GenerateBean.mybatis((MybatisTrusteeship) object);
             this.classList.addAll(autowiredInterface.beanList());
             this.transactionManager=autowiredInterface.transactionManager();
             /*this.classList.add(new ClassObj(transactionManager));

@@ -1,12 +1,8 @@
 
 subprojects {
 
-  project.ext {
-  }
-
   apply plugin: 'java'
-
-  group 'com.collar'
+  group='cq.sdk'
 
   sourceCompatibility = 1.8
 
@@ -20,11 +16,11 @@ subprojects {
   }
 
   dependencies {
-    compile "org.mybatis:mybatis:3.4.1"
     compile "mysql:mysql-connector-java:5.1.39"
     compile "com.alibaba:druid:1.0.25"
     compile "cglib:cglib-nodep:3.2.4"
-    compile "org.mybatis.generator:mybatis-generator-core:1.3.4"
+    compile "org.hibernate:hibernate-core:5.2.2.Final"
+    compile "org.springframework:spring-hibernate:1.2.9"
   }
 }
 

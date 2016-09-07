@@ -1,1 +1,1 @@
-include 'CQ-sdk-service'
+include "CQ-sdk-service","hibernate"

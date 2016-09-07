@@ -6,21 +6,18 @@ import com.cq.sdk.service.potential.annotation.Entrance;
 import com.cq.sdk.service.potential.annotation.Execute;
 import com.cq.sdk.service.potential.annotation.LoadProperties;
 import com.cq.sdk.service.potential.utils.InjectionType;
-import com.cq.sdk.service.test.dao.Loginaccount;
-import com.cq.sdk.service.test.dao.entity.LoginaccountMapper;
 import com.cq.sdk.service.utils.Logger;
-import org.apache.ibatis.session.Configuration;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.xml.ConfigurationParser;
-import org.mybatis.generator.exception.InvalidConfigurationException;
-import org.mybatis.generator.exception.XMLParserException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import com.cq.sdk.service.hibernate.LoginAccountEntity;
+import org.hibernate.jdbc.Work;
 
 import java.io.File;
-import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by admin on 2016/9/2.
@@ -30,19 +27,33 @@ import java.util.List;
 public class Main {
     @Autowired
     Main main;
-    @Autowired
-    LoginaccountMapper loginaccountMapper;
     static long time=0;
     public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
         time=System.currentTimeMillis();
          new Trusteeship(Main.class);
     }
     @Execute
-    public void main() throws IOException, XMLParserException, InvalidConfigurationException, SQLException, InterruptedException {
+    public void main(){
        /* List list=new ArrayList();
-        org.mybatis.generator.config.Configuration configuration= new ConfigurationParser(list).parseConfiguration(new File(Thread.currentThread().getClass().getResource("/mybatisGeneratorConfig.xml").getFile()));
+        org.frame.generator.config.Configuration configuration= new ConfigurationParser(list).parseConfiguration(new File(Thread.currentThread().getClass().getResource("/mybatisGeneratorConfig.xml").getFile()));
         MyBatisGenerator myBatisGenerator=new MyBatisGenerator(configuration,null,list);
         myBatisGenerator.generate(null);*/
-        Logger.info(this.loginaccountMapper.selectByPrimaryKey(12L));
+       Configuration configuration=new Configuration().configure(new File(LoginAccountEntity.class.getResource("/hibernate.cfg.xml").getFile()));
+        SessionFactory sessionFactory=configuration.buildSessionFactory();
+        Session session=sessionFactory.openSession();
+        Properties properties=new Properties();
+        properties.put("datasource","my is test datasource");
+        configuration.addProperties(properties);
+        Transaction transaction=session.beginTransaction();
+        transaction.begin();
+        session.doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+
+            }
+        });
+        Logger.info(session.get(LoginAccountEntity.class,2L).getAccountName());
+       /* ConnectionProvider connectionProvider= (ConnectionProvider) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),new Class[]{ConnectionProvider.class},new InvocationHandlerClass());
+        Logger.info(connectionProvider);*/
     }
 }
