@@ -23,9 +23,8 @@ public class MybatisTest {//implements MybatisTrusteeship {
         return druidDataSource;
     }
 
-    public TransactionManager transactionManager(Connection connection) {
+    public TransactionManager transactionManager() {
         TransactionManager transactionManager=new TransactionManager();
-        transactionManager.setConnection(connection);
         transactionManager.setPackName("com.cq.sdk.service.test.*");
         List<TransactionMethod> transactionMethodList=new ArrayList<>();
         TransactionMethod transactionMethod=new TransactionMethod();

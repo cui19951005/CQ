@@ -1,5 +1,6 @@
 package com.cq.sdk.service.potential.sql.frame;
 
+import com.cq.sdk.service.potential.annotation.Autowired;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
  * Created by admin on 2016/9/7.
  */
 public class HibernateConnectionProvider implements InvocationHandler {
+    @Autowired
     private DataSource dataSource;
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {

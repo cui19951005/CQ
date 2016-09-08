@@ -1,10 +1,14 @@
 package com.cq.sdk.service.potential;
 
 import com.cq.sdk.service.potential.annotation.*;
+import com.cq.sdk.service.potential.aop.ProceedingJoinPoint;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
+import com.cq.sdk.service.potential.sql.frame.HibernateTrusteeship;
+import com.cq.sdk.service.potential.sql.tx.TransactionAop;
 import com.cq.sdk.service.potential.sql.tx.TransactionManager;
 import com.cq.sdk.service.potential.sql.frame.MybatisTrusteeship;
 import com.cq.sdk.service.potential.sql.frame.utils.GenerateBean;
+import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
 import com.cq.sdk.service.potential.utils.AopClass;
 import com.cq.sdk.service.potential.utils.AopMethod;
 import com.cq.sdk.service.potential.utils.ClassObj;
@@ -14,13 +18,9 @@ import com.cq.sdk.service.utils.PackUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * 托管类
@@ -29,8 +29,8 @@ import java.util.Properties;
 public class Trusteeship {
     private String packagePath;
     private String mainMethod;
-    private List<ClassObj> classList=new ArrayList();
-    private List<AopClass> aopList=new ArrayList<>();
+    private Map<String,ClassObj> classMap =new HashMap<>();
+    private Map<String,AopClass> aopMap =new HashMap<>();
     private String rootDir;
     private Class mainClass;
     private InjectionType injectionType=InjectionType.AutoAll;//默认采用全部注入
@@ -67,7 +67,7 @@ public class Trusteeship {
     }
     private void init(){
         try {
-            this.rootDir = this.getClass().getResource("/").getFile().substring(1);
+            this.rootDir = Thread.currentThread().getClass().getResource("/").getFile().substring(1);
             String absPath=this.rootDir+packagePath.replace(".","/").replace("*","");
             this.mainClass=Class.forName(this.mainMethod.substring(0,this.mainMethod.lastIndexOf(".")));
             LoadProperties loadProperties= (LoadProperties) this.mainClass.getAnnotation(LoadProperties.class);
@@ -78,6 +78,7 @@ public class Trusteeship {
                     this.propertiesList.add(properties);
                 }
             }
+            this.loadClass(this.getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
             this.loadClass(absPath);
         }catch (Exception ex){
             ex.printStackTrace();
@@ -125,65 +126,82 @@ public class Trusteeship {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    private Object injection(Class clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        Object object;
-        if(clazz.isInterface()){
-            ClassObj classObj=this.impl(clazz);
-            if(classObj !=null &&classObj.getObject()==null){
-                classObj=new ClassObj(this.injection(classObj.getClazz()));
-            }else{
-                return null;
+    private <T> T injection(Class<T> clazz){
+        try {
+            Object object;
+            if (clazz.isInterface()) {
+                ClassObj classObj = this.impl(clazz);
+                if (classObj != null && classObj.getObject() == null) {
+                    classObj = new ClassObj(this.injection(classObj.getClazz()));
+                } else {
+                    return null;
+                }
+                object = classObj.getObject();
+            } else {
+                object = this.createObj(clazz);
             }
-            object=classObj.getObject();
-        }else{
-            object=this.createObj(clazz);
+            return (T) this.injection(object);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        Field[] fields= clazz.getDeclaredFields();
-        for(Field field : fields){
-            field.setAccessible(true);
-            if(field.getType().isPrimitive()){
-                continue;
-            }
-            Class type = field.getType();
-            Object obj =null;
-            if(type.isAssignableFrom(clazz)){
-                obj=object;
-            }else {
-                obj=this.exists(type, field);
-            }
-            if (obj == null) {
-                obj=this.injection(type);
-            }
-            if(obj!=null) {
-                obj =this.addAop(obj);
-                injectionProperties(field,obj);
-                field.set(object, obj);
-            }
-        }
-        return this.addAop(object);
     }
-
+    private Object injection(Object object) {
+        try {
+            Field[] fields = object.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                if (field.getType().isPrimitive()) {
+                    continue;
+                }
+                Class type = field.getType();
+                Object obj;
+                if (type == object.getClass()) {
+                    obj = object;
+                } else {
+                    obj = this.exists(type, field);
+                }
+                if (obj != null) {
+                    obj = this.addAop(obj);
+                    injectionProperties(field, obj);
+                    field.set(object, obj);
+                }
+            }
+            return this.addAop(object);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
     /**
      * 类型是否存在总库
      * @param clazz
      * @return
      */
-    private Object exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException {
-        if(!clazz.isInterface()){
-            return this.createObj(clazz);
+    private Object exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+        if(field.isAnnotationPresent(Autowired.class)){
+            Autowired annotation=field.getAnnotation(Autowired.class);
+            if(annotation.type().length()>0){
+                clazz=Class.forName(annotation.type());
+            }
         }
-        for (ClassObj classObj : this.classList) {
+        for (ClassObj classObj : this.classMap.values()) {
             if(!classObj.getClazz().isInterface()) {
-                if (field.isAnnotationPresent(Autowired.class)&&!field.getAnnotation(Autowired.class).value()) {//
-                    if (this.isClassName(classObj.getClazz(), field.getName())) {
+                if (field.isAnnotationPresent(Autowired.class)) {
+                    if(!field.getAnnotation(Autowired.class).value()) {
+                        if (this.isClassName(classObj.getClazz(), field.getName())) {
+                            return classObj.getObject();
+                        }
+                    }else if(this.isImplClass(classObj.getClazz(), clazz)){
                         return classObj.getObject();
                     }
-                } else if(!(this.injectionType==InjectionType.Annotation &&!field.isAnnotationPresent(Autowired.class))) {
-                    if (this.isImplClass(classObj.getClazz(), clazz)) {//
-                        return classObj.getObject();
-                    }
+                } else if(this.injectionType==InjectionType.AutoAll&&this.isImplClass(classObj.getClazz(), clazz)) {
+                    return classObj.getObject();
                 }
             }
+        }
+        if(!clazz.isInterface()&&clazz.isAnnotationPresent(Autowired.class)){
+            return this.createObj(clazz);
         }
         return null;
     }
@@ -209,7 +227,7 @@ public class Trusteeship {
      * @return
      */
     private ClassObj impl(Class clazz1){
-        for(ClassObj classObj : this.classList){
+        for(ClassObj classObj : this.classMap.values()){
             if(!classObj.getClazz().isInterface() && this.isImplClass(classObj.getClazz(),clazz1)){
                 return classObj;
             }
@@ -224,9 +242,19 @@ public class Trusteeship {
      * @return 实现true否则false
      */
     private boolean isImplClass(Class clazz1,Class clazz2){
+        if(clazz1==null){
+            return false;
+        }
+        if(!clazz1.isInterface()&&clazz1.isAssignableFrom(clazz2)){
+            return true;
+        }
         for(Class c : clazz1.getInterfaces()){
-            if(c.isAssignableFrom(clazz2)){
+            if(c==clazz2){
                 return true;
+            }else{
+                if(isImplClass(c,clazz2)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -281,16 +309,14 @@ public class Trusteeship {
                             }else{
                                 item.invoke(object, value);
                             }
-
                         }
                     }
                 }
             }
-
         }
     }
     private Object addAop(Object object) {
-        return new InvocationHandlerImpl(this.aopList,this.transactionManager).bind(object);
+        return new InvocationHandlerImpl(new ArrayList(this.aopMap.values()),this.transactionManager).bind(object);
     }
     /**
      * 将对象注解切面表达式存入对象
@@ -329,38 +355,50 @@ public class Trusteeship {
         Service service = (Service) clazz.getAnnotation(Service.class);
         Component component = (Component) clazz.getAnnotation(Component.class);
         if (!clazz.isInterface() && (repository != null || service != null || component != null)) {
-            this.classList.add(new ClassObj(object));//不要接口
+            this.classMap.put(clazz.getName(),new ClassObj(object));//不要接口
         }
     }
     private void addAopManager(Class clazz, Object object){
         Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
         if(aspect!=null){
-            this.aopList.add(this.analysisAopClass(object));
+            this.aopMap.put(clazz.getName(),this.analysisAopClass(object));
         }
     }
-    private void addDatabaseManager(Class clazz, Object object) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+    private void addDatabaseManager(Class clazz, Object object) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
+        AutowiredInterface autowiredInterface=null;
         if (this.isImplClass(clazz, MybatisTrusteeship.class)) {
             object=this.injection(clazz);
-            AutowiredInterface autowiredInterface = GenerateBean.mybatis((MybatisTrusteeship) object);
-            this.classList.addAll(autowiredInterface.beanList());
-            this.transactionManager=autowiredInterface.transactionManager();
-            /*this.classList.add(new ClassObj(transactionManager));
-            TransactionAop  transactionAop=new TransactionAop();
-            Method method=transactionAop.getClass().getMethod("round");
-            AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
-            for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
-                AopClass aopClass = new AopClass();
-                aopClass.setObject(transactionAop);
-                aopClass.setName("pointcut");
-                StringBuilder sb = new StringBuilder();
-                sb.append(".*");
-                sb.append(transactionManager.getPackName());
-                sb.append(transactionMethod.getName().replace("*",".*"));
-                sb.append("\\(.*\\)");
-                aopClass.setPointcut(Pattern.compile(sb.toString()));
-                aopClass.setRound(aopMethod);
-                this.aopList.add(aopClass);
-            }*/
+            autowiredInterface = GenerateBean.mybatis((MybatisTrusteeship) object);
+        }else if(this.isImplClass(clazz, HibernateTrusteeship.class)){
+            object=this.injection(clazz);
+            autowiredInterface=GenerateBean.hibernate((HibernateTrusteeship) object);
+        }
+        if(autowiredInterface!=null){
+            for(ClassObj classObj : autowiredInterface.beanList()){
+                this.classMap.put(classObj.getClazz().getName(),classObj);
+            }
+            setTransactionManager(autowiredInterface);
+        }
+    }
+    private void setTransactionManager(AutowiredInterface autowiredInterface) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        this.transactionManager=autowiredInterface.transactionManager();
+        this.injection(this.transactionManager.getTransaction());
+        this.classMap.put(transactionManager.getClass().getName(),new ClassObj(transactionManager));
+        TransactionAop  transactionAop=  this.injection(TransactionAop.class);
+        Method method=transactionAop.getClass().getMethod("around", ProceedingJoinPoint.class);
+        AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
+        for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
+            AopClass aopClass = new AopClass();
+            aopClass.setObject(transactionAop);
+            aopClass.setName("pointcut");
+            StringBuilder sb = new StringBuilder();
+            sb.append(".*");
+            sb.append(transactionManager.getPackName());
+            sb.append(transactionMethod.getName().replace("*",".*"));
+            sb.append("\\(.*\\)");
+            aopClass.setPointcut(Pattern.compile(sb.toString()));
+            aopClass.setRound(aopMethod);
+            this.aopMap.put(transactionAop.getClass().getName(),aopClass);
         }
     }
 }

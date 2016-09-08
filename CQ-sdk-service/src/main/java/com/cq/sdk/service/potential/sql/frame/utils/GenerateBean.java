@@ -122,18 +122,21 @@ public class GenerateBean {
             Object sessionFactory=configuration.getClass().getMethod("buildSessionFactory").invoke(configuration);
 
             TransactionManager transactionManager = hibernateTrusteeship.transactionManager();
-            Field field=transactionManager.getClass().getField("transaction");
+            Field field=transactionManager.getClass().getDeclaredField("transaction");
             field.setAccessible(true);
             field.set(transactionManager, new Transaction() {
                 @Autowired(type = "org.hibernate.SessionFactory")
                 Object sessionFactory;
+                Object session;
                 Object transaction;
                 @Override
                 public void begin() {
                     try {
-                        Object session=sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
+                        this.session=sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
                         this.transaction=session.getClass().getMethod("beginTransaction").invoke(session);
-                        this.transaction.getClass().getMethod("begin").invoke(this.transaction);
+                        if(!(Boolean) this.transaction.getClass().getMethod("isActive").invoke(this.transaction)) {
+                            this.transaction.getClass().getMethod("begin").invoke(this.transaction);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -152,6 +155,7 @@ public class GenerateBean {
                 public void rollback() {
                     try {
                         this.transaction.getClass().getMethod("rollback").invoke(this.transaction);
+                        this.session.getClass().getMethod("close").invoke(this.transaction);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -159,6 +163,7 @@ public class GenerateBean {
             });
             List<ClassObj> classObjList=new ArrayList<>();
             classObjList.add(new ClassObj(sessionFactory));
+            classObjList.add(new ClassObj(transactionManager));
             return new AutowiredInterface() {
                 @Override
                 public TransactionManager transactionManager() {

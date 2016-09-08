@@ -21,6 +21,7 @@ subprojects {
     compile "cglib:cglib-nodep:3.2.4"
     compile "org.hibernate:hibernate-core:5.2.2.Final"
     compile "org.springframework:spring-hibernate:1.2.9"
+    compile ""
   }
 }
 
