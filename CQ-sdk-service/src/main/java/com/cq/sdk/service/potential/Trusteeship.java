@@ -384,7 +384,7 @@ public class Trusteeship {
         this.transactionManager=autowiredInterface.transactionManager();
         this.injection(this.transactionManager.getTransaction());
         this.classMap.put(transactionManager.getClass().getName(),new ClassObj(transactionManager));
-        TransactionAop  transactionAop=  this.injection(TransactionAop.class);
+        TransactionAop transactionAop=  this.injection(TransactionAop.class);
         AopClass baseAopClass=this.analysisAopClass(transactionAop);
         for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
             AopClass aopClass = baseAopClass.clone();

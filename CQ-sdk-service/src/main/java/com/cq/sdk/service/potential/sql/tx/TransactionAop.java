@@ -8,7 +8,7 @@ import com.cq.sdk.service.utils.Logger;
  * Created by admin on 2016/9/8.
  */
 @Component
-public class TransactionAop {
+public final class TransactionAop {
     @Autowired
     TransactionManager transactionManager;
     public void pointcut(){
