@@ -78,4 +78,16 @@ public class AopClass {
     public void setReturning(AopMethod returning) {
         this.returning = returning;
     }
+    public AopClass clone() {
+        AopClass aopClass=new AopClass();
+        aopClass.setName(this.getName());
+        aopClass.setObject(this.object);
+        aopClass.setRound(this.round);
+        aopClass.setPointcut(this.pointcut);
+        aopClass.setAfter(this.after);
+        aopClass.setThrowing(this.throwing);
+        aopClass.setBefore(this.before);
+        aopClass.setReturning(this.returning);
+        return aopClass;
+    }
 }

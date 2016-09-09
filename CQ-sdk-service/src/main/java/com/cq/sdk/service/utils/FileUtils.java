@@ -17,13 +17,20 @@ public class FileUtils {
      * @return
      */
     public static final List<File> findFileList(String packName){
-        String root=Thread.currentThread().getClass().getResource("/").getFile();
-        root=root.substring(1);
         String[] array=packName.split("\\.");
-        return fileList(new ArrayList<File>(),new File(root),array,0,true);
+        StringBuilder sb=new StringBuilder("/");
+        for(int i=0;i<array.length;i++){
+            if(array[i].indexOf("*")==-1){
+                sb.append(array[i]);
+                sb.append("/");
+            }else{
+                array=Arrays.copyOfRange(array,i,array.length);
+                break;
+            }
+        }
+        return FileUtils. fileList(new ArrayList(),new File(Thread.currentThread().getClass().getResource(sb.toString()).getFile()),array,0,true);
     }
     private static final List<File> fileList(List<File> fileList,File path,String[] array,int level,boolean fileMode){
-
         String nowStr=array[level];
         int type=wildcard(nowStr);
         File[] files=path.listFiles();
@@ -109,11 +116,5 @@ public class FileUtils {
                 loadFile(file,fileList);
             }
         }
-    }
-
-    public static final List<File> findResources(Class clazz,String packName){
-        packName=packName.replace("classpath*:","").replace("classpath:","").replace("\\","/");
-        String[] array=packName.split("/");
-        return fileList(new ArrayList<File>(),new File(clazz.getResource("/"+array[0]).getFile()), Arrays.copyOfRange(array,1,array.length),0,true);
     }
 }

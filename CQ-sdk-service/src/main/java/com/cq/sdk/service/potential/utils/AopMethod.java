@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 /**
  * Created by admin on 2016/9/5.
  */
-public class AopMethod {
+public class AopMethod implements Cloneable {
     private Annotation value;
     private Object object;
     private Method method;
@@ -40,4 +40,5 @@ public class AopMethod {
     public void setMethod(Method method) {
         this.method = method;
     }
+
 }

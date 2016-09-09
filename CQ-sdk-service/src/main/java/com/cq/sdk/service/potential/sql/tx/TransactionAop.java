@@ -1,7 +1,5 @@
 package com.cq.sdk.service.potential.sql.tx;
-import com.cq.sdk.service.potential.annotation.Around;
-import com.cq.sdk.service.potential.annotation.Autowired;
-import com.cq.sdk.service.potential.annotation.Component;
+import com.cq.sdk.service.potential.annotation.*;
 import com.cq.sdk.service.potential.aop.ProceedingJoinPoint;
 import com.cq.sdk.service.utils.Logger;
 
@@ -16,19 +14,16 @@ public class TransactionAop {
     public void pointcut(){
 
     }
-    @Around("pointcut()")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint){
-        Logger.info("事件前");
-        Object object=null;
+    @Before("pointcut()")
+    public void before(){
         this.transactionManager.getTransaction().begin();
-        try {
-            object= proceedingJoinPoint.proceed();
-            this.transactionManager.getTransaction().commit();
-        }catch (Exception ex){
-            ex.printStackTrace();
-            this.transactionManager.getTransaction().rollback();
-        }
-        Logger.info("事件后");
-        return object;
+    }
+    @AfterThrowing("pointcut()")
+    public void throwing(Exception e){
+        this.transactionManager.getTransaction().rollback();
+    }
+    @AfterReturning("pointcut()")
+    public void returning(){
+        this.transactionManager.getTransaction().commit();
     }
 }

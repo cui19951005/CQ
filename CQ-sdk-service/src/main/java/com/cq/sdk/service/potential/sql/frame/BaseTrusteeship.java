@@ -9,15 +9,22 @@ import javax.sql.DataSource;
  */
 public interface BaseTrusteeship {
     /**
-     * 创建dataSource
+     * create dataSource
      * @return DataSource
      */
     DataSource dataSource();
 
     /**
-     * 创建TransactionFactory
+     * create TransactionFactory
      * @return
      */
     TransactionManager transactionManager();
+
+    /**
+     * create configuration
+     * @param dataSource
+     * @return
+     */
+    Object configuration(Object configuration, DataSource dataSource);
 
 }

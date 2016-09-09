@@ -1,6 +1,9 @@
 package com.cq.sdk.service.test;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.cq.sdk.service.hibernate.LoginAccountEntity;
+import com.cq.sdk.service.potential.annotation.Autowired;
+import com.cq.sdk.service.potential.annotation.Property;
 import com.cq.sdk.service.potential.sql.frame.HibernateTrusteeship;
 import com.cq.sdk.service.potential.sql.tx.TransactionManager;
 import com.cq.sdk.service.potential.sql.utils.TransactionMethod;
@@ -10,14 +13,19 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by admin on 2016/9/7.
  */
 public class HibernateTest implements HibernateTrusteeship {
+    @Property("jdbc.")
+    @Autowired
+    DruidDataSource druidDataSource;
     @Override
     public DataSource dataSource() {
-        return null;
+        this.druidDataSource.setDefaultAutoCommit(false);
+        return this.druidDataSource;
     }
 
     @Override
@@ -34,8 +42,19 @@ public class HibernateTest implements HibernateTrusteeship {
 
     @Override
     public Object configuration(Object configuration, DataSource dataSource) {
-        Configuration c= (Configuration) configuration;
+        /*Configuration c= (Configuration) configuration;
         c.configure(new File(LoginAccountEntity.class.getResource("/hibernate.cfg.xml").getFile()));
-        return c;
+        return c;*/
+        return configuration;
+    }
+
+    @Override
+    public Properties properties(Properties properties) {
+        return properties;
+    }
+
+    @Override
+    public String mapping() {
+        return "com.cq.sdk.service.hibernate.*";
     }
 }

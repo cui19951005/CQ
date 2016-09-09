@@ -4,14 +4,12 @@ import com.cq.sdk.service.potential.annotation.Autowired;
 import com.cq.sdk.service.potential.inter.AutowiredInterface;
 import com.cq.sdk.service.potential.sql.tx.Transaction;
 import com.cq.sdk.service.potential.sql.tx.TransactionManager;
-import com.cq.sdk.service.potential.sql.frame.HibernateConnectionProvider;
 import com.cq.sdk.service.potential.sql.frame.HibernateTrusteeship;
 import com.cq.sdk.service.potential.sql.frame.MybatisTrusteeship;
 import com.cq.sdk.service.potential.utils.ClassObj;
 import com.cq.sdk.service.utils.FileUtils;
 import com.cq.sdk.service.utils.Logger;
 import com.cq.sdk.service.utils.StringUtils;
-
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +38,7 @@ public class GenerateBean {
             Object envObj=constructor.newInstance("frame",Class.forName("org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory").newInstance(),dataSource);
             Object configObj=configClass.newInstance();
             Class xMLMapperBuilder=Class.forName("org.apache.ibatis.builder.xml.XMLMapperBuilder");
-            List<File> fileList=FileUtils.findResources(mybatisTrusteeship.getClass(),mapper);
+            List<File> fileList=FileUtils.findFileList(mapper);
             for(File file :  fileList){//解析xml文件
                 Constructor xMLMapperBuilderCon=xMLMapperBuilder.getConstructor(InputStream.class,configClass,String.class, Map.class);
                 Object xMLMapperBuilderObj=xMLMapperBuilderCon.newInstance(new FileInputStream(file),configObj,file.getAbsolutePath(),configClass.getMethod("getSqlFragments").invoke(configObj));
@@ -55,7 +53,7 @@ public class GenerateBean {
             final List<ClassObj> objectList = new ArrayList<ClassObj>();
             fileList = FileUtils.findFileList(mybatisTrusteeship.mapperLocation());
             for (File file : fileList) {
-                ClassObj classObj=new ClassObj(sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file))));
+                ClassObj classObj=new ClassObj(sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file,mybatisTrusteeship.mapperLocation()))));
                 objectList.add(classObj);
             }
             objectList.add(new ClassObj(dataSource));
@@ -113,16 +111,41 @@ public class GenerateBean {
         try {
             DataSource dataSource = hibernateTrusteeship.dataSource();
             Object configuration = Class.forName("org.hibernate.cfg.Configuration").newInstance();
-            if(dataSource!=null) {
-                Properties properties = (Properties) configuration.getClass().getField("properties").get(configuration);
-                properties.put("connection.provider_class", HibernateConnectionProvider.class.getName());
-                configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
-            }
+            Field field=configuration.getClass().getDeclaredField("properties");
+            field.setAccessible(true);
+            Properties properties = (Properties) field.get(configuration);
+            properties.put("hibernate.cache.use_query_cache",false);
+            properties.put("hibernate.cache.use_second_level_cache",true);
+            properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+            properties=hibernateTrusteeship.properties(properties);
+            configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
             configuration=hibernateTrusteeship.configuration(configuration,dataSource);
+            if(dataSource!=null) {
+                properties.put("hibernate.connection.datasource",dataSource);
+            }
+            configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
+            field=configuration.getClass().getDeclaredField("standardServiceRegistryBuilder");
+            field.setAccessible(true);
+            Object standardServiceRegistryBuilder=field.get(configuration);
+            field=standardServiceRegistryBuilder.getClass().getDeclaredField("aggregatedCfgXml");
+            field.setAccessible(true);
+            Object aggregatedCfgXml=field.get(standardServiceRegistryBuilder);
+            Field mappingReferencesField=aggregatedCfgXml.getClass().getDeclaredField("mappingReferences");
+            mappingReferencesField.setAccessible(true);
+            List mappingReferences= (List) mappingReferencesField.get(aggregatedCfgXml);
+            if(mappingReferences==null){
+                mappingReferences=new ArrayList();
+            }
+            List<File> mappingFile=FileUtils.findFileList(hibernateTrusteeship.mapping());
+            Class mappingReference$Type=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference$Type");
+            for(File file : mappingFile){
+                Object mappingReference=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference").getConstructor(mappingReference$Type,String.class).newInstance(mappingReference$Type.getEnumConstants()[1],StringUtils.filePathConvertPack(file,hibernateTrusteeship.mapping()));
+                mappingReferences.add(mappingReference);
+            }
+            mappingReferencesField.set(aggregatedCfgXml,mappingReferences);
             Object sessionFactory=configuration.getClass().getMethod("buildSessionFactory").invoke(configuration);
-
             TransactionManager transactionManager = hibernateTrusteeship.transactionManager();
-            Field field=transactionManager.getClass().getDeclaredField("transaction");
+            field=transactionManager.getClass().getDeclaredField("transaction");
             field.setAccessible(true);
             field.set(transactionManager, new Transaction() {
                 @Autowired(type = "org.hibernate.SessionFactory")

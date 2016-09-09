@@ -7,19 +7,14 @@ import javax.sql.DataSource;
  */
 public interface MybatisTrusteeship extends BaseTrusteeship {
 
+
     /**
-     * 创建configuration
-     * @param dataSource
-     * @return
-     */
-    Object configuration(Object configuration, DataSource dataSource);
-    /**
-     * 创建mapper.xml文件包
+     * get mapper*.xml resource path
      */
     String mappers();
 
     /**
-     * mapper 接口位置
+     * get mapper interface package path
      * @return
      */
     String mapperLocation();

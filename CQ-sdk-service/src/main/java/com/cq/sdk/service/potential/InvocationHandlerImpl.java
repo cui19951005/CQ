@@ -157,23 +157,13 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             }else if(method.getParameters()[i].getType().isAssignableFrom(ProceedingJoinPoint.class)){
                 params[i]=new ProceedingJoinPoint() {
                     @Override
-                    public Object proceed() {
-                        try {
+                    public Object proceed() throws InvocationTargetException, IllegalAccessException {
                             return paramsMethod.invoke(object, objects);
-                        }catch (Exception ex){
-                            ex.printStackTrace();
-                            return null;
-                        }
                     }
 
                     @Override
-                    public Object proceed(Object[] args) {
-                        try {
+                    public Object proceed(Object[] args) throws InvocationTargetException, IllegalAccessException {
                             return paramsMethod.invoke(object,args);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
-                        }
                     }
 
                     @Override

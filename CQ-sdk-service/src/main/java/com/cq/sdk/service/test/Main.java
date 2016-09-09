@@ -6,21 +6,21 @@ import com.cq.sdk.service.potential.annotation.Entrance;
 import com.cq.sdk.service.potential.annotation.Execute;
 import com.cq.sdk.service.potential.annotation.LoadProperties;
 import com.cq.sdk.service.potential.utils.InjectionType;
+import com.cq.sdk.service.utils.FileUtils;
 import com.cq.sdk.service.utils.Logger;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import com.cq.sdk.service.hibernate.LoginAccountEntity;
-import org.hibernate.jdbc.Work;
+import org.hibernate.boot.cfgxml.spi.MappingReference;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * Created by admin on 2016/9/2.
@@ -35,9 +35,14 @@ public class Main {
     public static ThreadLocal<List<StringBuilder>> sb=new ThreadLocal<>();
     public static List<StringBuilder> list=new ArrayList<>();
     static long time=0;
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-        time=System.currentTimeMillis();
+    public static void main(String[] args) throws IOException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+       time=System.currentTimeMillis();
         new Trusteeship(Main.class);
+        /*Object hibernateConnectionProvider=  Proxy.newProxyInstance(HibernateConnectionProvider.class.getClassLoader(),HibernateConnectionProvider.class.getInterfaces(),new HibernateConnectionProvider());
+        Logger.info(hibernateConnectionProvider.getClass().getName());
+        Class c=Class.forName(hibernateConnectionProvider.getClass().getName());
+        Logger.info(c.newInstance());*/
+        //ApplicationContext applicationContext=new ClassPathXmlApplicationContext("/applicationContext.xml");
     }
     @Execute
     public void main(){

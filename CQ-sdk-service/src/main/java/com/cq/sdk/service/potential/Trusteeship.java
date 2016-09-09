@@ -200,7 +200,7 @@ public class Trusteeship {
                 }
             }
         }
-        if(!clazz.isInterface()&&clazz.isAnnotationPresent(Autowired.class)){
+        if(!clazz.isInterface()&&field.isAnnotationPresent(Autowired.class)){
             return this.createObj(clazz);
         }
         return null;
@@ -385,19 +385,16 @@ public class Trusteeship {
         this.injection(this.transactionManager.getTransaction());
         this.classMap.put(transactionManager.getClass().getName(),new ClassObj(transactionManager));
         TransactionAop  transactionAop=  this.injection(TransactionAop.class);
-        Method method=transactionAop.getClass().getMethod("around", ProceedingJoinPoint.class);
-        AopMethod aopMethod=new AopMethod(method.getAnnotation(Around.class),transactionAop,method);
+        AopClass baseAopClass=this.analysisAopClass(transactionAop);
         for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
-            AopClass aopClass = new AopClass();
+            AopClass aopClass = baseAopClass.clone();
             aopClass.setObject(transactionAop);
-            aopClass.setName("pointcut");
             StringBuilder sb = new StringBuilder();
             sb.append(".*");
             sb.append(transactionManager.getPackName());
             sb.append(transactionMethod.getName().replace("*",".*"));
             sb.append("\\(.*\\)");
             aopClass.setPointcut(Pattern.compile(sb.toString()));
-            aopClass.setRound(aopMethod);
             this.aopMap.put(transactionAop.getClass().getName(),aopClass);
         }
     }

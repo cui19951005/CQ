@@ -14,6 +14,15 @@
     <orderEntry type="library" name="Gradle: cglib:cglib-nodep:3.2.4" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.2.2.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-hibernate:1.2.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-context:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-core:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-dao:2.0.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-jdbc:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-orm:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-beans:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-aop:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.aspectj:aspectjrt:1.6.12" level="project" />
+    <orderEntry type="library" name="Gradle: org.aspectj:aspectjweaver:1.6.12" level="project" />
     <orderEntry type="module" module-name="hibernate_main" />
     <orderEntry type="library" name="Gradle: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
@@ -25,16 +34,14 @@
     <orderEntry type="library" name="Gradle: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final" level="project" />
     <orderEntry type="library" name="Gradle: javax.enterprise:cdi-api:1.1" level="project" />
-    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-beans:1.2.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-core:1.2.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-dao:1.2.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-jdbc:1.2.9" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-orm:1.2.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-expression:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-asm:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Gradle: javax.el:el-api:2.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec:1.0.0.Beta1" level="project" />
     <orderEntry type="library" name="Gradle: javax.annotation:jsr250-api:1.0" level="project" />
     <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework:spring-context:1.2.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework:spring-tx:3.1.4.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.1.1" level="project" />
   </component>
 </module>
