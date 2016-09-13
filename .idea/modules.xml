@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service.iml" group="CQ-sdk-service" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_main.iml" group="CQ-sdk-service" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ-sdk-service/CQ-sdk-service_test.iml" group="CQ-sdk-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk.iml" group="cq-sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_main.iml" group="cq-sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_test.iml" group="cq-sdk" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/hibernate/hibernate.iml" filepath="$PROJECT_DIR$/.idea/modules/hibernate/hibernate.iml" group="hibernate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/hibernate/hibernate_main.iml" filepath="$PROJECT_DIR$/.idea/modules/hibernate/hibernate_main.iml" group="hibernate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/hibernate/hibernate_test.iml" filepath="$PROJECT_DIR$/.idea/modules/hibernate/hibernate_test.iml" group="hibernate" />

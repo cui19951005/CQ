@@ -25,6 +25,8 @@
       <module name="CQ-sdk-service_,_hibernate_test" target="1.8" />
       <module name="CQ-sdk-service_main" target="1.8" />
       <module name="CQ-sdk-service_test" target="1.8" />
+      <module name="cq-sdk_main" target="1.8" />
+      <module name="cq-sdk_test" target="1.8" />
       <module name="hibernate_main" target="1.8" />
       <module name="hibernate_test" target="1.8" />
     </bytecodeTargetLevel>
