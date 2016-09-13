@@ -1,0 +1,4161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - fundstore@139.196.188.73" uuid="a7d4049c-ce16-4d37-9f80-8d735c43a59a">
+    <database-info product="MySQL" version="5.6.32" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.36 ( Revision: 4fc1f969f740409a4e03750316df2c0e429f3dc8 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+      <schema id="1" name="fundstore">
+        <visible>1</visible>
+      </schema>
+      <schema id="2" name="information_schema"/>
+      <schema id="3" name="test"/>
+      <table id="4" parent="1" name="Advert">
+        <comment>广告</comment>
+      </table>
+      <table id="5" parent="1" name="Agreement">
+        <comment>用户协议表</comment>
+      </table>
+      <table id="6" parent="1" name="Area">
+        <comment>开户省</comment>
+      </table>
+      <table id="7" parent="1" name="BankBranch">
+        <comment>开户行</comment>
+      </table>
+      <table id="8" parent="1" name="BankProvinceArea">
+        <comment>开户省开户市表</comment>
+      </table>
+      <table id="9" parent="1" name="Banks"/>
+      <table id="10" parent="1" name="Channel"/>
+      <table id="11" parent="1" name="ChannelDetail"/>
+      <table id="12" parent="1" name="City">
+        <comment>开户市</comment>
+      </table>
+      <table id="13" parent="1" name="Commission">
+        <comment>佣金</comment>
+      </table>
+      <table id="14" parent="1" name="CommissionLog">
+        <comment>每次佣金记录</comment>
+      </table>
+      <table id="15" parent="1" name="CompanyFund">
+        <comment>公司下基金</comment>
+      </table>
+      <table id="16" parent="1" name="Constants">
+        <comment>常量表</comment>
+      </table>
+      <table id="17" parent="1" name="DataSource">
+        <comment>数据来源</comment>
+      </table>
+      <table id="18" parent="1" name="ExchangeRateExplain"/>
+      <table id="19" parent="1" name="FundBonus">
+        <comment>基金分红</comment>
+      </table>
+      <table id="20" parent="1" name="FundCompany"/>
+      <table id="21" parent="1" name="FundDetailInfo"/>
+      <table id="22" parent="1" name="FundDiscount">
+        <comment>基金折扣率</comment>
+      </table>
+      <table id="23" parent="1" name="FundInfo"/>
+      <table id="24" parent="1" name="FundManager"/>
+      <table id="25" parent="1" name="FundNavHistory"/>
+      <table id="26" parent="1" name="FundRate"/>
+      <table id="27" parent="1" name="FundSource">
+        <comment>基金来源</comment>
+      </table>
+      <table id="28" parent="1" name="FundStrategy">
+        <comment>投资策略</comment>
+      </table>
+      <table id="29" parent="1" name="HeavyShares">
+        <comment>重仓股票</comment>
+      </table>
+      <table id="30" parent="1" name="Holiday">
+        <comment>假日表</comment>
+      </table>
+      <table id="31" parent="1" name="LoginAccount"/>
+      <table id="32" parent="1" name="Menu"/>
+      <table id="33" parent="1" name="Message"/>
+      <table id="34" parent="1" name="MessageDetail"/>
+      <table id="35" parent="1" name="MoreFiles">
+        <comment>非标准类产品上传文件表</comment>
+      </table>
+      <table id="36" parent="1" name="MoreInfo">
+        <comment>非标准类产品更多信息表</comment>
+      </table>
+      <table id="37" parent="1" name="NoStandardFundInfo">
+        <comment>非标准类基金产品信息</comment>
+      </table>
+      <table id="38" parent="1" name="OnlineFundCondition">
+        <comment>非标类产品上架条件表</comment>
+      </table>
+      <table id="39" parent="1" name="OnlineFundLimitCondition">
+        <comment>非标类产品上架条件表</comment>
+      </table>
+      <table id="40" parent="1" name="OnlineNoStandard">
+        <comment>上架基金表</comment>
+      </table>
+      <table id="41" parent="1" name="OperatorInformation"/>
+      <table id="42" parent="1" name="OutFundInfo">
+        <comment>基金同步信息</comment>
+      </table>
+      <table id="43" parent="1" name="Paypassword"/>
+      <table id="44" parent="1" name="ReservationOrder">
+        <comment>预约单</comment>
+      </table>
+      <table id="45" parent="1" name="Role"/>
+      <table id="46" parent="1" name="RoleMenu"/>
+      <table id="47" parent="1" name="Topics">
+        <comment>精选主题</comment>
+      </table>
+      <table id="48" parent="1" name="TopicsFund">
+        <comment>主题基金</comment>
+      </table>
+      <table id="49" parent="1" name="TradeOrder">
+        <comment>产品订单</comment>
+      </table>
+      <table id="50" parent="1" name="TransactionLog"/>
+      <table id="51" parent="1" name="UserAsset"/>
+      <table id="52" parent="1" name="UserCardInfo"/>
+      <table id="53" parent="1" name="UserFund"/>
+      <table id="54" parent="1" name="UserFundDetail"/>
+      <table id="55" parent="1" name="UserFundHistory"/>
+      <table id="56" parent="1" name="UserInformation"/>
+      <table id="57" parent="1" name="productCategory"/>
+      <view id="58" parent="1" name="v_ChannelPerformance">
+        <comment>VIEW</comment>
+      </view>
+      <view id="59" parent="1" name="v_ChannelPerformanceDetail">
+        <comment>VIEW</comment>
+      </view>
+      <view id="60" parent="1" name="v_FinancialAdvisorPerformance">
+        <comment>VIEW</comment>
+      </view>
+      <view id="61" parent="1" name="v_InvertorTrade">
+        <comment>VIEW</comment>
+      </view>
+      <view id="62" parent="1" name="v_ReservationOrderDetail">
+        <comment>VIEW</comment>
+      </view>
+      <view id="63" parent="1" name="v_TransactionOrderDetail">
+        <comment>VIEW</comment>
+      </view>
+      <routine id="64" parent="1" name="getChannelFundIds">
+        <routine-kind>FUNCTION</routine-kind>
+      </routine>
+      <routine id="65" parent="1" name="p_deleteChildMenu">
+        <routine-kind>PROCEDURE</routine-kind>
+      </routine>
+      <routine id="66" parent="1" name="p_deleteChildMenu_copy">
+        <routine-kind>PROCEDURE</routine-kind>
+      </routine>
+      <column id="67" parent="4" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="68" parent="4" name="title">
+        <comment>广告标题</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="69" parent="4" name="context">
+        <comment>广告内容</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="70" parent="4" name="imgUrl">
+        <comment>图片地址</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="71" parent="4" name="url">
+        <comment>广告地址</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="72" parent="4" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="73" parent="4" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="74" parent="4" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="75" parent="4" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="76" parent="4" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="77" parent="5" name="pid">
+        <comment>主键id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="78" parent="5" name="agreementCode">
+        <comment>协议代码</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="79" parent="5" name="agreementName">
+        <comment>协议名称</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="80" parent="5" name="agreementUrl">
+        <comment>协议地址</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <key id="81" parent="5" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="82" parent="6" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="83" parent="6" name="code">
+        <comment>开户省代码</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="84" parent="6" name="name">
+        <comment>开户省名称</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="85" parent="6" name="parentId">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="86" parent="6" name="level">
+        <mandatory>1</mandatory>
+        <data-type>int(2)|0</data-type>
+      </column>
+      <column id="87" parent="6" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="88" parent="6" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="89" parent="6" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="90" parent="6" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="91" parent="6" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="92" parent="7" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="93" parent="7" name="branchCode">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="94" parent="7" name="branchName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="95" parent="7" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="96" parent="7" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="97" parent="7" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="98" parent="7" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="99" parent="7" name="provinceId">
+        <comment>关联开户省pid</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="100" parent="7" name="cityId">
+        <comment>关联开户市pid</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="101" parent="7" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="102" parent="8" name="pid">
+        <comment>pid</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="103" parent="8" name="provinceCode">
+        <comment>开户省代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="104" parent="8" name="provinceName">
+        <comment>开户省名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="105" parent="8" name="areaCode">
+        <comment>开户区域代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="106" parent="8" name="areaName">
+        <comment>开户区域名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="107" parent="8" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="108" parent="8" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="109" parent="8" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="110" parent="8" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="111" parent="8" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="112" parent="9" name="pid">
+        <comment>银行</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="113" parent="9" name="bank_id">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="114" parent="9" name="bankCode">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="115" parent="9" name="bankName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="116" parent="9" name="bankShortName">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="117" parent="9" name="iconUrl">
+        <comment>ͼ</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="118" parent="9" name="status">
+        <comment>״̬&#xd;
+            DBL δ</comment>
+        <data-type>char(3)|0</data-type>
+      </column>
+      <column id="119" parent="9" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="120" parent="9" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="121" parent="9" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="122" parent="9" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="123" parent="9" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="124" parent="9" name="onceLimit">
+        <comment>单次限额(分)</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="125" parent="9" name="monthLimit">
+        <comment>每月限额(分)</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="126" parent="9" name="dayLimit">
+        <comment>银行每天限额(分)</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="127" parent="9" name="needSign">
+        <comment>充值前是否需签约,Y-需要页面签约,N-不需要页面签约</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <key id="128" parent="9" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="129" parent="10" name="pid">
+        <comment>ԤԼ</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="130" parent="10" name="name">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="131" parent="10" name="code">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="132" parent="10" name="status">
+        <comment>״̬&#xd;
+</comment>
+        <data-type>char(3)|0</data-type>
+      </column>
+      <column id="133" parent="10" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="134" parent="10" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="135" parent="10" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="136" parent="10" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="137" parent="10" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="138" parent="10" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="139" parent="11" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="140" parent="11" name="channelId">
+        <comment>渠道编号</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="141" parent="11" name="enterpriseName">
+        <comment>企业名称</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="142" parent="11" name="legalRepresentative">
+        <comment>法人代表</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="143" parent="11" name="legalRepresentativeIdcard">
+        <comment>法人代表身份证</comment>
+        <data-type>char(18)|0</data-type>
+      </column>
+      <column id="144" parent="11" name="legalRepresentativeContact">
+        <comment>法人代表联系方式</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="145" parent="11" name="registeredProvinceCode">
+        <comment>企业注册省份编号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="146" parent="11" name="registeredCityCode">
+        <comment>企业注册城市编号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="147" parent="11" name="registeredAddress">
+        <comment>企业注册地址</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="148" parent="11" name="contactProvinceCode">
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="149" parent="11" name="contactCityCode">
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="150" parent="11" name="contactAddress">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="151" parent="11" name="linkMan">
+        <comment>企业联系人</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="152" parent="11" name="linkManIdcard">
+        <comment>企业联系人身份证号</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="153" parent="11" name="linkManContact">
+        <comment>企业联系人联系方式</comment>
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="154" parent="11" name="linkManEmail">
+        <comment>邮箱</comment>
+        <data-type>varchar(80)|0</data-type>
+      </column>
+      <column id="155" parent="11" name="createBy">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="156" parent="11" name="createAt">
+        <data-type>timestamp|0</data-type>
+      </column>
+      <column id="157" parent="11" name="modifyBy">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="158" parent="11" name="modifyAt">
+        <data-type>timestamp|0</data-type>
+      </column>
+      <key id="159" parent="11" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="160" parent="12" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="161" parent="12" name="cityCode">
+        <comment>开户市代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="162" parent="12" name="cityName">
+        <comment>开户市名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="163" parent="12" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="164" parent="12" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="165" parent="12" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="166" parent="12" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="167" parent="12" name="provinceId">
+        <comment>关联开户省pid</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="168" parent="12" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="169" parent="13" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="170" parent="13" name="loginAccountId">
+        <comment>关联登录用户pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="171" parent="13" name="todayComm">
+        <comment>当天佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="172" parent="13" name="monthComm">
+        <comment>本月佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="173" parent="13" name="yearComm">
+        <comment>本年佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="174" parent="13" name="totalComm">
+        <comment>累计佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="175" parent="13" name="intoAccount">
+        <comment>已入账佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="176" parent="13" name="nointoAccount">
+        <comment>未入账佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="177" parent="13" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="178" parent="13" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="179" parent="13" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="180" parent="13" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="181" parent="13" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="182" parent="14" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="183" parent="14" name="loginAccountId">
+        <comment>关联登录pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="184" parent="14" name="comm">
+        <comment>佣金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="185" parent="14" name="op">
+        <comment>操作</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="186" parent="14" name="opdate">
+        <comment>操作日期</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="187" parent="14" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="188" parent="14" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="189" parent="14" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="190" parent="14" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="191" parent="14" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="192" parent="15" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="193" parent="15" name="companyId">
+        <comment>关联公司pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="194" parent="15" name="fundId">
+        <comment>关联基金pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="195" parent="15" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="196" parent="16" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="197" parent="16" name="param">
+        <comment>参数名</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="198" parent="16" name="pvalue">
+        <comment>参数值</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="199" parent="16" name="describute">
+        <comment>参数说明</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <key id="200" parent="16" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="201" parent="17" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="202" parent="17" name="sourceCode">
+        <comment>来源代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="203" parent="17" name="sourceName">
+        <comment>来源名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="204" parent="17" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="205" parent="17" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="206" parent="17" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="207" parent="17" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="208" parent="17" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="209" parent="18" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="210" parent="18" name="fundId">
+        <comment>关联基金id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="211" parent="18" name="name">
+        <comment>名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="212" parent="18" name="content">
+        <comment>内容</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="213" parent="18" name="rate">
+        <comment>汇率</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="214" parent="18" name="rateExplain">
+        <comment>说明</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="215" parent="18" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="216" parent="18" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="217" parent="18" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="218" parent="18" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="219" parent="18" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="220" parent="19" name="pid">
+        <comment>主键</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="221" parent="19" name="fundId">
+        <comment>关联基金pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="222" parent="19" name="bonusTitle">
+        <comment>分红标题</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="223" parent="19" name="bonusDate">
+        <comment>分红日期</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="224" parent="19" name="dividendDate">
+        <comment>派息日期</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="225" parent="19" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="226" parent="19" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="227" parent="19" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="228" parent="19" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="229" parent="19" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="230" parent="19" name="amount">
+        <comment>分红金额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <key id="231" parent="19" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="232" parent="20" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="233" parent="20" name="companyCode">
+        <comment>公司代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="234" parent="20" name="companyName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="235" parent="20" name="companyIntro">
+        <data-type>varchar(5000)|0</data-type>
+      </column>
+      <column id="236" parent="20" name="registeCapital">
+        <comment>ע</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="237" parent="20" name="establishDate">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="238" parent="20" name="totalAsset">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="239" parent="20" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="240" parent="20" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="241" parent="20" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="242" parent="20" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="243" parent="20" name="companyNameAbbr">
+        <comment>公司名称简称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <key id="244" parent="20" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="245" parent="21" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="246" parent="21" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="247" parent="21" name="fundNav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="248" parent="21" name="minSg">
+        <comment>最低申购</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="249" parent="21" name="maxSg">
+        <comment>最高申购</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="250" parent="21" name="minFaseWit">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="251" parent="21" name="maxFaseWit">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="252" parent="21" name="marketingType">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="253" parent="21" name="estabDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="254" parent="21" name="fegm">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="255" parent="21" name="ftyi">
+        <comment>15</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="256" parent="21" name="isBuy">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="257" parent="21" name="issbDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="258" parent="21" name="isseDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="259" parent="21" name="fundManagerId">
+        <comment>基金经理id,多个id用逗号分开</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="260" parent="21" name="fundManager">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="261" parent="21" name="fundGrade">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="262" parent="21" name="minRg">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="263" parent="21" name="maxRg">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="264" parent="21" name="rate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="265" parent="21" name="rdmcfmData">
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="266" parent="21" name="dailyGains">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="267" parent="21" name="purchaseStatus">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="268" parent="21" name="redemptionStatus">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="269" parent="21" name="sourceRate">
+        <comment>Դ</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="270" parent="21" name="ssbcfmData">
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="271" parent="21" name="annual7dRate">
+        <comment>7</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="272" parent="21" name="annual1yRate">
+        <comment>1</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="273" parent="21" name="annual2yRate">
+        <comment>2</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="274" parent="21" name="annual3yRate">
+        <comment>3</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="275" parent="21" name="seasonRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="276" parent="21" name="halfYearRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="277" parent="21" name="thisYearRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="278" parent="21" name="allRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="279" parent="21" name="monthRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="280" parent="21" name="weekRate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="281" parent="21" name="annual28dRate">
+        <comment>28</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="282" parent="21" name="annual35dRate">
+        <comment>35</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="283" parent="21" name="isHuoqi">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="284" parent="21" name="isDingqi">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="285" parent="21" name="subscribeTime">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="286" parent="21" name="fixedInvestStatus">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="287" parent="21" name="hadmrt">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="288" parent="21" name="maxSgDay">
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="289" parent="21" name="mgrexp">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="290" parent="21" name="minDt">
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="291" parent="21" name="minSbsg">
+        <comment>&#x5f7;</comment>
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="292" parent="21" name="minSsg">
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="293" parent="21" name="salesExp">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="294" parent="21" name="trustExp">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="295" parent="21" name="fundCropNo">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="296" parent="21" name="fundCropName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="297" parent="21" name="bizWorkDay">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="298" parent="21" name="minAppend">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="299" parent="21" name="minHold">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="300" parent="21" name="dividendMethod">
+        <comment>Ĭ</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="301" parent="21" name="chargeType">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="302" parent="21" name="isTrade">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="303" parent="21" name="endNav">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="304" parent="21" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="305" parent="21" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="306" parent="21" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="307" parent="21" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="308" parent="21" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="309" parent="21" name="assetTotal">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="310" parent="21" name="assetShares">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="311" parent="21" name="assetBond">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="312" parent="21" name="assetCash">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="313" parent="21" name="investStrategy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="314" parent="21" name="annual1yRate300">
+        <comment>1年收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="315" parent="21" name="annual2yRate300">
+        <comment>2年收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="316" parent="21" name="annual3yRate300">
+        <comment>3年收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="317" parent="21" name="seasonRate300">
+        <comment>季收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="318" parent="21" name="halfYearRate300">
+        <comment>半年收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="319" parent="21" name="thisYearRate300">
+        <comment>今年收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="320" parent="21" name="allRate300">
+        <comment>成立以来收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="321" parent="21" name="monthRate300">
+        <comment>月收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="322" parent="21" name="weekRate300">
+        <comment>周收益率300</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="323" parent="21" name="fundType">
+        <comment>基金类型,101股票，102混合，103指数，104债券，105qdii,106货币</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="324" parent="21" name="rereceiveDays">
+        <comment>预计到账时间</comment>
+        <data-type>decimal(16,1)|0</data-type>
+      </column>
+      <column id="325" parent="21" name="fundStatus">
+        <comment>基金状态,0-交易,1-发行,2-发行成功,3-发行失败,4-基金停止交易,5-停止申购,6-停止赎回,9-基金封闭,a-基金终止</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="326" parent="21" name="fundNameAbbr">
+        <comment>基金简称</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="327" parent="21" name="fundName">
+        <comment>基金名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="328" parent="21" name="navDate">
+        <comment>净值日期yyyyMMdd</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="329" parent="21" name="unitAccrual">
+        <comment>万份收益</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="330" parent="21" name="annual7D">
+        <comment>7日年化</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="331" parent="21" name="risk">
+        <comment>风险等级</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="332" parent="21" name="purchaseType">
+        <comment>购买类型</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <key id="333" parent="21" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="334" parent="22" name="pid">
+        <comment>主键pid</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="335" parent="22" name="fundId">
+        <comment>基金ld</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="336" parent="22" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="337" parent="22" name="businessCode">
+        <comment>业务代码, 20认购，22申购，24赎回</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="338" parent="22" name="calMode">
+        <comment>计费基准
+            0-默认计费标准
+            1-金额
+            2-份额
+</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="339" parent="22" name="discountPolicy">
+        <comment>计费策略,1-固定比例收费,3-金额段收费
+            4-持有时间收费</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="340" parent="22" name="fixDiscount">
+        <comment>比例</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="341" parent="22" name="downAmount">
+        <comment>金额下限(份额下限)</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="342" parent="22" name="upAmount">
+        <comment>金额上限(份额上限)</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="343" parent="22" name="valueType">
+        <comment>设值类型
+            0-比例
+            1-指定值</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="344" parent="22" name="rateValue">
+        <comment>指定值</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="345" parent="22" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="346" parent="22" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="347" parent="22" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="348" parent="22" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="349" parent="22" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="350" parent="23" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="351" parent="23" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="352" parent="23" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="353" parent="23" name="fundType">
+        <comment>基金类型,101股票，102混合，103指数，104债券，105qdii,106货币</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="354" parent="23" name="risk">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="355" parent="23" name="riskStr">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="356" parent="23" name="annual7D">
+        <comment>7</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="357" parent="23" name="annual7dStr">
+        <comment>7</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="358" parent="23" name="syly">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="359" parent="23" name="sylyStr">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="360" parent="23" name="unitAccrual">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="361" parent="23" name="unitAccrualStr">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="362" parent="23" name="minSg">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="363" parent="23" name="purchaseStatus">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="364" parent="23" name="redemptionStatus">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="365" parent="23" name="navDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="366" parent="23" name="fundNav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="367" parent="23" name="dailyGains">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="368" parent="23" name="dailyGainsStr">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="369" parent="23" name="chargeType">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="370" parent="23" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="371" parent="23" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="372" parent="23" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="373" parent="23" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="374" parent="23" name="isBuy">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="375" parent="23" name="annual1yRate">
+        <comment>1年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="376" parent="23" name="seasonRate">
+        <comment>季度收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="377" parent="23" name="thisYearRate">
+        <comment>今年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="378" parent="23" name="monthRate">
+        <comment>月收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="379" parent="23" name="fundChannel">
+        <comment>上架频道,1基金，2活期，3定期，4保险</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="380" parent="23" name="fundStatus">
+        <comment>基金状态,0-交易,1-发行,2-发行成功,3-发行失败,4-基金停止交易,5-停止申购,6-停止赎回,9-基金封闭,a-基金终止</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="381" parent="23" name="fundNameAbbr">
+        <comment>基金名称简称</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="382" parent="23" name="fundId">
+        <comment>关联基金id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="383" parent="23" name="status">
+        <comment>基金上架，1上架，2下架，3删除</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="384" parent="23" name="fundCanalId">
+        <comment>基金渠道id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="385" parent="23" name="sourceId">
+        <comment>来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="386" parent="23" name="conditions">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="387" parent="23" name="outFundId">
+        <comment>关联标准产品主键id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="388" parent="23" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="389" parent="24" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="390" parent="24" name="mid">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="391" parent="24" name="mgrDays">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="392" parent="24" name="education">
+        <comment>ѧ</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="393" parent="24" name="fempdate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="394" parent="24" name="lempdate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="395" parent="24" name="mgrid">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="396" parent="24" name="mgrname">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="397" parent="24" name="penavgrowth">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="398" parent="24" name="managerPhotoUrl">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="399" parent="24" name="resume">
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="400" parent="24" name="country">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="401" parent="24" name="status">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="402" parent="24" name="occuptalRequirement">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="403" parent="24" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="404" parent="24" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="405" parent="24" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="406" parent="24" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="407" parent="24" name="age">
+        <comment>年龄</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <key id="408" parent="24" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="409" parent="25" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="410" parent="25" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="411" parent="25" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="412" parent="25" name="fundNav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="413" parent="25" name="fundDate">
+        <data-type>date|0</data-type>
+      </column>
+      <column id="414" parent="25" name="discount">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="415" parent="25" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="416" parent="25" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="417" parent="25" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="418" parent="25" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="419" parent="25" name="unitAccrual">
+        <comment>万份收益</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="420" parent="25" name="annual7dRate">
+        <comment>7日年化收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="421" parent="25" name="annual1yRate">
+        <comment>1年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="422" parent="25" name="annual2yRate">
+        <comment>2年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="423" parent="25" name="annual3yRate">
+        <comment>3年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="424" parent="25" name="seasonRate">
+        <comment>季度收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="425" parent="25" name="halfYearRate">
+        <comment>半年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="426" parent="25" name="thisYearRate">
+        <comment>今年收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="427" parent="25" name="allRate">
+        <comment>成立以来收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="428" parent="25" name="monthRate">
+        <comment>月收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="429" parent="25" name="weekRate">
+        <comment>周收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="430" parent="25" name="annual28dRate">
+        <comment>28日年化收益率（货币理财特有）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="431" parent="25" name="annual35dRate">
+        <comment>35日年化收益率（货币理财特有）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="432" parent="25" name="dailyGainsStr">
+        <comment>日涨幅百分比</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="433" parent="25" name="dayRate">
+        <comment>日涨幅</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <key id="434" parent="25" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="435" parent="26" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="436" parent="26" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="437" parent="26" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="438" parent="26" name="downAmount">
+        <comment>金额下限</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="439" parent="26" name="upAmount">
+        <comment>金额上限</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="440" parent="26" name="fixFee">
+        <comment>固定费率</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="441" parent="26" name="rate">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="442" parent="26" name="discount">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="443" parent="26" name="discountTips">
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="444" parent="26" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="445" parent="26" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="446" parent="26" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="447" parent="26" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="448" parent="26" name="downHold">
+        <comment>持有时间下限(月)</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="449" parent="26" name="upHold">
+        <comment>持有时间上限(月)</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="450" parent="26" name="feeRate">
+        <comment>费率</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="451" parent="26" name="businessCode">
+        <comment>业务代码,20认购，22申购，24赎回</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="452" parent="26" name="feePolicy">
+        <comment>计费策略,1-固定比例收费,3-金额段收费,4-持有时间收费</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <key id="453" parent="26" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="454" parent="27" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="455" parent="27" name="fundId">
+        <comment>关联基金id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="456" parent="27" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="457" parent="27" name="sourceId">
+        <comment>基金来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="458" parent="27" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="459" parent="27" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="460" parent="27" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="461" parent="27" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="462" parent="27" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="463" parent="28" name="pid">
+        <comment>主键id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="464" parent="28" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="465" parent="28" name="name">
+        <comment>投资策略名称</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="466" parent="28" name="investTarget">
+        <comment>投资目的</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="467" parent="28" name="investRange">
+        <comment>投资范围</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="468" parent="28" name="achieveBase">
+        <comment>业绩比较基准</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="469" parent="28" name="incomeCharater">
+        <comment>风险收益准则</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="470" parent="28" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="471" parent="28" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="472" parent="28" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="473" parent="28" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="474" parent="28" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="475" parent="29" name="pid">
+        <comment>主键id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="476" parent="29" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="477" parent="29" name="sharesCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="478" parent="29" name="sharesName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="479" parent="29" name="sharesNumber">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="480" parent="29" name="sharesPercent">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="481" parent="29" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="482" parent="29" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="483" parent="29" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="484" parent="29" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="485" parent="29" name="fundCode">
+        <comment>基金代码</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <key id="486" parent="29" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="487" parent="30" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="488" parent="30" name="tday">
+        <comment>日期</comment>
+        <mandatory>1</mandatory>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="489" parent="30" name="holidayType">
+        <comment>加班类型，0加班，1休息</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="490" parent="30" name="describute">
+        <comment>说明</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <key id="491" parent="30" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="492" parent="31" name="pid">
+        <comment>ԤԼ</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="493" parent="31" name="accountName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="494" parent="31" name="password">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="495" parent="31" name="loginStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="496" parent="31" name="accStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="497" parent="31" name="loginSource">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="498" parent="31" name="userToken">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="499" parent="31" name="loginChannel">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="500" parent="31" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="501" parent="31" name="lockStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="502" parent="31" name="unLockTime">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="503" parent="31" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="504" parent="31" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="505" parent="31" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="506" parent="31" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="507" parent="31" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="508" parent="32" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="509" parent="32" name="menuName">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="510" parent="32" name="menuUrl">
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="511" parent="32" name="menuDesc">
+        <data-type>varchar(500)|0</data-type>
+      </column>
+      <column id="512" parent="32" name="level">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="513" parent="32" name="position">
+        <comment>ͬ</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="514" parent="32" name="parentId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="515" parent="32" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="516" parent="32" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="517" parent="32" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="518" parent="32" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="519" parent="32" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="520" parent="33" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="521" parent="33" name="title">
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="522" parent="33" name="content">
+        <data-type>varchar(5000)|0</data-type>
+      </column>
+      <column id="523" parent="33" name="sendBy">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="524" parent="33" name="state">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="525" parent="33" name="sendTime">
+        <mandatory>1</mandatory>
+        <data-type>timestamp|0</data-type>
+        <default-expression>CURRENT_TIMESTAMP</default-expression>
+      </column>
+      <column id="526" parent="33" name="messageType">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="527" parent="33" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="528" parent="33" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="529" parent="33" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="530" parent="33" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="531" parent="33" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="532" parent="34" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="533" parent="34" name="messageId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="534" parent="34" name="receiver">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="535" parent="34" name="isPull">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="536" parent="34" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="537" parent="34" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="538" parent="34" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="539" parent="34" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="540" parent="34" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="541" parent="35" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="542" parent="35" name="moreInfoId">
+        <comment>moreInfo表的pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="543" parent="35" name="fileName">
+        <comment>文件名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="544" parent="35" name="fileType">
+        <comment>文件类型</comment>
+        <data-type>varchar(6)|0</data-type>
+      </column>
+      <column id="545" parent="35" name="fileUrl">
+        <comment>文件地址</comment>
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="546" parent="35" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="547" parent="35" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="548" parent="35" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="549" parent="35" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="550" parent="35" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="551" parent="36" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="552" parent="36" name="fundCode">
+        <comment>基金产品code</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="553" parent="36" name="title">
+        <comment>更多信息标题</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="554" parent="36" name="content">
+        <comment>更多信息内容</comment>
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="555" parent="36" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="556" parent="36" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="557" parent="36" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="558" parent="36" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="559" parent="36" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="560" parent="37" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="561" parent="37" name="fundCode">
+        <comment>产品代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="562" parent="37" name="risk">
+        <comment>风险等级代码&#xd;
+            0-低风险 &#xd;
+            1-中低风险 &#xd;
+            2-中风险 &#xd;
+            3-中高风险 &#xd;
+            4-高风险</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="563" parent="37" name="riskStr">
+        <comment>风险等级</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="564" parent="37" name="category">
+        <comment>产品类别&#xd;
+            A国内保险&#xd;
+            B固定收益&#xd;
+            C私募基金&#xd;
+            D银行理财&#xd;
+            E信托&#xd;
+            F资管&#xd;
+            G众筹&#xd;
+            H海外保险&#xd;
+            I投资组合&#xd;
+            J其他</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="565" parent="37" name="categoryDetail">
+        <comment>产品细类&#xd;
+            A保障型保险&#xd;
+            B投资型保险&#xd;
+            C证券投资私募基金&#xd;
+            D产业私募基金&#xd;
+            E风险私募基金</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="566" parent="37" name="shortName">
+        <comment>产品简称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="567" parent="37" name="sylyStr">
+        <comment>产品全称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="568" parent="37" name="fundType">
+        <comment>产品类型&#xd;
+            A意外伤害保险&#xd;
+            B健康险&#xd;
+            C人寿险&#xd;
+            D财产险</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="569" parent="37" name="fundTypeDesc">
+        <comment>产品类型说明</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="570" parent="37" name="minInvsestAmount">
+        <comment>起投金额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="571" parent="37" name="minInvsestAmountUnit">
+        <comment>起投金额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="572" parent="37" name="distributeCompany">
+        <comment>发行公司</comment>
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="573" parent="37" name="term">
+        <comment>期限</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="574" parent="37" name="termUnit">
+        <comment>期限单位&#xd;
+            日&#xd;
+            月&#xd;
+            年&#xd;
+            终身&#xd;
+            无期限</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="575" parent="37" name="annualRate">
+        <comment>预计年化收益率（投资型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="576" parent="37" name="maximum">
+        <comment>最大保额（保障型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="577" parent="37" name="maximumUnit">
+        <comment>最大保额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="578" parent="37" name="profitType">
+        <comment>收益类别</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="579" parent="37" name="status">
+        <comment>非标产品状态 1新建 2提交 3审核通过4审核拒绝</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="580" parent="37" name="region">
+        <comment>保险地区</comment>
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="581" parent="37" name="remark1">
+        <comment>保险特点1描述</comment>
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="582" parent="37" name="remark2">
+        <comment>保险特点2描述</comment>
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="583" parent="37" name="remark3">
+        <comment>保险特点3描述</comment>
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="584" parent="37" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="585" parent="37" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="586" parent="37" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="587" parent="37" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <index id="588" parent="37" name="fundCode_unique">
+        <columns>fundCode</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="589" parent="37" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <key id="590" parent="37" name="fundCode_unique">
+        <columns>fundCode</columns>
+        <underlying-index>fundCode_unique</underlying-index>
+      </key>
+      <column id="591" parent="38" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="592" parent="38" name="onlineFundId">
+        <comment>OnlineNoStandard表的pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="593" parent="38" name="conditionType">
+        <comment>类型</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="594" parent="38" name="conditions">
+        <comment>条件</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="595" parent="38" name="conditionValue">
+        <comment>值</comment>
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="596" parent="38" name="type">
+        <comment>基金类别&#xd;
+            1-标准类&#xd;
+            2-非标准类</comment>
+        <data-type>varchar(2)|0</data-type>
+      </column>
+      <column id="597" parent="38" name="status">
+        <comment>状态&#xd;
+            1-开放&#xd;
+            2-不开放</comment>
+        <data-type>varchar(8)|0</data-type>
+      </column>
+      <column id="598" parent="38" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="599" parent="38" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="600" parent="38" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="601" parent="38" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="602" parent="38" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="603" parent="39" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="604" parent="39" name="onlineFundId">
+        <comment>OnlineNoStandard表的pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="605" parent="39" name="conditionType">
+        <comment>类型</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="606" parent="39" name="conditionValue">
+        <comment>值</comment>
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="607" parent="39" name="type">
+        <comment>基金类别&#xd;
+            1-标准类&#xd;
+            2-非标准类</comment>
+        <data-type>varchar(2)|0</data-type>
+      </column>
+      <column id="608" parent="39" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="609" parent="39" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="610" parent="39" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="611" parent="39" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="612" parent="39" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="613" parent="40" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="614" parent="40" name="noStandardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="615" parent="40" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="616" parent="40" name="fundName">
+        <comment>基金名称&#xd;
+            &#xd;
+</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="617" parent="40" name="fundType">
+        <comment>基金类型，101股票，102混合，103指数，104债券，105qdii，106货币</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="618" parent="40" name="fundChannel">
+        <comment>基金类型， 1-基金，2-活期，3-定期，4-保险</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="619" parent="40" name="status">
+        <comment>上架状态&#xd;
+            1-上架&#xd;
+            2-下架&#xd;
+            3-删除</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="620" parent="40" name="annual7dStr">
+        <comment>7日年化百分比，如果是非标类产品，则显示预计年化收益率</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="621" parent="40" name="minInvsestAmount">
+        <comment>起投金额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="622" parent="40" name="insuranceType">
+        <comment>保险类型code</comment>
+        <data-type>varchar(4)|0</data-type>
+      </column>
+      <column id="623" parent="40" name="maximum">
+        <comment>最大保额（保障型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="624" parent="40" name="currencyCode">
+        <comment>币种code</comment>
+        <data-type>varchar(8)|0</data-type>
+      </column>
+      <column id="625" parent="40" name="conditions">
+        <comment>1-不可用&#xd;
+2-对所有人可见&#xd;
+3-有条件可见</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="626" parent="40" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="627" parent="40" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="628" parent="40" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="629" parent="40" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="630" parent="40" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="631" parent="41" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="632" parent="41" name="userName">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="633" parent="41" name="mobilePhone">
+        <data-type>char(11)|0</data-type>
+      </column>
+      <column id="634" parent="41" name="tel">
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="635" parent="41" name="address">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="636" parent="41" name="loginAccountId">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="637" parent="41" name="gender">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="638" parent="41" name="email">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="639" parent="41" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="640" parent="41" name="createBy">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="641" parent="41" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="642" parent="41" name="modifyBy">
+        <data-type>varchar(255)|0</data-type>
+      </column>
+      <column id="643" parent="41" name="roleId">
+        <comment>操作人员角色Id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="644" parent="41" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="645" parent="42" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="646" parent="42" name="fundId">
+        <comment>关联基金id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="647" parent="42" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="648" parent="42" name="fundName">
+        <comment>基金名称
+            
+</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="649" parent="42" name="fundType">
+        <comment>基金类型，101股票，102混合，103指数，104债券，105qdii，106货币</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="650" parent="42" name="fundStatus">
+        <comment>基金状态,0-交易
+            1-发行
+            2-发行成功
+            3-发行失败
+            4-基金停止交易
+            5-停止申购
+            6-停止赎回
+            9-基金封闭
+            a-基金终止
+</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="651" parent="42" name="navDate">
+        <comment>净值日期yyyy-MM-dd</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="652" parent="42" name="fundNav">
+        <comment>基金净值</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="653" parent="42" name="risk">
+        <comment>风险等级</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="654" parent="42" name="annual7D">
+        <comment>7日年化</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="655" parent="42" name="syly">
+        <comment>月收益</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="656" parent="42" name="unitAccrual">
+        <comment>万份收益</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="657" parent="42" name="minSg">
+        <comment>最低申购</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="658" parent="42" name="dailyGains">
+        <comment>日涨幅</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="659" parent="42" name="chargeType">
+        <comment>收费方式
+             0前端 1后端</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="660" parent="42" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="661" parent="42" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="662" parent="42" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="663" parent="42" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="664" parent="42" name="fundNameAbbr">
+        <comment>基金名称简称</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="665" parent="42" name="sourceId">
+        <comment>来源id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="666" parent="42" name="minRg">
+        <comment>最低认购</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <key id="667" parent="42" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="668" parent="43" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="669" parent="43" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="670" parent="43" name="password">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="671" parent="43" name="status">
+        <comment>״̬-Status</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="672" parent="43" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="673" parent="43" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="674" parent="43" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="675" parent="43" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="676" parent="43" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="677" parent="44" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="678" parent="44" name="orderCode">
+        <comment>订单code</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="679" parent="44" name="fundCode">
+        <comment>基金code</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="680" parent="44" name="userId">
+        <comment>用户id对应表的UserInfomation的字段loginAccountId</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="681" parent="44" name="status">
+        <comment>订单状态</comment>
+        <data-type>varchar(6)|0</data-type>
+        <default-expression>&apos;&apos;</default-expression>
+      </column>
+      <column id="682" parent="44" name="advisorId">
+        <comment>预约的理财师id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="683" parent="44" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="684" parent="44" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="685" parent="44" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="686" parent="44" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="687" parent="44" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="688" parent="45" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="689" parent="45" name="roleCode">
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="690" parent="45" name="roleName">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="691" parent="45" name="roleDesc">
+        <data-type>varchar(500)|0</data-type>
+      </column>
+      <column id="692" parent="45" name="applyFor">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="693" parent="45" name="position">
+        <comment>ͬ</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="694" parent="45" name="parentId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="695" parent="45" name="status">
+        <comment>״̬</comment>
+        <data-type>char(3)|0</data-type>
+      </column>
+      <column id="696" parent="45" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="697" parent="45" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="698" parent="45" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="699" parent="45" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="700" parent="45" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="701" parent="46" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="702" parent="46" name="roleId">
+        <comment>role</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="703" parent="46" name="menuId">
+        <comment>menu</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="704" parent="46" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="705" parent="46" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="706" parent="46" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="707" parent="46" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="708" parent="46" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="709" parent="47" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="710" parent="47" name="topicCode">
+        <comment>主题编号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="711" parent="47" name="name">
+        <comment>主题名称</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="712" parent="47" name="context">
+        <comment>主题内容</comment>
+        <data-type>varchar(200)|0</data-type>
+      </column>
+      <column id="713" parent="47" name="imgUrl">
+        <comment>图片地址</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="714" parent="47" name="detailImgUrl">
+        <comment>详情页图片</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="715" parent="47" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="716" parent="47" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="717" parent="47" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="718" parent="47" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="719" parent="47" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="720" parent="48" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="721" parent="48" name="topicsId">
+        <comment>关联主题pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="722" parent="48" name="fundId">
+        <comment>关联基金pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="723" parent="48" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="724" parent="49" name="pid">
+        <comment>主键</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="725" parent="49" name="orderCode">
+        <comment>订单编号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="726" parent="49" name="orderDate">
+        <comment>订单日期</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="727" parent="49" name="fundId">
+        <comment>基金编号</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="728" parent="49" name="fundCode">
+        <comment>基金编号</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="729" parent="49" name="phone">
+        <comment>手机号</comment>
+        <data-type>char(11)|0</data-type>
+      </column>
+      <column id="730" parent="49" name="investorName">
+        <comment>投资人姓名</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="731" parent="49" name="idCard">
+        <comment>身份证号</comment>
+        <data-type>varchar(18)|0</data-type>
+      </column>
+      <column id="732" parent="49" name="bankCard">
+        <comment>银行卡号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="733" parent="49" name="contactAddress">
+        <comment>联系地址</comment>
+        <data-type>varchar(100)|0</data-type>
+      </column>
+      <column id="734" parent="49" name="channelId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="735" parent="49" name="financialPlanner">
+        <comment>理财师帐号</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="736" parent="49" name="amount">
+        <comment>金额</comment>
+        <data-type>decimal(10,2)|0</data-type>
+      </column>
+      <column id="737" parent="49" name="buyTime">
+        <comment>购买时间</comment>
+        <data-type>timestamp|0</data-type>
+      </column>
+      <column id="738" parent="49" name="contractCode">
+        <comment>合同编号</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="739" parent="49" name="hasExtraFee">
+        <comment>是否有额外补偿</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="740" parent="49" name="extraFeeType">
+        <comment>额外补偿类型</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="741" parent="49" name="extraFeeValue">
+        <comment>额外补偿值</comment>
+        <data-type>decimal(10,2)|0</data-type>
+      </column>
+      <column id="742" parent="49" name="hasExtraTime">
+        <comment>是否有额外时间</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="743" parent="49" name="extraTimeType">
+        <comment>额外时间类型</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="744" parent="49" name="extraTimeValue">
+        <comment>额外时间值</comment>
+        <data-type>int(5)|0</data-type>
+      </column>
+      <column id="745" parent="49" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="746" parent="49" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="747" parent="49" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="748" parent="49" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="749" parent="49" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="750" parent="50" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="751" parent="50" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="752" parent="50" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="753" parent="50" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="754" parent="50" name="busiType">
+        <comment>ҵ</comment>
+        <data-type>char(4)|0</data-type>
+      </column>
+      <column id="755" parent="50" name="busiTypeName">
+        <comment>ҵ</comment>
+        <data-type>varchar(6)|0</data-type>
+      </column>
+      <column id="756" parent="50" name="amt">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="757" parent="50" name="fene">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="758" parent="50" name="originalOrderId">
+        <comment>交易订单id</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="759" parent="50" name="nav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="760" parent="50" name="applyTime">
+        <mandatory>1</mandatory>
+        <data-type>timestamp|0</data-type>
+        <default-expression>CURRENT_TIMESTAMP</default-expression>
+      </column>
+      <column id="761" parent="50" name="applyDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="762" parent="50" name="chargeTypeDesc">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="763" parent="50" name="cfmWroth">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="764" parent="50" name="confirmTime">
+        <comment>ȷ</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="765" parent="50" name="confirmAmount">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="766" parent="50" name="confirmVol">
+        <comment>确认份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="767" parent="50" name="cfmState">
+        <comment>ȷ</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="768" parent="50" name="charge">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="769" parent="50" name="applyState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="770" parent="50" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="771" parent="50" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="772" parent="50" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="773" parent="50" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="774" parent="50" name="fundName">
+        <comment>基金名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="775" parent="50" name="originalTtyId">
+        <comment>原交易流水id</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="776" parent="50" name="ttyId">
+        <comment>交易流水id</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="777" parent="50" name="orderId">
+        <comment>订单id</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="778" parent="50" name="sourceId">
+        <comment>来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="779" parent="50" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="780" parent="51" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="781" parent="51" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="782" parent="51" name="totalFloatProfit">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="783" parent="51" name="totalAsset">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="784" parent="51" name="frozeAsset">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="785" parent="51" name="totalFundCount">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="786" parent="51" name="totalMarketValue">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="787" parent="51" name="remark">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="788" parent="51" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="789" parent="51" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="790" parent="51" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="791" parent="51" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="792" parent="51" name="newestProfit">
+        <comment>最新收益</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="793" parent="51" name="navDate">
+        <comment>更新日期</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="794" parent="51" name="sharesAsset">
+        <comment>股票类资产</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="795" parent="51" name="bondAsset">
+        <comment>债券类资产</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="796" parent="51" name="currencyAsset">
+        <comment>货币类资产</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="797" parent="51" name="otherAsset">
+        <comment>其他类资产</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="798" parent="51" name="sourceId">
+        <comment>资产来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="799" parent="51" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="800" parent="52" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="801" parent="52" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="802" parent="52" name="cardType">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="803" parent="52" name="bankCode">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="804" parent="52" name="bankName">
+        <comment>银行名称</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="805" parent="52" name="bankNumber">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="806" parent="52" name="p6L4Code">
+        <comment>前6后4卡号</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="807" parent="52" name="holderName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="808" parent="52" name="idCardType">
+        <comment>֤</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="809" parent="52" name="idCardNumber">
+        <comment>֤</comment>
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="810" parent="52" name="p6L4IDCard">
+        <comment>前6后4身份证号</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="811" parent="52" name="mobilePhone">
+        <comment>银行预留手机号</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="812" parent="52" name="provinceCode">
+        <comment>开户省代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="813" parent="52" name="cityCode">
+        <comment>开户地区代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="814" parent="52" name="subBranchName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="815" parent="52" name="verfiyFlag">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="816" parent="52" name="status">
+        <comment>״̬</comment>
+        <data-type>char(3)|0</data-type>
+      </column>
+      <column id="817" parent="52" name="remark">
+        <data-type>varchar(512)|0</data-type>
+      </column>
+      <column id="818" parent="52" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="819" parent="52" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="820" parent="52" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="821" parent="52" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <key id="822" parent="52" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="823" parent="53" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="824" parent="53" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="825" parent="53" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="826" parent="53" name="totalVol">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="827" parent="53" name="avaVol">
+        <comment>可用份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="828" parent="53" name="frozeVol">
+        <comment>冻结份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="829" parent="53" name="marketValue">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="830" parent="53" name="floatProfitLoss">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="831" parent="53" name="lastDayProfit">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="832" parent="53" name="unPaidProfit">
+        <comment>δ</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="833" parent="53" name="nav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="834" parent="53" name="navdate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="835" parent="53" name="annual7dRate">
+        <comment>7</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="836" parent="53" name="unitAccrual">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="837" parent="53" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="838" parent="53" name="odwAmt">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="839" parent="53" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="840" parent="53" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="841" parent="53" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="842" parent="53" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="843" parent="53" name="loginAccountId">
+        <comment>关联登录账户id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="844" parent="53" name="fundType">
+        <comment>基金类型</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="845" parent="53" name="newestProfit">
+        <comment>最新收益</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="846" parent="53" name="positionProfit">
+        <comment>持仓收益</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="847" parent="53" name="sourceId">
+        <comment>数据来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="848" parent="53" name="shopId">
+        <comment>上架id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="849" parent="53" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="850" parent="54" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="851" parent="54" name="fundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="852" parent="54" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="853" parent="54" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="854" parent="54" name="bankCode">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="855" parent="54" name="totalVol">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="856" parent="54" name="bankCardNo">
+        <comment>银行卡号</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="857" parent="54" name="bankName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="858" parent="54" name="avaVol">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="859" parent="54" name="marketValue">
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="860" parent="54" name="nav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="861" parent="54" name="navdate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="862" parent="54" name="annual7D">
+        <comment>7</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="863" parent="54" name="unitAccrual">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="864" parent="54" name="minFaseWit">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="865" parent="54" name="maxFaseWit">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="866" parent="54" name="frozonVol">
+        <comment>冻结份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="867" parent="54" name="dayIncome">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="868" parent="54" name="totalIncome">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="869" parent="54" name="chargeType">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="870" parent="54" name="reserveMobile">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="871" parent="54" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="872" parent="54" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="873" parent="54" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="874" parent="54" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="875" parent="54" name="loginAccountId">
+        <comment>关联登录账户id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="876" parent="54" name="sourceId">
+        <comment>数据来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="877" parent="54" name="shopId">
+        <comment>上架id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="878" parent="54" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="879" parent="55" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="880" parent="55" name="loginAccountId">
+        <comment>关联登录账户id</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="881" parent="55" name="fundId">
+        <comment>关联fundInfo表的pid</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="882" parent="55" name="fundCode">
+        <comment>基金代码</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="883" parent="55" name="fundType">
+        <comment>基金类型</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="884" parent="55" name="totalVol">
+        <comment>基金总份额</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="885" parent="55" name="avaVol">
+        <comment>可用份额</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="886" parent="55" name="frozeVol">
+        <comment>冻结份额</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="887" parent="55" name="marketValue">
+        <comment>参考市值</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="888" parent="55" name="floatProfitLoss">
+        <comment>浮动收益</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="889" parent="55" name="lastDayProfit">
+        <comment>昨日收益</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="890" parent="55" name="unPaidProfit">
+        <comment>未结转收益</comment>
+        <data-type>varchar(20)|0</data-type>
+      </column>
+      <column id="891" parent="55" name="nav">
+        <comment>最新净值</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="892" parent="55" name="navdate">
+        <comment>净值日期yyyy-MM-dd</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="893" parent="55" name="annual7dRate">
+        <comment>7日年化收益率</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="894" parent="55" name="unitAccrual">
+        <comment>万分收益</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="895" parent="55" name="fundName">
+        <comment>基金名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="896" parent="55" name="odwAmt">
+        <comment>在途资金</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="897" parent="55" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="898" parent="55" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="899" parent="55" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="900" parent="55" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="901" parent="55" name="souurceId">
+        <comment>数据来源id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="902" parent="55" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="903" parent="56" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="904" parent="56" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="905" parent="56" name="ttyUserId">
+        <comment>汇付用户id</comment>
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="906" parent="56" name="parentCode">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="907" parent="56" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="908" parent="56" name="userType">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="909" parent="56" name="userName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="910" parent="56" name="displayName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="911" parent="56" name="gender">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="912" parent="56" name="birthday">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="913" parent="56" name="logoUrl">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="914" parent="56" name="invitationCode">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="915" parent="56" name="verifyFlag">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="916" parent="56" name="createBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="917" parent="56" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="918" parent="56" name="modifyBy">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="919" parent="56" name="modifyAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="920" parent="56" name="risk">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="921" parent="56" name="financeStatus">
+        <comment>理财师审核状态,0非理财师，1未审核，2审核通过，3审核失败，4审核成功确认</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <key id="922" parent="56" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="923" parent="57" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="924" parent="57" name="code">
+        <mandatory>1</mandatory>
+        <data-type>varchar(10)|0</data-type>
+      </column>
+      <column id="925" parent="57" name="name">
+        <comment>产品类别</comment>
+        <mandatory>1</mandatory>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="926" parent="57" name="parentId">
+        <comment>父类型ID</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <key id="927" parent="57" name="PRIMARY">
+        <columns>pid</columns>
+        <primary>1</primary>
+      </key>
+      <column id="928" parent="58" name="standardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="929" parent="58" name="noStandardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="930" parent="58" name="channelId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="931" parent="58" name="channelName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="932" parent="58" name="financialAdvisorAccount">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="933" parent="58" name="financialAdvisorName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="934" parent="58" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="935" parent="58" name="financialCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="936" parent="58" name="channelCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="937" parent="58" name="confirmAmount">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="938" parent="58" name="cfmState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="939" parent="58" name="confirmTime">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="940" parent="58" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="941" parent="58" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="942" parent="58" name="fundType">
+        <data-type>char(20)|0</data-type>
+      </column>
+      <column id="943" parent="58" name="totalPerformance">
+        <data-type>decimal(38,2)|0</data-type>
+      </column>
+      <column id="944" parent="58" name="annualPerformance">
+        <data-type>decimal(38,2)|0</data-type>
+      </column>
+      <column id="945" parent="59" name="standardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="946" parent="59" name="noStandardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="947" parent="59" name="channelId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="948" parent="59" name="channelName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="949" parent="59" name="financialAdvisorAccount">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="950" parent="59" name="financialAdvisorName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="951" parent="59" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="952" parent="59" name="financialCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="953" parent="59" name="channelCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="954" parent="59" name="confirmAmount">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="955" parent="59" name="cfmState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="956" parent="59" name="confirmTime">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="957" parent="59" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="958" parent="59" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="959" parent="59" name="fundType">
+        <data-type>char(20)|0</data-type>
+      </column>
+      <column id="960" parent="60" name="standardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="961" parent="60" name="noStandardFundId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="962" parent="60" name="channelId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="963" parent="60" name="channelName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="964" parent="60" name="financialAdvisorAccount">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="965" parent="60" name="financialAdvisorName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="966" parent="60" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="967" parent="60" name="financialCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="968" parent="60" name="channelCreateStr">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="969" parent="60" name="confirmAmount">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="970" parent="60" name="cfmState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="971" parent="60" name="confirmTime">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="972" parent="60" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="973" parent="60" name="fundName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="974" parent="60" name="fundType">
+        <data-type>char(20)|0</data-type>
+      </column>
+      <column id="975" parent="60" name="totalPerformance">
+        <data-type>decimal(38,2)|0</data-type>
+      </column>
+      <column id="976" parent="60" name="annualPerformance">
+        <data-type>decimal(38,2)|0</data-type>
+      </column>
+      <column id="977" parent="61" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="978" parent="61" name="busiType">
+        <comment>ҵ</comment>
+        <data-type>char(4)|0</data-type>
+      </column>
+      <column id="979" parent="61" name="busiTypeName">
+        <comment>ҵ</comment>
+        <data-type>varchar(6)|0</data-type>
+      </column>
+      <column id="980" parent="61" name="amt">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="981" parent="61" name="fene">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="982" parent="61" name="nav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="983" parent="61" name="applyTime">
+        <mandatory>1</mandatory>
+        <data-type>timestamp|0</data-type>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
+      </column>
+      <column id="984" parent="61" name="applyDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="985" parent="61" name="chargeTypeDesc">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="986" parent="61" name="cfmWroth">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="987" parent="61" name="confirmTime">
+        <comment>ȷ</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="988" parent="61" name="confirmAmount">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="989" parent="61" name="confirmVol">
+        <comment>确认份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="990" parent="61" name="cfmState">
+        <comment>ȷ</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="991" parent="61" name="charge">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="992" parent="61" name="createAt">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="993" parent="61" name="applyState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="994" parent="61" name="ChannelName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="995" parent="61" name="status">
+        <comment>״̬&#xd;
+</comment>
+        <data-type>char(3)|0</data-type>
+      </column>
+      <column id="996" parent="61" name="loginStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="997" parent="61" name="accStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="998" parent="61" name="loginSource">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="999" parent="61" name="loginChannel">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1000" parent="61" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="1001" parent="61" name="userToken">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1002" parent="61" name="inv_mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1003" parent="61" name="inv_userName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1004" parent="61" name="fin_mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1005" parent="61" name="fin_userType">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1006" parent="61" name="fin_userName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1007" parent="61" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1008" parent="61" name="risk">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1009" parent="61" name="riskStr">
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1010" parent="61" name="accountName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1011" parent="61" name="password">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="1012" parent="61" name="displayName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1013" parent="61" name="gender">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1014" parent="61" name="fundName">
+        <comment>基金名称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1015" parent="61" name="fundType">
+        <comment>基金类型,101股票，102混合，103指数，104债券，105qdii,106货币</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="1016" parent="61" name="bankName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1017" parent="61" name="bankCardNumber">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1018" parent="61" name="provinceName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1019" parent="61" name="cityName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1020" parent="61" name="subBranchName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1021" parent="62" name="pid">
+        <comment>物理主键，自增</comment>
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="1022" parent="62" name="orderCode">
+        <comment>订单code</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1023" parent="62" name="fundCode">
+        <comment>基金code</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1024" parent="62" name="reservationStatus">
+        <comment>订单状态</comment>
+        <data-type>varchar(6)|0</data-type>
+        <default-expression>&apos;&apos;</default-expression>
+      </column>
+      <column id="1025" parent="62" name="advisorId">
+        <comment>预约的理财师id</comment>
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="1026" parent="62" name="createBy">
+        <comment>创建人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1027" parent="62" name="createAt">
+        <comment>创建时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="1028" parent="62" name="modifyBy">
+        <comment>最后修改人</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1029" parent="62" name="modifyAt">
+        <comment>最后修改时间</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="1030" parent="62" name="accountName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1031" parent="62" name="accStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1032" parent="62" name="loginSource">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1033" parent="62" name="loginChannel">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1034" parent="62" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="1035" parent="62" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="1036" parent="62" name="ttyUserId">
+        <comment>汇付用户id</comment>
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="1037" parent="62" name="parentCode">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="1038" parent="62" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1039" parent="62" name="userType">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1040" parent="62" name="userName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1041" parent="62" name="displayName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1042" parent="62" name="invitationCode">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1043" parent="62" name="financeStatus">
+        <comment>理财师审核状态,0非理财师，1未审核，2审核通过，3审核失败，4审核成功确认</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1044" parent="62" name="risk">
+        <comment>风险等级代码&#xd;
+            0-低风险 &#xd;
+            1-中低风险 &#xd;
+            2-中风险 &#xd;
+            3-中高风险 &#xd;
+            4-高风险</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1045" parent="62" name="riskStr">
+        <comment>风险等级</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1046" parent="62" name="shortName">
+        <comment>产品简称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1047" parent="62" name="categoryDetail">
+        <comment>产品细类&#xd;
+            A保障型保险&#xd;
+            B投资型保险&#xd;
+            C证券投资私募基金&#xd;
+            D产业私募基金&#xd;
+            E风险私募基金</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1048" parent="62" name="category">
+        <comment>产品类别&#xd;
+            A国内保险&#xd;
+            B固定收益&#xd;
+            C私募基金&#xd;
+            D银行理财&#xd;
+            E信托&#xd;
+            F资管&#xd;
+            G众筹&#xd;
+            H海外保险&#xd;
+            I投资组合&#xd;
+            J其他</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1049" parent="62" name="sylyStr">
+        <comment>产品全称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1050" parent="62" name="fundType">
+        <comment>产品类型&#xd;
+            A意外伤害保险&#xd;
+            B健康险&#xd;
+            C人寿险&#xd;
+            D财产险</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1051" parent="62" name="fundTypeDesc">
+        <comment>产品类型说明</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1052" parent="62" name="minInvsestAmount">
+        <comment>起投金额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1053" parent="62" name="minInvsestAmountUnit">
+        <comment>起投金额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1054" parent="62" name="distributeCompany">
+        <comment>发行公司</comment>
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1055" parent="62" name="term">
+        <comment>期限</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1056" parent="62" name="termUnit">
+        <comment>期限单位&#xd;
+            日&#xd;
+            月&#xd;
+            年&#xd;
+            终身&#xd;
+            无期限</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1057" parent="62" name="annualRate">
+        <comment>预计年化收益率（投资型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1058" parent="62" name="maximum">
+        <comment>最大保额（保障型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1059" parent="62" name="maximumUnit">
+        <comment>最大保额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1060" parent="62" name="profitType">
+        <comment>收益类别</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1061" parent="62" name="status">
+        <comment>非标产品状态 1新建 2提交 3审核通过4审核拒绝</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1062" parent="63" name="pid">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)|0</data-type>
+        <default-expression>&apos;0&apos;</default-expression>
+      </column>
+      <column id="1063" parent="63" name="fundCode">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1064" parent="63" name="busiType">
+        <comment>ҵ</comment>
+        <data-type>char(4)|0</data-type>
+      </column>
+      <column id="1065" parent="63" name="busiTypeName">
+        <comment>ҵ</comment>
+        <data-type>varchar(6)|0</data-type>
+      </column>
+      <column id="1066" parent="63" name="amt">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1067" parent="63" name="fene">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1068" parent="63" name="nav">
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1069" parent="63" name="applyTime">
+        <mandatory>1</mandatory>
+        <data-type>timestamp|0</data-type>
+        <default-expression>&apos;0000-00-00 00:00:00&apos;</default-expression>
+      </column>
+      <column id="1070" parent="63" name="applyDate">
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="1071" parent="63" name="chargeTypeDesc">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="1072" parent="63" name="cfmWroth">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1073" parent="63" name="confirmTime">
+        <comment>ȷ</comment>
+        <data-type>datetime|0</data-type>
+      </column>
+      <column id="1074" parent="63" name="confirmAmount">
+        <comment>ȷ</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1075" parent="63" name="confirmVol">
+        <comment>确认份额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1076" parent="63" name="cfmState">
+        <comment>ȷ</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1077" parent="63" name="charge">
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1078" parent="63" name="applyState">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1079" parent="63" name="accountName">
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1080" parent="63" name="accStatus">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1081" parent="63" name="loginSource">
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1082" parent="63" name="loginChannel">
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1083" parent="63" name="remark">
+        <data-type>varchar(256)|0</data-type>
+      </column>
+      <column id="1084" parent="63" name="loginAccountId">
+        <data-type>bigint(20)|0</data-type>
+      </column>
+      <column id="1085" parent="63" name="ttyUserId">
+        <comment>汇付用户id</comment>
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="1086" parent="63" name="parentCode">
+        <data-type>varchar(50)|0</data-type>
+      </column>
+      <column id="1087" parent="63" name="mobilePhone">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1088" parent="63" name="userType">
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1089" parent="63" name="userName">
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1090" parent="63" name="displayName">
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1091" parent="63" name="invitationCode">
+        <data-type>varchar(11)|0</data-type>
+      </column>
+      <column id="1092" parent="63" name="financeStatus">
+        <comment>理财师审核状态,0非理财师，1未审核，2审核通过，3审核失败，4审核成功确认</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1093" parent="63" name="risk">
+        <comment>风险等级代码&#xd;
+            0-低风险 &#xd;
+            1-中低风险 &#xd;
+            2-中风险 &#xd;
+            3-中高风险 &#xd;
+            4-高风险</comment>
+        <data-type>char(1)|0</data-type>
+      </column>
+      <column id="1094" parent="63" name="riskStr">
+        <comment>风险等级</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1095" parent="63" name="category">
+        <comment>产品类别&#xd;
+            A国内保险&#xd;
+            B固定收益&#xd;
+            C私募基金&#xd;
+            D银行理财&#xd;
+            E信托&#xd;
+            F资管&#xd;
+            G众筹&#xd;
+            H海外保险&#xd;
+            I投资组合&#xd;
+            J其他</comment>
+        <data-type>varchar(32)|0</data-type>
+      </column>
+      <column id="1096" parent="63" name="categoryDetail">
+        <comment>产品细类&#xd;
+            A保障型保险&#xd;
+            B投资型保险&#xd;
+            C证券投资私募基金&#xd;
+            D产业私募基金&#xd;
+            E风险私募基金</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1097" parent="63" name="shortName">
+        <comment>产品简称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1098" parent="63" name="sylyStr">
+        <comment>产品全称</comment>
+        <data-type>varchar(64)|0</data-type>
+      </column>
+      <column id="1099" parent="63" name="fundType">
+        <comment>产品类型&#xd;
+            A意外伤害保险&#xd;
+            B健康险&#xd;
+            C人寿险&#xd;
+            D财产险</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <column id="1100" parent="63" name="fundTypeDesc">
+        <comment>产品类型说明</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1101" parent="63" name="minInvsestAmount">
+        <comment>起投金额</comment>
+        <data-type>decimal(16,2)|0</data-type>
+      </column>
+      <column id="1102" parent="63" name="minInvsestAmountUnit">
+        <comment>起投金额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1103" parent="63" name="distributeCompany">
+        <comment>发行公司</comment>
+        <data-type>varchar(128)|0</data-type>
+      </column>
+      <column id="1104" parent="63" name="term">
+        <comment>期限</comment>
+        <data-type>int(11)|0</data-type>
+      </column>
+      <column id="1105" parent="63" name="termUnit">
+        <comment>期限单位&#xd;
+            日&#xd;
+            月&#xd;
+            年&#xd;
+            终身&#xd;
+            无期限</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1106" parent="63" name="annualRate">
+        <comment>预计年化收益率（投资型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1107" parent="63" name="maximum">
+        <comment>最大保额（保障型保险）</comment>
+        <data-type>decimal(16,4)|0</data-type>
+      </column>
+      <column id="1108" parent="63" name="maximumUnit">
+        <comment>最大保额单位</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1109" parent="63" name="profitType">
+        <comment>收益类别</comment>
+        <data-type>varchar(16)|0</data-type>
+      </column>
+      <column id="1110" parent="63" name="status">
+        <comment>非标产品状态 1新建 2提交 3审核通过4审核拒绝</comment>
+        <data-type>char(2)|0</data-type>
+      </column>
+      <argument id="1111" parent="64">
+        <direction>RETURN</direction>
+        <data-type>varchar(4000)|0</data-type>
+      </argument>
+      <argument id="1112" parent="64" name="channelId">
+        <direction>IN</direction>
+        <data-type>bigint(20)|0</data-type>
+      </argument>
+      <argument id="1113" parent="64" name="channelName">
+        <direction>IN</direction>
+        <data-type>varchar(200)|0</data-type>
+      </argument>
+      <argument id="1114" parent="65" name="menuId">
+        <direction>IN</direction>
+        <data-type>bigint(20)|0</data-type>
+      </argument>
+      <argument id="1115" parent="66" name="r0">
+        <direction>IN</direction>
+        <data-type>decimal(10)|0</data-type>
+      </argument>
+      <argument id="1116" parent="66" name="t1">
+        <direction>IN</direction>
+        <data-type>timestamp|0</data-type>
+      </argument>
+      <argument id="1117" parent="66" name="t2">
+        <direction>IN</direction>
+        <data-type>timestamp|0</data-type>
+      </argument>
+      <argument id="1118" parent="66" name="s0">
+        <direction>OUT</direction>
+        <data-type>decimal(10)|0</data-type>
+      </argument>
+    </database-model>
+  </data-source>
+</component>
