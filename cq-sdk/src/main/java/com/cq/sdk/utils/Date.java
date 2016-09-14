@@ -147,158 +147,159 @@ public class Date extends java.util.Date   {
     public static Date calculate(DateTime date1,DateTime date2,DateCalculateType dateCalculateType){
         return new Date(DateTime.calculate(date1,date2,dateCalculateType));
     }
-}
-class DateTime{
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minutes;
-    private int second;
-
-    public DateTime() {
-    }
-
-    public DateTime(int year) {
-        this(year,0);
-    }
-
-    public DateTime(int year, int month) {
-        this(year,month,0);
-    }
-
-    public DateTime(int year, int month, int day) {
-        this(year,month,day,0,0,0);
-    }
-
-    public DateTime(int year, int month, int day, int hour, int minutes, int second) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.hour = hour;
-        this.minutes = minutes;
-        this.second = second;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
-    }
-
-    public int getSecond() {
-        return second;
-    }
-
-    public void setSecond(int second) {
-        this.second = second;
-    }
-
-    public static DateTime calculate(DateTime dateTime1,DateTime dateTime2,DateCalculateType dateCalculateType){
-        DateTime dateTime=new DateTime();
-        switch (dateCalculateType){
-            case plus:
-                dateTime.setYear(dateTime1.getYear()+dateTime2.getYear());
-                dateTime.setMonth(dateTime1.getMonth()+dateTime2.getMonth());
-                dateTime.setDay(dateTime1.getDay()+dateTime2.getDay());
-                dateTime.setHour(dateTime1.getHour()+dateTime2.getHour());
-                dateTime.setMinutes(dateTime1.getMinutes()+dateTime2.getMinutes());
-                dateTime.setSecond(dateTime1.getSecond()+dateTime2.getSecond());
-                break;
-            case reduce:
-                dateTime.setYear(dateTime1.getYear()-dateTime2.getYear());
-                dateTime.setMonth(dateTime1.getMonth()-dateTime2.getMonth());
-                dateTime.setDay(dateTime1.getDay()- dateTime2.getDay());
-                dateTime.setHour(dateTime1.getHour()- dateTime2.getHour());
-                dateTime.setMinutes(dateTime1.getMinutes()- dateTime2.getMinutes());
-                dateTime.setSecond(dateTime1.getSecond()- dateTime2.getSecond());
-                break;
+    public enum DateCalculateType{
+        plus(1),reduce(2);
+        private int type;
+        DateCalculateType(int type){
+            this.type=type;
         }
-        if(dateTime.getSecond()>59){
-            dateTime.setMinutes(dateTime.getMinutes()+1);
-            dateTime.setSecond(dateTime.getSecond()-60);
-        }else if(dateTime.getSecond()<0){
-            dateTime.setMinutes(dateTime.getMinutes()-1);
-            dateTime.setSecond(dateTime.getSecond()+60);
+        public int getType() {
+            return type;
         }
-        if(dateTime.getMinutes()>59){
-            dateTime.setHour(dateTime.getHour()+1);
-            dateTime.setMinutes(dateTime.getMinutes()-60);
-        }else if(dateTime.getMinutes()<0){
-            dateTime.setHour(dateTime.getHour()-1);
-            dateTime.setMinutes(dateTime.getMinutes()+60);
+
+        public void setType(int type) {
+            this.type = type;
         }
-        if(dateTime.getHour()>23){
-            dateTime.setDay(dateTime.getDay()+1);
-            dateTime.setHour(dateTime.getHour()+24);
-        }else if(dateTime.getHour()<0){
-            dateTime.setDay(dateTime.getDay()-1);
-            dateTime.setHour(dateTime.getHour()-24);
-        }
-        int day= Date.getMonths()[dateTime.getMonth()>12?dateTime.getMonth()%12:(dateTime.getMonth()<1?12+dateTime.getMonth():dateTime.getMonth())];
-        if(dateTime.getDay()>day){
-            dateTime.setMonth(dateTime.getMonth()+1);
-            dateTime.setDay(dateTime.getDay()-day);
-        }else if(dateTime.getDay()<1){
-            dateTime.setMonth(dateTime.getMonth()-1);
-            day=Date.getMonths()[dateTime.getMonth()>12?dateTime.getMonth()%12:(dateTime.getMonth()<1?12+dateTime.getMonth():dateTime.getMonth())];
-            dateTime.setDay(dateTime.getDay()+day);
-        }
-        if(dateTime.getMonth()>12){
-            dateTime.setYear(dateTime.getYear()+1);
-            dateTime.setMonth(dateTime.getMonth()-12);
-        }else if(dateTime.getMonth()<1){
-            dateTime.setYear(dateTime.getYear()-1);
-            dateTime.setMonth(dateTime.getMonth()+12);
-        }
-        return dateTime;
     }
-}
-enum DateCalculateType{
-    plus(1),reduce(2);
-    private int type;
-    DateCalculateType(int type){
-        this.type=type;
-    }
-    public int getType() {
-        return type;
+    public static class DateTime{
+        private int year;
+        private int month;
+        private int day;
+        private int hour;
+        private int minutes;
+        private int second;
+
+        public DateTime() {
+        }
+
+        public DateTime(int year) {
+            this(year,0);
+        }
+
+        public DateTime(int year, int month) {
+            this(year,month,0);
+        }
+
+        public DateTime(int year, int month, int day) {
+            this(year,month,day,0,0,0);
+        }
+
+        public DateTime(int year, int month, int day, int hour, int minutes, int second) {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            this.hour = hour;
+            this.minutes = minutes;
+            this.second = second;
+        }
+
+        public int getYear() {
+            return year;
+        }
+
+        public void setYear(int year) {
+            this.year = year;
+        }
+
+        public int getMonth() {
+            return month;
+        }
+
+        public void setMonth(int month) {
+            this.month = month;
+        }
+
+        public int getDay() {
+            return day;
+        }
+
+        public void setDay(int day) {
+            this.day = day;
+        }
+
+        public int getHour() {
+            return hour;
+        }
+
+        public void setHour(int hour) {
+            this.hour = hour;
+        }
+
+        public int getMinutes() {
+            return minutes;
+        }
+
+        public void setMinutes(int minutes) {
+            this.minutes = minutes;
+        }
+
+        public int getSecond() {
+            return second;
+        }
+
+        public void setSecond(int second) {
+            this.second = second;
+        }
+
+        public static DateTime calculate(DateTime dateTime1,DateTime dateTime2,DateCalculateType dateCalculateType){
+            DateTime dateTime=new DateTime();
+            switch (dateCalculateType){
+                case plus:
+                    dateTime.setYear(dateTime1.getYear()+dateTime2.getYear());
+                    dateTime.setMonth(dateTime1.getMonth()+dateTime2.getMonth());
+                    dateTime.setDay(dateTime1.getDay()+dateTime2.getDay());
+                    dateTime.setHour(dateTime1.getHour()+dateTime2.getHour());
+                    dateTime.setMinutes(dateTime1.getMinutes()+dateTime2.getMinutes());
+                    dateTime.setSecond(dateTime1.getSecond()+dateTime2.getSecond());
+                    break;
+                case reduce:
+                    dateTime.setYear(dateTime1.getYear()-dateTime2.getYear());
+                    dateTime.setMonth(dateTime1.getMonth()-dateTime2.getMonth());
+                    dateTime.setDay(dateTime1.getDay()- dateTime2.getDay());
+                    dateTime.setHour(dateTime1.getHour()- dateTime2.getHour());
+                    dateTime.setMinutes(dateTime1.getMinutes()- dateTime2.getMinutes());
+                    dateTime.setSecond(dateTime1.getSecond()- dateTime2.getSecond());
+                    break;
+            }
+            if(dateTime.getSecond()>59){
+                dateTime.setMinutes(dateTime.getMinutes()+1);
+                dateTime.setSecond(dateTime.getSecond()-60);
+            }else if(dateTime.getSecond()<0){
+                dateTime.setMinutes(dateTime.getMinutes()-1);
+                dateTime.setSecond(dateTime.getSecond()+60);
+            }
+            if(dateTime.getMinutes()>59){
+                dateTime.setHour(dateTime.getHour()+1);
+                dateTime.setMinutes(dateTime.getMinutes()-60);
+            }else if(dateTime.getMinutes()<0){
+                dateTime.setHour(dateTime.getHour()-1);
+                dateTime.setMinutes(dateTime.getMinutes()+60);
+            }
+            if(dateTime.getHour()>23){
+                dateTime.setDay(dateTime.getDay()+1);
+                dateTime.setHour(dateTime.getHour()+24);
+            }else if(dateTime.getHour()<0){
+                dateTime.setDay(dateTime.getDay()-1);
+                dateTime.setHour(dateTime.getHour()-24);
+            }
+            int day= Date.getMonths()[dateTime.getMonth()>12?dateTime.getMonth()%12:(dateTime.getMonth()<1?12+dateTime.getMonth():dateTime.getMonth())];
+            if(dateTime.getDay()>day){
+                dateTime.setMonth(dateTime.getMonth()+1);
+                dateTime.setDay(dateTime.getDay()-day);
+            }else if(dateTime.getDay()<1){
+                dateTime.setMonth(dateTime.getMonth()-1);
+                day=Date.getMonths()[dateTime.getMonth()>12?dateTime.getMonth()%12:(dateTime.getMonth()<1?12+dateTime.getMonth():dateTime.getMonth())];
+                dateTime.setDay(dateTime.getDay()+day);
+            }
+            if(dateTime.getMonth()>12){
+                dateTime.setYear(dateTime.getYear()+1);
+                dateTime.setMonth(dateTime.getMonth()-12);
+            }else if(dateTime.getMonth()<1){
+                dateTime.setYear(dateTime.getYear()-1);
+                dateTime.setMonth(dateTime.getMonth()+12);
+            }
+            return dateTime;
+        }
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
 }

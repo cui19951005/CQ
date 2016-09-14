@@ -81,36 +81,9 @@ public class InvocationHandlerImpl implements MethodInterceptor {
                     aopClass.getReturning().getMethod().invoke(aopClass.getObject(), this.createParams(this.object, aopClass.getReturning().getMethod(), method, objects));
                 }
             }
-        }catch (Exception ex){
-            ex.printStackTrace();
-            for(AopClass aopClass : aopClassList) {
-                if (aopClass.getThrowing() != null) {
-                    Object[] params = new Object[aopClass.getThrowing().getMethod().getParameters().length];
-                    for (int i = 0; i < aopClass.getThrowing().getMethod().getParameterTypes().length; i++) {
-                        if (aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ex.getClass())) {
-                            params[i] = ex;
-                        } else if (aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ProceedingJoinPoint.class)) {
-                            params[i] = new JoinPoint() {
-                                @Override
-                                public Object getThis() {
-                                    return InvocationHandlerImpl.this.object;
-                                }
-
-                                @Override
-                                public Method getMethod() {
-                                    return method;
-                                }
-
-                                @Override
-                                public Object[] getArgs() {
-                                    return objects;
-                                }
-                            };
-                        }
-                    }
-                    aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing().getObject(), params);
-                }
-            }
+        }catch (InvocationTargetException e){
+            e.getCause().printStackTrace();
+            this.exception(method,objects,e);
         }finally {
             for(AopClass aopClass : aopClassList){
                 if(aopClass.getAfter()!=null) {
@@ -119,6 +92,36 @@ public class InvocationHandlerImpl implements MethodInterceptor {
             }
         }
         return object;
+    }
+    private void exception(Method method,Object[] objects,Exception ex) throws InvocationTargetException, IllegalAccessException {
+        for(AopClass aopClass : aopClassList) {
+            if (aopClass.getThrowing() != null) {
+                Object[] params = new Object[aopClass.getThrowing().getMethod().getParameters().length];
+                for (int i = 0; i < aopClass.getThrowing().getMethod().getParameterTypes().length; i++) {
+                    if (aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ex.getClass())) {
+                        params[i] = ex;
+                    } else if (aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ProceedingJoinPoint.class)) {
+                        params[i] = new JoinPoint() {
+                            @Override
+                            public Object getThis() {
+                                return InvocationHandlerImpl.this.object;
+                            }
+
+                            @Override
+                            public Method getMethod() {
+                                return method;
+                            }
+
+                            @Override
+                            public Object[] getArgs() {
+                                return objects;
+                            }
+                        };
+                    }
+                }
+                aopClass.getThrowing().getMethod().invoke(aopClass.getThrowing().getObject(), params);
+            }
+        }
     }
     private List<AopClass> exists(String name){
         List<AopClass> aopClassList=new ArrayList<>();

@@ -47,7 +47,7 @@ public class Hash {
     }
 
     /**
-     * 实现
+     *
      * @param s
      * @return
      */

@@ -323,15 +323,13 @@ public class Number {
      *
      * @param bytes
      *            byte数组
-     * @param off
-     *            开始位置
      * @return int整数
      */
-    public static int byte4ToInt(ByteSet bytes, int off) {
-        int b0 = bytes.get(off) & 0xFF;
-        int b1 = bytes.get(off + 1) & 0xFF;
-        int b2 = bytes.get(off + 2) & 0xFF;
-        int b3 = bytes.get(off + 3) & 0xFF;
+    public static int byte4ToInt(ByteSet bytes) {
+        int b0 = bytes.get(0) & 0xFF;
+        int b1 = bytes.get(0 + 1) & 0xFF;
+        int b2 = bytes.get(0 + 2) & 0xFF;
+        int b3 = bytes.get(0 + 3) & 0xFF;
         return (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
     }
     public static long bytesToLong(ByteSet bytes) {

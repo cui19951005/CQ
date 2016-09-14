@@ -28,7 +28,7 @@ public class TestAop {
     @Around(value = "pointcut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws InvocationTargetException, IllegalAccessException {
         Logger.info("环绕前");
-           Object object= proceedingJoinPoint.proceed();
+        Object object= proceedingJoinPoint.proceed();
         Logger.info("环绕后");
         return object;
     }

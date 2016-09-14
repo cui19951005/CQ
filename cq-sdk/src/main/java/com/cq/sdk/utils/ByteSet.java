@@ -1,6 +1,7 @@
 package com.cq.sdk.utils;
 import java.io.Serializable;
 import java.lang.*;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -17,6 +18,9 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     public ByteSet(byte[] byteSet) {
         this.byteSet = byteSet.clone();
+    }
+    public ByteSet(byte[] byteSet,int offset,int length){
+        this.byteSet= Arrays.copyOfRange(byteSet,offset,length);
     }
     public ByteSet(String hex){
         if(hex.indexOf("{")==-1) {
@@ -42,6 +46,9 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         ByteSet byteSet=new ByteSet(new byte[length]);
         System.arraycopy(this.byteSet,startIndex,byteSet.byteSet,0,length);
         return byteSet;
+    }
+    public ByteSet subByteSet(int startIndex){
+        return this.subByteSet(startIndex,this.length());
     }
     public ByteSet getLeft(int length){
         if(this.length()<=length){
@@ -90,10 +97,9 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             if(bytes[i].length==0){
                 continue;
             }
-            ByteSet temp=this.clone();
             this.byteSet=new byte[this.length()+bytes[i].length];
-            System.arraycopy(temp.byteSet,0,this.byteSet,0,temp.length());
-            System.arraycopy(bytes[i],0,this.byteSet,temp.length(),bytes[i].length);
+            System.arraycopy(this.byteSet,0,this.byteSet,0,this.length());
+            System.arraycopy(bytes[i],0,this.byteSet,this.length(),bytes[i].length);
         }
         return this;
     }
@@ -235,7 +241,9 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     public static ByteSet parse(byte[] byteSet){
         return new ByteSet(byteSet);
     }
-
+    public static ByteSet parse(byte[] byteSet,int offset,int length){
+        return new ByteSet(byteSet,offset,length);
+    }
     /**
      * 将16进制字节文本转换为字节集
      * @param hex

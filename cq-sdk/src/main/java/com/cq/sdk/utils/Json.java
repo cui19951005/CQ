@@ -647,49 +647,49 @@ public class Json {
         }
         return null;
     }
-}
-class ClassSuper{
-    /**
-     * 名字(没什么用)
-     */
-    private String name;
-    /**
-     * 类
-     */
-    private Class clazz;
-    /**
-     * 用于泛型数据类型
-     */
-    private Type[] params;
-    public ClassSuper(Class clazz){
-        this.name=clazz.getName();
-        this.clazz =clazz;
-    }
-    public ClassSuper(String name) throws ClassNotFoundException {
-        this.name=name;
-        this.clazz=Class.forName(name);
-    }
-    public String getName() {
-        return name;
-    }
+    private static class ClassSuper{
+        /**
+         * 名字(没什么用)
+         */
+        private String name;
+        /**
+         * 类
+         */
+        private Class clazz;
+        /**
+         * 用于泛型数据类型
+         */
+        private Type[] params;
+        public ClassSuper(Class clazz){
+            this.name=clazz.getName();
+            this.clazz =clazz;
+        }
+        public ClassSuper(String name) throws ClassNotFoundException {
+            this.name=name;
+            this.clazz=Class.forName(name);
+        }
+        public String getName() {
+            return name;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public Class getClazz() {
-        return clazz;
-    }
+        public Class getClazz() {
+            return clazz;
+        }
 
-    public void setClazz(Class clazz) {
-        this.clazz = clazz;
-    }
+        public void setClazz(Class clazz) {
+            this.clazz = clazz;
+        }
 
-    public Type[] getParams() {
-        return params;
-    }
+        public Type[] getParams() {
+            return params;
+        }
 
-    public void setParams(Type[] params) {
-        this.params = params;
+        public void setParams(Type[] params) {
+            this.params = params;
+        }
     }
 }

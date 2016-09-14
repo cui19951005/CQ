@@ -74,7 +74,7 @@ public class Bin {
         return result;
     }
     public static final int bin2Int(ByteSet bytes){
-        return Number.byte4ToInt(flip(bytes),0);
+        return Number.byte4ToInt(flip(bytes));
     }
     public static final ByteSet int2Bin(int value){
         return flip(Number.intToByte4(value));
@@ -92,7 +92,7 @@ public class Bin {
         return Number.byte2ToUnsignedShort(flip(bytes));
     }
     public static final int bin2Byte(ByteSet bytes){
-        return Number.byte4ToInt(bytes,0);
+        return Number.byte4ToInt(bytes);
     }
     public static final ByteSet byte2Bin(byte b){
         return flip(new ByteSet(b));

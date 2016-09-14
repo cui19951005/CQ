@@ -40,6 +40,9 @@ public class Trusteeship {
         if(entrance!=null){
             this.packagePath=entrance.value();
             this.mainClass=mainClass;
+            if(entrance.method().length()>0){
+                this.mainMethod=mainClass.getName()+"."+entrance.method();
+            }
             for(Method method : mainClass.getDeclaredMethods()){
                 Execute execute=method.getAnnotation(Execute.class);
                 if(execute !=null){
@@ -48,9 +51,9 @@ public class Trusteeship {
                 }
             }
             this.injectionType=entrance.injectionType();
+            this.init();
+            this.start();
         }
-        this.init();
-        this.start();
     }
 
     public Trusteeship(String packagePath, String mainMethod) {
@@ -111,8 +114,12 @@ public class Trusteeship {
             String method=this.mainMethod.substring(index+1);
             Object object=this.injection(this.mainClass);
             this.mainClass.getMethod(method).invoke(object);
-        }catch (Exception ex){
-            ex.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
 
     }
