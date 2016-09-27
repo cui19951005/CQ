@@ -32,13 +32,13 @@ public class JceOutputStream {
     public void writeObj(int type,ByteSet val,int tag){
         switch (type){
             case 0:
-                this.writeByte((byte) Number.byte4ToInt(val,0),tag);
+                this.writeByte((byte) Number.byte4ToInt(val),tag);
                 break;
             case 1:
-                this.writeShort((short) Number.byte4ToInt(val,0),tag);
+                this.writeShort((short) Number.byte4ToInt(val),tag);
                 break;
             case 2:
-                this.writeInt(Number.byte4ToInt(val,0),tag);
+                this.writeInt(Number.byte4ToInt(val),tag);
                 break;
             case 3:
                 this.writeLong(Number.bytesToLong(val),tag);

@@ -1,5 +1,7 @@
 package com.cq.sdk.potential;
 
+import com.cq.sdk.net.NetClass;
+import com.cq.sdk.net.NetObject;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.inter.AutowiredInterface;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
@@ -14,12 +16,21 @@ import com.cq.sdk.potential.utils.InjectionType;
 import com.cq.sdk.potential.utils.AopMethod;
 import com.cq.sdk.utils.Logger;
 import com.cq.sdk.utils.PackUtils;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.CtMethod;
+import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * 托管类
@@ -35,6 +46,7 @@ public class Trusteeship {
     private InjectionType injectionType=InjectionType.AutoAll;//默认采用全部注入
     private List<Properties> propertiesList=new ArrayList<Properties>();
     private TransactionManager transactionManager;
+    private List<NetObject> netObjectList=new ArrayList<>();
     public Trusteeship(Class mainClass) {
         Entrance entrance= (Entrance) mainClass.getAnnotation(Entrance.class);
         if(entrance!=null){
@@ -43,22 +55,140 @@ public class Trusteeship {
             if(entrance.method().length()>0){
                 this.mainMethod=mainClass.getName()+"."+entrance.method();
             }
-            for(Method method : mainClass.getDeclaredMethods()){
-                Execute execute=method.getAnnotation(Execute.class);
-                if(execute !=null){
-                    this.mainMethod=mainClass.getName()+"."+method.getName();
-                    break;
-                }
-            }
+            Stream.of(mainClass.getDeclaredMethods()).filter(s->s.isAnnotationPresent(Execute.class)).limit(1).forEach(
+                    method->{
+                        Execute execute=method.getAnnotation(Execute.class);
+                        if(execute !=null){
+                            this.mainMethod=mainClass.getName()+"."+method.getName();
+                        }
+                    }
+            );
             this.injectionType=entrance.injectionType();
-            this.init();
+            addNetObject(mainClass);
+            //this.init();
             this.start();
+        }
+
+
+    }
+
+    private void addNetObject(Class mainClass) {
+        NetAddress netAddress=(NetAddress)mainClass.getAnnotation(NetAddress.class);
+        if(netAddress!=null)
+        {
+            List<Class> annotationList=new ArrayList<>();
+            annotationList.add(Service.class);
+            annotationList.add(Component.class);
+            annotationList.add(Repository.class);
+            Stream.of(netAddress.value()).forEach(ipPort->{
+                String[] array=ipPort.split(":");
+                NetObject netObject=new NetObject(netAddress.port(),array[0],Integer.valueOf(array[1]));
+                netObject.messageHandle(this.getClassMap());
+                this.netObjectList.add(netObject);
+                List<NetClass> list=netObject.getList(this.packagePath,annotationList);
+                ClassPool classPool=ClassPool.getDefault();
+                list.stream().forEach(netClass->{
+                    try {
+                        CtClass ctClass = classPool.makeClass(netClass.getName()+"$");
+                        CtField ctField=new CtField(classPool.get(netObject.getClass().getName()),"netObject",ctClass);
+                        StringBuilder sb=new StringBuilder();
+                        sb.append("new com.cq.sdk.net.NetObject(");
+                        sb.append(netAddress.port());
+                        sb.append(",\"");
+                        sb.append(array[0]);
+                        sb.append("\",");
+                        sb.append(Integer.valueOf(array[1]));
+                        sb.append(");");
+                        ctClass.addField(ctField,sb.toString());
+                        ctField=new CtField(classPool.get(String.class.getName()),"clazz",ctClass);
+                        ctClass.addField(ctField,"\""+netClass.getName()+"\"");
+                        CtClass[] interfaceList = new CtClass[netClass.getInterfaceName().length];
+                        for(int i=0;i<interfaceList.length;i++){
+                            interfaceList[i]=classPool.get(netClass.getInterfaceName()[i]);
+                            CtMethod[] ctMethods=interfaceList[i].getMethods();
+                            Stream.of(ctMethods).filter(method-> method.getModifiers()==Modifier.PUBLIC || method.getModifiers()==Modifier.ABSTRACT+Modifier.PUBLIC).forEach(item->{
+                                try {
+                                    CtMethod ctMethod = new CtMethod(item.getReturnType(), item.getName(), item.getParameterTypes(), ctClass);
+                                    sb.setLength(0);
+                                    sb.append("{");
+                                    sb.append("Object object=this.netObject.invoke(this.clazz+\".");
+                                    sb.append(ctMethod.getName());
+                                    if (ctMethod.getParameterTypes().length > 0) {
+                                        sb.append("\",new Object[]{");
+                                        for (int j = 0; j < ctMethod.getParameterTypes().length; j++) {
+                                            sb.append("$");
+                                            sb.append(j + 1);
+                                            if (j != ctMethod.getParameterTypes().length - 1) {
+                                                sb.append(",");
+                                            }
+                                        }
+                                        sb.append("}");
+                                    } else {
+                                        sb.append("\",new Object[0]");
+                                    }
+                                    sb.append(");");
+                                    if (!ctMethod.getReturnType().getName().equals("void")) {
+                                        sb.append("return ");
+                                        if(ctMethod.getReturnType().isPrimitive()){
+                                            if(ctMethod.getReturnType().getName().equals("int")){
+                                                sb.append("java.lang.Integer.valueOf(object.toString()).intValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("byte")){
+                                                sb.append("java.lang.Byte.valueOf(object.toString()).byteValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("short")){
+                                                sb.append("java.lang.Short.valueOf(object.toString()).shortValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("char")){
+                                                sb.append("object.toString().toCharArray()[0];");
+                                            }else if(ctMethod.getReturnType().getName().equals("boolean")){
+                                                sb.append("java.lang.Boolean.valueOf(object.toString()).booleanValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("float")){
+                                                sb.append("java.lang.Float.valueOf(object.toString()).floatValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("double")){
+                                                sb.append("java.lang.Double.valueOf(object.toString()).doubleValue();");
+                                            }else if(ctMethod.getReturnType().getName().equals("long")){
+                                                sb.append("java.lang.Long.valueOf(object.toString()).longValue();");
+                                            }else {
+                                                sb.append("object;");
+                                            }
+                                        }else{
+                                            if(ctMethod.getReturnType().getName().equals(String.class.getName())){
+                                                sb.append("object.toString();");
+                                            }else {
+                                                sb.append("object;");
+                                            }
+                                        }
+                                    }
+                                    sb.append("}");
+                                    ctMethod.setBody(sb.toString());
+                                    ctClass.addMethod(ctMethod);
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                        ctClass.setInterfaces(interfaceList);
+                        AnnotationsAttribute annotationsAttribute=new AnnotationsAttribute(ctClass.getClassFile().getConstPool(),AnnotationsAttribute.visibleTag);
+                        Stream.of(netClass.getAnnotationList()).forEach(annotation->{
+                            annotationsAttribute.addAnnotation(new Annotation(annotation,ctClass.getClassFile().getConstPool()));
+                        });
+                        ctClass.getClassFile().addAttribute(annotationsAttribute);
+                        ctClass.debugWriteFile("D:\\project\\");
+                        this.addAutowiredManager(ctClass.toClass());
+                    } catch (NotFoundException e) {
+                        e.printStackTrace();
+                    } catch (CannotCompileException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                });
+            });
         }
     }
 
-    public Trusteeship(String packagePath, String mainMethod) {
-        this(packagePath,mainMethod,InjectionType.AutoAll);
-    }
 
     public Trusteeship(String packagePath, String mainMethod, InjectionType injectionType) {
         this.packagePath = packagePath;
@@ -80,7 +210,7 @@ public class Trusteeship {
                     this.propertiesList.add(properties);
                 }
             }
-            this.loadClass(this.getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
+            this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
             this.loadClass(absPath);
         }catch (Exception ex){
             ex.printStackTrace();
@@ -344,7 +474,7 @@ public class Trusteeship {
             After after=method.getAnnotation(After.class);
             Around around=method.getAnnotation(Around.class);
             if(pointcut!=null) {
-                aopClass.setPointcut(PackUtils.generatePattern(pointcut.value()));
+                aopClass.setPointcut(PackUtils.generateNamePattern(pointcut.value()));
                 aopClass.setName(method.getName());
             }else if(before!=null){
                 aopClass.setBefore(new AopMethod(before,object,method));
@@ -368,9 +498,22 @@ public class Trusteeship {
            this.addManager(clazz);
         }
     }
+    private void addAutowiredManager(Object object) throws IllegalAccessException, InstantiationException {
+        Repository repository = object.getClass().getAnnotation(Repository.class);
+        Service service =object.getClass().getAnnotation(Service.class);
+        Component component = object.getClass().getAnnotation(Component.class);
+        if (!object.getClass().isInterface() && (repository != null || service != null || component != null)) {
+            this.addManager(object);
+        }
+    }
     private ClassObj addManager(Class clazz){
         ClassObj classObj=new ClassObj(clazz);
         this.classMap.put(clazz.getName(),classObj);//不要接口
+        return classObj;
+    }
+    private ClassObj addManager(Object object){
+        ClassObj classObj=new ClassObj(object);
+        this.classMap.put(object.getClass().getName(),classObj);
         return classObj;
     }
     private void addAopManager(Class clazz) throws IllegalAccessException, InstantiationException {
@@ -413,5 +556,9 @@ public class Trusteeship {
             aopClass.setPointcut(Pattern.compile(sb.toString()));
             this.aopMap.put(transactionAop.getClass().getName(),aopClass);
         }
+    }
+
+    public Map<String, ClassObj> getClassMap() {
+        return classMap;
     }
 }

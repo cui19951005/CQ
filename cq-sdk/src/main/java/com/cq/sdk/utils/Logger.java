@@ -11,7 +11,7 @@ public class Logger {
         error(object,null);
     }
 
-    public static final void error(Object object, Exception ex) {
+    public static final void error(Object object, Exception e) {
         String info= formatMsg(object);
         System.err.println(info);
     }
@@ -45,12 +45,17 @@ public class Logger {
         stringBuffer.append(stringBuilder.toString());
         return stringBuilder.toString();
     }
+    public static final void error(String format,Exception e,Object... objects){
+        Logger.error(Logger.format(format,objects),e);
+    }
+    public static final void error(String format,Object... objects){
+        String message=Logger.format(format,objects);
+        Logger.error(message,new Exception(message));
+    }
     public static final void info(String format,Object... objects){
         Logger.info(Logger.format(format,objects));
     }
-    public static final void error(String format,Object... objects){
-        Logger.error(Logger.format(format,objects));
-    }
+
     private static final String format(String format,Object... objects){
         for(int i=0;i<objects.length;i++){
             String chars="{"+i+"}";

@@ -317,9 +317,4 @@ public class Tea {
         }
         return x;
     }
-    public static void main(String[] args){
-        /*UserService androidQQService=new UserServiceImpl();
-        androidQQService.login("2534549160","sj17839969220");*/
-        Logger.info(Number.byte4ToInt(ByteSet.parse("4{17,15,-102,63}"),0));
-    }
 }

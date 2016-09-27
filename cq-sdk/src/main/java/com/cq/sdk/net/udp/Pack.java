@@ -1,6 +1,7 @@
 package com.cq.sdk.net.udp;
 
 import com.cq.sdk.utils.ByteSet;
+import com.cq.sdk.utils.Encryption;
 import com.cq.sdk.utils.Number;
 
 /**
@@ -13,7 +14,9 @@ public class Pack {
         return data;
     }
 
-    public Pack(ByteSet md5, int size, ByteSet byteSet){
-        this.data=md5.append(Number.intToByte4(size),byteSet);
+    public Pack(int size, ByteSet byteSet){
+        ByteSet sum=Number.intToByte4(size).append(byteSet);
+        ByteSet md5= Encryption.MD5(sum);
+        this.data=md5.append(sum);
     }
 }

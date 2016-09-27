@@ -23,7 +23,7 @@ public class TransactionManager {
 
     public void setPackName(String name){
         this.packName=name;
-        this.packPattern=PackUtils.generatePattern(name);
+        this.packPattern=PackUtils.generateNamePattern(name);
     }
 
     public String getPackName() {

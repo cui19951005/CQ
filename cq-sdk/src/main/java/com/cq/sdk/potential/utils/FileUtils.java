@@ -1,4 +1,6 @@
-package com.cq.sdk.utils;
+package com.cq.sdk.potential.utils;
+
+import com.cq.sdk.utils.*;
 
 import java.io.File;
 import java.net.URL;
@@ -129,6 +131,40 @@ public class FileUtils {
                 fileList.add(file);
             }else if(file.isDirectory()){
                 loadFile(file,fileList);
+            }
+        }
+    }
+    public static final List<File> loadClass(String packName){
+        StringBuilder sb=new StringBuilder("/");
+        String[] array=packName.split("\\.");
+        int index=-1;
+        for(int i=0;i<array.length;i++){
+            if(array[i].indexOf("*")==-1 && array[i].indexOf("?")==-1) {
+                sb.append(array[i]);
+            }else{
+                break;
+            }
+            sb.append("/");
+            index+=array[i].length()+1;
+        }
+        packName=packName.substring(index);
+        List<File> fileList=new ArrayList<>();
+        FileUtils.findList(new File(Thread.currentThread().getClass().getResource(sb.substring(0,sb.length()-1)).getFile()),fileList,PackUtils.generateFilePattern(packName),null);
+        return fileList;
+    }
+    private static final void findList(File base,List<File> list,Pattern match,File now){
+        if(now==null)now=base;
+        File[] files=now.listFiles();
+        if(files==null)return;
+        for(File file : files){
+            String path=file.getAbsolutePath();
+            path=path.substring(base.getAbsolutePath().length());
+            int index=path.indexOf(".");
+            path=path.substring(0,index==-1?path.length():index);
+            if(match.matcher(path.replace("\\","/")).find()&&file.isFile()){
+                list.add(file);
+            }else if(file.isDirectory()){
+                FileUtils.findList(base,list,match,file);
             }
         }
     }

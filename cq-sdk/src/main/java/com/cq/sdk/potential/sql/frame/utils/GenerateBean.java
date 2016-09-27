@@ -11,7 +11,7 @@ import com.cq.sdk.potential.sql.frame.MybatisTrusteeship;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateSessionManager;
 import com.cq.sdk.potential.utils.ClassObj;
 import com.cq.sdk.potential.utils.SynchronizationType;
-import com.cq.sdk.utils.FileUtils;
+import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.utils.Logger;
 import com.cq.sdk.utils.StringUtils;
 import org.hibernate.context.spi.CurrentSessionContext;

@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
         Global.qq.token0058 = new ByteSet();
         Global.qq.key = ByteSet.empty(16);
         Global.qq.loginState = DataType.UserState.Login;
-        Logger.info(Constants.IP_ADDRESS);
         if(!this.networkService.connection(Constants.IP_ADDRESS)){
             Global.qq.loginState = DataType.UserState.OffLine;
             return ErrorCode.System.SERVER_CONNECTION_FAILED.getCode();

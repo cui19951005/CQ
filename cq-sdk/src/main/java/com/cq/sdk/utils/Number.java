@@ -326,10 +326,10 @@ public class Number {
      * @return int整数
      */
     public static int byte4ToInt(ByteSet bytes) {
-        int b0 = bytes.get(0) & 0xFF;
-        int b1 = bytes.get(0 + 1) & 0xFF;
-        int b2 = bytes.get(0 + 2) & 0xFF;
-        int b3 = bytes.get(0 + 3) & 0xFF;
+        int b0 = bytes.get(3) & 0xFF;
+        int b1 = bytes.get(2) & 0xFF;
+        int b2 = bytes.get(1) & 0xFF;
+        int b3 = bytes.get(0) & 0xFF;
         return (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
     }
     public static long bytesToLong(ByteSet bytes) {

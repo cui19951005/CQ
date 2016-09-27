@@ -7,17 +7,16 @@ import com.cq.sdk.utils.Number;
  * Created by admin on 2016/9/14.
  */
 public class UnPack {
-    private ByteSet head;
     private ByteSet md5;
     private int size;
     private ByteSet data;
     private ByteSet surplusData;
     public UnPack(ByteSet byteSet){
-        this.head=byteSet.subByteSet(0,16+8);//16包md5 8长度
-        this.md5=this.head.subByteSet(0,16);
-        this.size=Number.byte4ToInt(this.head.subByteSet(16,8));
-        this.data=byteSet.subByteSet(this.head.length(), size>byteSet.length()-this.head.length()?byteSet.length():size);
-        this.surplusData=byteSet.subByteSet(this.data.length()+this.head.length());
+        this.md5=byteSet.subByteSet(0,16);
+        this.size=Number.byte4ToInt(byteSet.subByteSet(16,4));
+        int head=20;
+        this.data=byteSet.subByteSet(head, size>byteSet.length()-head?byteSet.length():size);
+        this.surplusData=byteSet.subByteSet(this.data.length()+head);
     }
     public boolean isNotEnd(){
         return this.size!=this.data.length();
