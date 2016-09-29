@@ -23,8 +23,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         this.byteSet= Arrays.copyOfRange(byteSet,offset,length);
     }
     public ByteSet(String hex){
+        hex = hex.replace(" ", "");
         if(hex.indexOf("{")==-1) {
-            hex = hex.replace(" ", "");
             this.byteSet = new byte[hex.length() / 2];
             for (int i = 0; i < this.length(); i++) {
                 this.byteSet[i] = ByteSet.uByteToByte(Integer.valueOf(Number.baseNum(hex.substring(i * 2, (i + 1) * 2), 16, 10)));
@@ -139,7 +139,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     @Override
     public String toString() {
-        StringBuffer stringBuffer=new StringBuffer();
+        /*StringBuffer stringBuffer=new StringBuffer();
         stringBuffer.append(this.length());
         stringBuffer.append("{");
         for(int i=0;i<this.length();i++){
@@ -149,7 +149,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             }
         }
         stringBuffer.append("}");
-        return stringBuffer.toString();
+        return stringBuffer.toString();*/
+        return toStringUInt();
     }
     public String toStringUInt(){
         StringBuffer stringBuffer=new StringBuffer();

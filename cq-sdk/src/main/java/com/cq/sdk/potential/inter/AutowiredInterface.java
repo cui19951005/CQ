@@ -1,6 +1,5 @@
 package com.cq.sdk.potential.inter;
 
-import com.cq.sdk.potential.utils.ClassObj;
 import com.cq.sdk.potential.sql.tx.TransactionManager;
 
 import java.util.List;
@@ -10,5 +9,5 @@ import java.util.List;
  */
 public interface AutowiredInterface  {
     TransactionManager transactionManager();
-    List<ClassObj> beanList();
+    List<Object> beanList();
 }

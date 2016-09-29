@@ -28,12 +28,9 @@ public class UserServiceImpl implements UserService {
         Global.qq.account = user;
         long userVal = Long.valueOf(user);
         if (userVal > Integer.MAX_VALUE) {
-            userVal = (int) -(Integer.MAX_VALUE + Integer.MAX_VALUE - userVal);
-        }
-        if (userVal > Integer.MAX_VALUE) {
-            Global.qq.user = Bin.flip(Number.longToByte8(userVal)).getRight(4);
+            Global.qq.user = Number.longToByte8(userVal).getRight(4);
         } else {
-            Global.qq.user = Bin.flip(Number.intToByte4((int) userVal));
+            Global.qq.user = Number.intToByte4((int) userVal);
         }
         Global.qq.qq = userVal;
         Global.qq.caption = ByteSet.parse(user.getBytes());
@@ -52,9 +49,9 @@ public class UserServiceImpl implements UserService {
         }
         Global.qq.shareKey = ByteSet.parse("957C3AAFBF6FAF1D2C2F19A5EA04E51C");
         Global.qq.pubKey = ByteSet.parse("02244B79F2239755E73C73FF583D4EC5625C19BF8095446DE1");
-        Global.qq.tgtKey = Bin.getRandomBin(16);
-        Global.qq.time = Bin.flip(Number.longToByte8(Other.timeStamp(false)).getLeft(4));
-        Global.qq.randKey = Bin.getRandomBin(16);
+        Global.qq.tgtKey = new ByteSet("{ 40, 81, 21, 92, 70, 136, 123, 20, 15, 44, 58, 216, 60, 152, 108, 30 }");//Bin.getRandomBin(16);
+        Global.qq.time = Number.longToByte8(Other.timeStamp(false)).getRight(4);//java语法不同
+        Global.qq.randKey =new ByteSet("{ 40, 81, 21, 92, 70, 136, 123, 20, 15, 44, 58, 216, 60, 152, 108, 30 }"); //Bin.getRandomBin(16);
         Pack pack = new Pack();
         pack.setHex("00 09");
         pack.setShort((short) 19);
@@ -83,8 +80,11 @@ public class UserServiceImpl implements UserService {
         pack.setBin(Tlv.tlv188());
         pack.setBin(Tlv.tlv191());
         ByteSet buffer = pack.getAll();
-        buffer = this.commonService.packPc("08 10", Hash.QQTea(buffer, Global.qq.shareKey), Global.qq.randKey, Global.qq.pubKey);
-        if (!this.networkService.send(this.commonService.makeLoginSendSsoMsg("wtlogin.login", buffer, new ByteSet(), Global.qqGlobal.imei, Global.qq.ksid, Global.qqGlobal.ver, true),new Receive())) {
+        buffer=Hash.QQTea(buffer, Global.qq.shareKey);
+        Logger.info(buffer);
+        buffer = this.commonService.packPc("08 10",buffer , Global.qq.randKey, Global.qq.pubKey);
+        buffer=this.commonService.makeLoginSendSsoMsg("wtlogin.login", buffer, new ByteSet(), Global.qqGlobal.imei, Global.qq.ksid, Global.qqGlobal.ver, true);
+        if (!this.networkService.send(buffer,new Receive())) {
             Global.qq.loginState = DataType.UserState.OffLine;
             return ErrorCode.User.USER_LOGINFAILED.getCode();
         }

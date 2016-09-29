@@ -2,8 +2,6 @@ package com.cq.sdk.net;
 
 import com.cq.sdk.net.udp.ReceiveData;
 import com.cq.sdk.net.udp.UDP;
-import com.cq.sdk.potential.Trusteeship;
-import com.cq.sdk.potential.utils.ClassObj;
 import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.utils.*;
 import com.cq.sdk.utils.Number;
@@ -128,7 +126,7 @@ public class NetObject {
             }
         }
     }
-    public void messageHandle(Map<String,ClassObj> objectMap){
+    public void messageHandle(Map<Class,Object> objectMap){
         messageHandle=new MessageHandle();
         messageHandle.netObject=this;
         messageHandle.objectMap=objectMap;
@@ -137,7 +135,7 @@ public class NetObject {
 
     private static class  MessageHandle extends Thread{
         private NetObject netObject;
-        private Map<String,ClassObj> objectMap;
+        private Map<Class,Object> objectMap;
         @Override
         public void run() {
             this.netObject.udp=new UDP(this.netObject.localPort,this.netObject.host,this.netObject.port, new ReceiveData() {
@@ -212,34 +210,34 @@ public class NetObject {
                                 paramsType[i] = params[i].getClass();
                             }
                         }
-                        ClassObj classObj=null;
+                        Object object=null;
                         if(objectMap!=null) {
-                             classObj = objectMap.get(clazzName);
+                            object = objectMap.get(Class.forName(clazzName));
                         }else{
                             try {
                                 Class clazz = Class.forName(clazzName);
                                 Constructor[] constructors = clazz.getConstructors();
                                 if (constructors.length == 0) {
-                                    classObj= new ClassObj(clazz.newInstance());
+                                    object= clazz.newInstance();
                                 }
                                 for (Constructor constructor : constructors) {
                                     if (constructor.getParameterCount() == 0) {
-                                        classObj= new ClassObj(clazz.newInstance());
+                                        object= clazz.newInstance();
                                     }
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
                         }
-                        Method method=classObj.getClazz().getMethod(methodName,paramsType);
+                        Method method=object.getClass().getMethod(methodName,paramsType);
                         method.setAccessible(true);
-                        Object object=method.invoke(classObj.getObject(),params);
-                        if(object==null) {
+                        Object result=method.invoke(object,params);
+                        if(result==null) {
                             udp.send(host,port,new ByteSet(4));//int4字节
                         }else{
                             ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
                             ObjectOutputStream objectOutputStream=new ObjectOutputStream(outputStream);
-                            objectOutputStream.writeObject(object);
+                            objectOutputStream.writeObject(result);
                             ByteSet bytes=ByteSet.parse(outputStream.toByteArray());
                             ByteSet length=Number.intToByte4(bytes.length());
                             udp.send(host,port,length.append(bytes));

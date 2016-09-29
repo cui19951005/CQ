@@ -45,6 +45,9 @@ public class NetworkServiceImpl implements NetworkService {
                 ByteSet result = new ByteSet();
                 while (true) {
                     int length = inputStream.read(data, 0, data.length);
+                    if(length<=0){
+                        break;
+                    }
                     result.append(data,0,length);
                     if(length!=data.length){
                         break;

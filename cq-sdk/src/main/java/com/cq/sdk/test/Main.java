@@ -1,6 +1,7 @@
 package com.cq.sdk.test;
 
 import com.cq.sdk.android.qq.UserService;
+import com.cq.sdk.android.qq.utils.Pack;
 import com.cq.sdk.hibernate.LoginAccountEntity;
 import com.cq.sdk.net.NetObject;
 import com.cq.sdk.net.udp.ReceiveData;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 @Entrance(value = "com.cq.sdk.android.qq.*",injectionType = InjectionType.Annotation)
 @LoadProperties({"test.properties"})
-@NetAddress(port=2020,value = "localhost:2021")
+//@NetAddress(port=2020,value = "localhost:2021")
 public class Main {
     @Autowired
     Main main;
@@ -40,12 +41,11 @@ public class Main {
     @Autowired
     UserService userService;
     public static void main(String[] args) throws Exception {
-        NetObject netObject=new NetObject(2021,"localhost",2020);
-        netObject.messageHandle(null);
-        new Trusteeship(Main.class);
-    }
-    @Execute
-    public void main(){
-        Logger.info(this.userService.login("111111111","211111111"));
+        /*NetObject netObject=new NetObject(2021,"localhost",2020);
+        netObject.messageHandle(null);*/
+        Trusteeship trusteeship=new Trusteeship(Main.class);
+        UserService userService=trusteeship.get(UserService.class);
+        Main m=trusteeship.add(Main.class);
+
     }
 }

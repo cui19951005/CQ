@@ -9,13 +9,10 @@ import com.cq.sdk.potential.sql.tx.TransactionManager;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
 import com.cq.sdk.potential.sql.frame.MybatisTrusteeship;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateSessionManager;
-import com.cq.sdk.potential.utils.ClassObj;
 import com.cq.sdk.potential.utils.SynchronizationType;
 import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.utils.Logger;
 import com.cq.sdk.utils.StringUtils;
-import org.hibernate.context.spi.CurrentSessionContext;
-
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,13 +53,13 @@ public class GenerateBean {
             Object sqlSessionFactoryBuilderObj=sqlSessionFactoryBuilder.newInstance();
             Object sqlSessionFactory = sqlSessionFactoryBuilder.getMethod("build",configClass).invoke(sqlSessionFactoryBuilderObj,configObj);
             Object sqlSession = sqlSessionFactory.getClass().getMethod("openSession").invoke(sqlSessionFactory);
-            final List<ClassObj> objectList = new ArrayList<ClassObj>();
+            final List<Object> objectList = new ArrayList();
             fileList = FileUtils.findFileList(mybatisTrusteeship.mapperInterface());
             for (File file : fileList) {
-                ClassObj classObj=new ClassObj(sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file,mybatisTrusteeship.mapperInterface()))));
-                objectList.add(classObj);
+                Object obj=sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file,mybatisTrusteeship.mapperInterface())));
+                objectList.add(obj);
             }
-            objectList.add(new ClassObj(dataSource));
+            objectList.add(dataSource);
             TransactionManager transactionManager=mybatisTrusteeship.transactionManager();
             Field field=transactionManager.getClass().getDeclaredField("transaction");
             field.setAccessible(true);
@@ -103,7 +100,7 @@ public class GenerateBean {
                     return transactionManager;
                 }
 
-                public List<ClassObj> beanList() {
+                public List<Object> beanList() {
                     return objectList;
                 }
             };
@@ -129,7 +126,7 @@ public class GenerateBean {
             if(dataSource!=null) {
                 properties.put("hibernate.connection.datasource",dataSource);
             }
-            properties.put("hibernate.current_session_context_class", HibernateProxy.getProxyClass(HibernateSessionManager.class.getClassLoader(),new Class[]{CurrentSessionContext.class}).getName());
+            properties.put("hibernate.current_session_context_class", HibernateProxy.getProxyClass(HibernateSessionManager.class.getClassLoader(),new Class[]{Class.forName("org.hibernate.context.spi.CurrentSessionContext")}).getName());
             configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
             field=configuration.getClass().getDeclaredField("standardServiceRegistryBuilder");
             field.setAccessible(true);
@@ -162,12 +159,14 @@ public class GenerateBean {
                 @Override
                 public void begin() {
                     try {
-                        this.session=sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
-                        SynchronizationManager.bind(SynchronizationType.HibernateSession,this.session);
-                        this.transaction=session.getClass().getMethod("getTransaction").invoke(session);
-                        if(!(Boolean) this.transaction.getClass().getMethod("isActive").invoke(this.transaction)) {
-                            this.transaction.getClass().getMethod("begin").invoke(this.transaction);
+                        if((this.session=SynchronizationManager.get(SynchronizationType.HibernateSession))==null&&!(Boolean)this.session.getClass().getMethod("isConnected").invoke(this.session)) {
+                            this.session = sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
+                            SynchronizationManager.bind(SynchronizationType.HibernateSession,this.session);
+                        }else{
+                            this.session=SynchronizationManager.get(SynchronizationType.HibernateSession);
                         }
+                        this.transaction=session.getClass().getMethod("getTransaction").invoke(session);
+                        this.transaction.getClass().getMethod("begin").invoke(this.transaction);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -192,9 +191,9 @@ public class GenerateBean {
                     }
                 }
             });
-            List<ClassObj> classObjList=new ArrayList<>();
-            classObjList.add(new ClassObj(sessionFactory));
-            classObjList.add(new ClassObj(transactionManager));
+            List<Object> classObjList=new ArrayList<>();
+            classObjList.add(sessionFactory);
+            classObjList.add(transactionManager);
             return new AutowiredInterface() {
                 @Override
                 public TransactionManager transactionManager() {
@@ -202,7 +201,7 @@ public class GenerateBean {
                 }
 
                 @Override
-                public List<ClassObj> beanList() {
+                public List<Object> beanList() {
                     return classObjList;
                 }
             };

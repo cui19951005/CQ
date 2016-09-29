@@ -11,7 +11,6 @@ import com.cq.sdk.potential.sql.tx.TransactionAop;
 import com.cq.sdk.potential.sql.tx.TransactionManager;
 import com.cq.sdk.potential.sql.tx.utils.TransactionMethod;
 import com.cq.sdk.potential.utils.AopClass;
-import com.cq.sdk.potential.utils.ClassObj;
 import com.cq.sdk.potential.utils.InjectionType;
 import com.cq.sdk.potential.utils.AopMethod;
 import com.cq.sdk.utils.Logger;
@@ -39,7 +38,7 @@ import java.util.stream.Stream;
 public class Trusteeship {
     private String packagePath;
     private String mainMethod;
-    private Map<String,ClassObj> classMap =new HashMap<>();
+    private Map<Class,Object> objectMap =new HashMap<>();
     private Map<String,AopClass> aopMap =new HashMap<>();
     private String rootDir;
     private Class mainClass;
@@ -65,7 +64,7 @@ public class Trusteeship {
             );
             this.injectionType=entrance.injectionType();
             addNetObject(mainClass);
-            //this.init();
+            this.init();
             this.start();
         }
 
@@ -83,7 +82,7 @@ public class Trusteeship {
             Stream.of(netAddress.value()).forEach(ipPort->{
                 String[] array=ipPort.split(":");
                 NetObject netObject=new NetObject(netAddress.port(),array[0],Integer.valueOf(array[1]));
-                netObject.messageHandle(this.getClassMap());
+                netObject.messageHandle(this.objectMap);
                 this.netObjectList.add(netObject);
                 List<NetClass> list=netObject.getList(this.packagePath,annotationList);
                 ClassPool classPool=ClassPool.getDefault();
@@ -188,20 +187,10 @@ public class Trusteeship {
             });
         }
     }
-
-
-    public Trusteeship(String packagePath, String mainMethod, InjectionType injectionType) {
-        this.packagePath = packagePath;
-        this.mainMethod = mainMethod;
-        this.injectionType=injectionType;
-        this.init();
-        this.start();
-    }
     private void init(){
         try {
             this.rootDir = Thread.currentThread().getClass().getResource("/").getFile().substring(1);
             String absPath=this.rootDir+packagePath.replace(".","/").replace("*","");
-            this.mainClass=Class.forName(this.mainMethod.substring(0,this.mainMethod.lastIndexOf(".")));
             LoadProperties loadProperties= (LoadProperties) this.mainClass.getAnnotation(LoadProperties.class);
             if(loadProperties!=null){//加载属性文件
                 for(String file : loadProperties.value()) {
@@ -212,6 +201,9 @@ public class Trusteeship {
             }
             this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
             this.loadClass(absPath);
+            for(Map.Entry<Class,Object> item : this.objectMap.entrySet()){
+                item.setValue(this.injection(item.getKey()));
+            }
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -239,19 +231,20 @@ public class Trusteeship {
         }
     }
     private void start(){
-        try {
-            int index=this.mainMethod.lastIndexOf(".");
-            String method=this.mainMethod.substring(index+1);
-            Object object=this.injection(this.mainClass);
-            this.mainClass.getMethod(method).invoke(object);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        if(this.mainMethod!=null) {
+            try {
+                int index = this.mainMethod.lastIndexOf(".");
+                String method = this.mainMethod.substring(index + 1);
+                Object object = this.injection(this.mainClass);
+                this.mainClass.getMethod(method).invoke(object);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     /**
@@ -265,13 +258,12 @@ public class Trusteeship {
         try {
             Object object;
             if (clazz.isInterface()) {
-                ClassObj classObj = this.impl(clazz);
-                if (classObj != null && classObj.getObject() == null) {
-                    classObj = new ClassObj(this.injection(classObj.getClazz()));
+                Class temp = this.impl(clazz);
+                if (this.objectMap.get(temp)==null) {
+                    object=this.addManager(this.injection(temp));
                 } else {
                     return null;
                 }
-                object = classObj.getObject();
             } else {
                 object = this.createObj(clazz);
             }
@@ -290,19 +282,24 @@ public class Trusteeship {
                     continue;
                 }
                 Class type = field.getType();
-                ClassObj obj;
+                Object obj;
                 if (type == object.getClass()) {
-                    obj = new ClassObj(object);
+                    obj = object;
                 } else {
                     obj = this.exists(type, field);
                 }
-                if(obj!=null && obj.getObject()==null){
-                    obj.setObject(this.injection(obj.getClazz()));
+                Map.Entry<Class,Object> temp;
+                if(obj!=null && obj instanceof Map.Entry && (temp=(Map.Entry)obj).getValue()==null){
+                    obj=this.addManager(this.injection(temp.getKey()),temp.getKey());
                 }
-                if (obj != null && obj.getObject()!=null) {
-                    obj.setObject(this.addAop(obj.getObject()));
-                    injectionProperties(field, obj.getObject());
-                    field.set(object, obj.getObject());
+                if(obj!=null && obj instanceof Map.Entry && (temp=(Map.Entry)obj).getValue()!=null){
+                    temp.setValue(this.addAop(temp.getValue()));
+                    injectionProperties(field,temp.getValue());
+                    field.set(object,temp.getValue());
+                }else if(obj != null && !(obj instanceof Map.Entry)){
+                    obj = this.addAop(obj);
+                    injectionProperties(field,obj);
+                    field.set(object,obj);
                 }
             }
             return this.addAop(object);
@@ -316,32 +313,44 @@ public class Trusteeship {
      * @param clazz
      * @return
      */
-    private ClassObj exists(Class clazz,Field field) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    private Map.Entry<Class,Object> exists(Class clazz, Field field) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         if(field.isAnnotationPresent(Autowired.class)){
             Autowired annotation=field.getAnnotation(Autowired.class);
             if(annotation.type().length()>0){
                 clazz=Class.forName(annotation.type());
             }
         }
-        for (ClassObj classObj : this.classMap.values()) {
-            if(!classObj.getClazz().isInterface()) {
+        for (Map.Entry<Class,Object> item : this.objectMap.entrySet()) {
+            if(!item.getKey().isInterface()) {
                 if (field.isAnnotationPresent(Autowired.class)) {
                     if(!field.getAnnotation(Autowired.class).value()) {
-                        if (this.isClassName(classObj.getClazz(), field.getName())) {
-                            return classObj;
+                        if (this.isClassName(item.getKey(), field.getName())) {
+                            return item;
                         }
-                    }else if(this.isImplClass(classObj.getClazz(), clazz)){
-                        return classObj;
+                    }else if(this.isImplClass(item.getKey(), clazz)){
+                        return item;
                     }
-                } else if(this.injectionType==InjectionType.AutoAll&&this.isImplClass(classObj.getClazz(), clazz)) {
-                    return classObj;
+                } else if(this.injectionType==InjectionType.AutoAll&&this.isImplClass(item.getKey(), clazz)) {
+                    return item;
                 }
             }
         }
         if(!clazz.isInterface()&&field.isAnnotationPresent(Autowired.class)){
-            ClassObj classObj=this.addManager(clazz);
-            classObj.setObject(this.injection(classObj.getClazz()));
-            return classObj;
+            Class temp=this.addManager(clazz);
+            return new Map.Entry<Class, Object>() {
+                @Override
+                public Class getKey() {
+                    return temp;
+                }
+                @Override
+                public Object getValue() {
+                    return Trusteeship.this.addManager(Trusteeship.this.injection(temp));
+                }
+                @Override
+                public Object setValue(Object value) {
+                    return Trusteeship.this.addManager(value);
+                }
+            };
         }
         return null;
     }
@@ -363,13 +372,13 @@ public class Trusteeship {
     }
     /**
      * 查找实现类
-     * @param clazz1
+     * @param clazz
      * @return
      */
-    private ClassObj impl(Class clazz1){
-        for(ClassObj classObj : this.classMap.values()){
-            if(!classObj.getClazz().isInterface() && this.isImplClass(classObj.getClazz(),clazz1)){
-                return classObj;
+    private Class impl(Class clazz){
+        for(Class item : this.objectMap.keySet()){
+            if(!item.isInterface() && this.isImplClass(item,clazz)){
+                return item;
             }
         }
         return null;
@@ -418,7 +427,7 @@ public class Trusteeship {
      * @param object
      * @throws IllegalAccessException
      */
-    public void injectionProperties(Field field, Object object) throws InvocationTargetException, IllegalAccessException {
+    private void injectionProperties(Field field, Object object) throws InvocationTargetException, IllegalAccessException {
         Property property=field.getAnnotation(Property.class);
         if(property != null){
             Method[] methods=object.getClass().getMethods();
@@ -456,7 +465,8 @@ public class Trusteeship {
         }
     }
     private Object addAop(Object object) {
-        return new InvocationHandlerImpl(new ArrayList(this.aopMap.values()),this.transactionManager).bind(object);
+        Object temp=new InvocationHandlerImpl(new ArrayList(this.aopMap.values()),this.transactionManager).bind(object);
+        return temp;
     }
     /**
      * 将对象注解切面表达式存入对象
@@ -498,23 +508,17 @@ public class Trusteeship {
            this.addManager(clazz);
         }
     }
-    private void addAutowiredManager(Object object) throws IllegalAccessException, InstantiationException {
-        Repository repository = object.getClass().getAnnotation(Repository.class);
-        Service service =object.getClass().getAnnotation(Service.class);
-        Component component = object.getClass().getAnnotation(Component.class);
-        if (!object.getClass().isInterface() && (repository != null || service != null || component != null)) {
-            this.addManager(object);
-        }
+    private Class addManager(Class clazz){
+        this.objectMap.put(clazz,null);//不要接口
+        return clazz;
     }
-    private ClassObj addManager(Class clazz){
-        ClassObj classObj=new ClassObj(clazz);
-        this.classMap.put(clazz.getName(),classObj);//不要接口
-        return classObj;
+    private Object addManager(Object object){
+        this.objectMap.put(object.getClass(),object);
+        return object;
     }
-    private ClassObj addManager(Object object){
-        ClassObj classObj=new ClassObj(object);
-        this.classMap.put(object.getClass().getName(),classObj);
-        return classObj;
+    private Object addManager(Object object,Class clazz){
+        this.objectMap.put(clazz,object);
+        return object;
     }
     private void addAopManager(Class clazz) throws IllegalAccessException, InstantiationException {
         Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
@@ -533,16 +537,14 @@ public class Trusteeship {
             autowiredInterface=GenerateBean.hibernate((HibernateTrusteeship) object);
         }
         if(autowiredInterface!=null){
-            for(ClassObj classObj : autowiredInterface.beanList()){
-                this.classMap.put(classObj.getClazz().getName(),classObj);
-            }
+            autowiredInterface.beanList().stream().forEach(item->this.addManager(item));
             setTransactionManager(autowiredInterface);
         }
     }
     private void setTransactionManager(AutowiredInterface autowiredInterface) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         this.transactionManager=autowiredInterface.transactionManager();
         this.injection(this.transactionManager.getTransaction());
-        this.classMap.put(transactionManager.getClass().getName(),new ClassObj(transactionManager));
+        this.addManager(transactionManager);
         TransactionAop transactionAop=  this.injection(TransactionAop.class);
         AopClass baseAopClass=this.analysisAopClass(transactionAop);
         for(TransactionMethod transactionMethod :transactionManager.getTransactionMethodList()) {
@@ -557,8 +559,16 @@ public class Trusteeship {
             this.aopMap.put(transactionAop.getClass().getName(),aopClass);
         }
     }
-
-    public Map<String, ClassObj> getClassMap() {
-        return classMap;
+    public <T> T get(Class<T> clazz){
+        for(Map.Entry<Class,Object> item : this.objectMap.entrySet()){
+            if(this.isImplClass(item.getKey(),clazz)){
+                return (T) item.getValue();
+            }
+        }
+        return null;
     }
+    public <T> T add(Class<T> clazz){
+        return (T) this.addManager(this.injection(this.addManager(clazz)),clazz);
+    }
+
 }
