@@ -35,7 +35,6 @@ public class NetworkServiceImpl implements NetworkService {
 
     public boolean send(ByteSet bytes, NetworkReceive networkReceive) {
         Global.increaseSsoSeq();
-        Logger.info(bytes);
         try {
             OutputStream outputStream=this.clicent.getOutputStream();
             outputStream.write(bytes.getByteSet());

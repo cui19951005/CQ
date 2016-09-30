@@ -82,6 +82,10 @@ public class Json {
             sb.append("[");
             sb.append(arrayObj(list.toArray(new Object[list.size()])));
             sb.append("]");
+        }else if(value instanceof Enum) {
+            sb.append("\"");
+            sb.append(value.toString());
+            sb.append("\"");
         }else{
             sb.append(object(value));
         }

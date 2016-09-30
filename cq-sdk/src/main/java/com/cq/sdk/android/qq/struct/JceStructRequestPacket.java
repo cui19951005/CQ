@@ -14,7 +14,7 @@ public class JceStructRequestPacket {
     public String sFuncName;
     public ByteSet sBuffer;
     public int iTimeout;
-    public JceMap[] context=new JceMap[1];
-    public JceMap[] status=new JceMap[1];
+    public JceMap[] context=new JceMap[0];
+    public JceMap[] status=new JceMap[0];
 
 }

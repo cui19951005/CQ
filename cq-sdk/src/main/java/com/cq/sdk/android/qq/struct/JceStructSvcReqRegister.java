@@ -9,7 +9,7 @@ public class JceStructSvcReqRegister {
     public long lUin;
     public long lBid;
     public byte cConnType;
-    public String sOther;
+    public String sOther="";
     public int iStatus;
     public byte bOnlinePush;
     public byte bIsOnline;
@@ -19,13 +19,13 @@ public class JceStructSvcReqRegister {
     public long timeStamp;
     public byte _11;
     public byte _12;
-    public String _13;
+    public String _13="";
     public byte _14;
-    public ByteSet _imei_;
+    public ByteSet _imei_=new ByteSet();
     public short _17;
     public byte _18;
-    public String _19_device;
-    public String _20_device;
-    public String _21_sys_ver;
+    public String _19_device="";
+    public String _20_device="";
+    public String _21_sys_ver="";
 
 }

@@ -2,6 +2,7 @@ package com.cq.sdk.android.qq.auxiliary;
 
 import com.cq.sdk.android.qq.impl.CommonServiceImpl;
 import com.cq.sdk.android.qq.CommonService;
+import com.cq.sdk.potential.annotation.Autowired;
 import com.cq.sdk.potential.annotation.Service;
 
 /**
@@ -9,7 +10,7 @@ import com.cq.sdk.potential.annotation.Service;
  */
 @Service
 public class MsgHandle extends Thread {
-    private CommonService commonService=new CommonServiceImpl();
+    public CommonService commonService;
     @Override
     public void run() {
       while (true){

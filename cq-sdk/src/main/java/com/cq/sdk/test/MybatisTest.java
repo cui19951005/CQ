@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by admin on 2016/9/2.
  */
-public class MybatisTest {//implements MybatisTrusteeship {
+public class MybatisTest implements MybatisTrusteeship {
     @Autowired
     @Property("jdbc.")
     DruidDataSource druidDataSource;

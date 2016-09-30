@@ -28,7 +28,6 @@ public class CommonServiceImpl implements CommonService {
         Logger.info(bytes);
         bytes=this.unPack(bytes,false);
         bytes= Hash.unQQTea(bytes, Global.qq.key);
-        int len=bytes.length();
         UnPack unPack=new UnPack();
         unPack.setData(bytes);
         int headLen=unPack.getInt();
@@ -75,35 +74,40 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public ByteSet makeLoginSendSsoMsg(String serviceCmd, ByteSet buffer, ByteSet extBin, String imei, ByteSet ksId, ByteSet ver, boolean isLogin) {
-        ByteSet cookies=new ByteSet("B6 CC 78 FC");
-        Pack pack=new Pack();
-        pack.setInt(Global.requestId);
-        pack.setInt(Global.qqGlobal.appId);
-        pack.setInt(Global.qqGlobal.appId);
-        pack.setHex("01 00 00 00 00 00 00 00 00 00 00 00");
-        pack.setInt(extBin.length()+4);
-        pack.setBin(extBin);
-        pack.setInt(serviceCmd.length()+4);
-        pack.setBin(ByteSet.parse(serviceCmd.getBytes()));
-        pack.setInt(cookies.length()+4);
-        pack.setBin(cookies);
-        pack.setInt(imei.length()+4);
-        pack.setBin(ByteSet.parse(imei.getBytes()));
-        pack.setInt(ksId.length()+4);
-        pack.setBin(ksId);
-        pack.setShort((short) (ver.length()+2));
-        pack.setBin(ver);
-        ByteSet bytes=pack.getAll();
-        pack.empty();
-        pack.setInt(bytes.length()+4);
-        pack.setBin(bytes);
-        bytes=pack.getAll();
-        pack.empty();
-        pack.setBin(bytes);
-        pack.setInt(buffer.length()+4);
-        pack.setBin(buffer);
-        Logger.info(pack.getAll());
-        return pack(Hash.QQTea(pack.getAll(),Global.qq.key),isLogin?0:1);
+        try {
+            ByteSet cookies = new ByteSet("B6 CC 78 FC");
+            Pack pack = new Pack();
+            pack.setInt(Global.requestId);
+            pack.setInt(Global.qqGlobal.appId);
+            pack.setInt(Global.qqGlobal.appId);
+            pack.setHex("01 00 00 00 00 00 00 00 00 00 00 00");
+            pack.setInt(extBin.length() + 4);
+            pack.setBin(extBin);
+            pack.setInt(serviceCmd.length() + 4);
+            pack.setBin(ByteSet.parse(serviceCmd.getBytes("gbk")));
+            pack.setInt(cookies.length() + 4);
+            pack.setBin(cookies);
+            pack.setInt(imei.length() + 4);
+            pack.setBin(ByteSet.parse(imei.getBytes("gbk")));
+            pack.setInt(ksId.length() + 4);
+            pack.setBin(ksId);
+            pack.setShort((short) (ver.length() + 2));
+            pack.setBin(ver);
+            ByteSet bytes = pack.getAll();
+            pack.empty();
+            pack.setInt(bytes.length() + 4);
+            pack.setBin(bytes);
+            bytes = pack.getAll();
+            pack.empty();
+            pack.setBin(bytes);
+            pack.setInt(buffer.length() + 4);
+            pack.setBin(buffer);
+            Logger.info(pack.getAll());
+            return pack(Hash.QQTea(pack.getAll(), Global.qq.key), isLogin ? 0 : 1);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ByteSet packPc(String cmd, ByteSet bin, ByteSet extKey, ByteSet extBin) {
@@ -143,10 +147,10 @@ public class CommonServiceImpl implements CommonService {
 
     public ByteSet unPack(ByteSet bytes, boolean bool) {
         int index=bytes.indexOf(Global.qq.caption);
-        bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length()+1);
+        bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length());
         if(bool){
             index=bytes.indexOf(Global.qq.caption);
-            bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length()+1);
+            bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length());
         }
         return bytes;
     }
@@ -306,20 +310,25 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public ByteSet makeSendSsoMsg(String serviceCmd, ByteSet wupBuffer) {
-        ByteSet msgCookies =ByteSet.parse("B6 CC 78 FC");
-        Pack pack=new Pack();
+        try {
+            ByteSet msgCookies = ByteSet.parse("B6 CC 78 FC");
+            Pack pack = new Pack();
 
-        pack.setInt (serviceCmd.length() + 4);
-        pack.setBin (ByteSet.parse(serviceCmd.getBytes()));
-        pack.setInt (msgCookies.length()+4);
-        pack.setBin (msgCookies);
+            pack.setInt(serviceCmd.length() + 4);
+            pack.setBin(ByteSet.parse(serviceCmd.getBytes("gbk")));
+            pack.setInt(msgCookies.length() + 4);
+            pack.setBin(msgCookies);
 
-        ByteSet temp=pack.getAll();
-        pack.empty ();
-        pack.setInt (temp.length()+4);
-        pack.setBin (temp);
-        pack.setBin (wupBuffer);
-        return this.pack (Hash.QQTea (pack.getAll (), Global.qq.key), 2);
+            ByteSet temp = pack.getAll();
+            pack.empty();
+            pack.setInt(temp.length() + 4);
+            pack.setBin(temp);
+            pack.setBin(wupBuffer);
+            return this.pack(Hash.QQTea(pack.getAll(), Global.qq.key), 2);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
@@ -328,30 +337,36 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public ByteSet packSendSsoMsgSimple(short iversion, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer) {
-        JceOutputStream out=new JceOutputStream();
-        out.writeJceStruct(wupBuffer,0);
-        ByteSet bin=out.toByteArray();
-        out.clear();
-        JceMap[] maps=new JceMap[1];
-        maps[0].keyType=Constants.TYPE_STRING1;
-        maps[0].valType=Constants.TYPE_SIMPLE_LIST;
-        maps[0].key= ByteSet.parse(mapKey.getBytes());
-        maps[0].val=bin;
-        out.writeMap(maps,0);
-        bin=out.toByteArray();
-        out.clear();
-        JceStructRequestPacket req=new JceStructRequestPacket();
-        req.iversion=iversion;
-        req.iRequestId=iRequestId;
-        req.sServantName=sServantName;
-        req.sFuncName=sFuncName;
-        req.sBuffer=bin;
-        JceStructFactory.writeRequestPacket(out,req);
-        bin=out.toByteArray();
-        Pack pack=new Pack();
-        pack.setInt(bin.length()+4);
-        pack.setBin(bin);
-        return pack.getAll();
+        try {
+            JceOutputStream out = new JceOutputStream();
+            out.writeJceStruct(wupBuffer, 0);
+            ByteSet bin = out.toByteArray();
+            out.clear();
+            JceMap[] maps = new JceMap[1];
+            maps[0]=new JceMap();
+            maps[0].keyType = Constants.TYPE_STRING1;
+            maps[0].valType = Constants.TYPE_SIMPLE_LIST;
+            maps[0].key = ByteSet.parse(mapKey.getBytes("gbk"));
+            maps[0].val = bin;
+            out.writeMap(maps, 0);
+            bin = out.toByteArray();
+            out.clear();
+            JceStructRequestPacket req = new JceStructRequestPacket();
+            req.iversion = iversion;
+            req.iRequestId = iRequestId;
+            req.sServantName = sServantName;
+            req.sFuncName = sFuncName;
+            req.sBuffer = bin;
+            JceStructFactory.writeRequestPacket(out, req);
+            bin = out.toByteArray();
+            Pack pack = new Pack();
+            pack.setInt(bin.length() + 4);
+            pack.setBin(bin);
+            return pack.getAll();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean unPackLogin(ByteSet bin) {
@@ -378,7 +393,7 @@ public class CommonServiceImpl implements CommonService {
         UnPack unPack=new UnPack();
         unPack.setData(bin);
         int len=unPack.getInt();
-        ByteSet bytes=unPack.getAll();
+        bin=unPack.getAll();
         unPack.setData(bin);
         unPack.getByte();
         len=unPack.getShort();
@@ -386,6 +401,7 @@ public class CommonServiceImpl implements CommonService {
         unPack.getBin(2);
         int result=unPack.getByte();
         bin=unPack.getBin(len-16-1);
+        Global.qq.shareKey=new ByteSet("16{149,124,58,175,191,111,175,29,44,47,25,165,234,4,229,28}");
         bin=Hash.unQQTea(bin,Global.qq.shareKey);
         if(result!=0){
             if(result==2){
@@ -394,9 +410,8 @@ public class CommonServiceImpl implements CommonService {
                 Global.qq.loginState=DataType.UserState.Verification;
                 return null;
             }
-
+            this.unPackErrMsg(bin);
         }
-        this.unPackErrMsg(bin);
         Global.qq.loginState= DataType.UserState.Login;
         return bin;
     }
@@ -410,6 +425,7 @@ public class CommonServiceImpl implements CommonService {
 
     public void unPackErrMsg(ByteSet bin) {
         UnPack unPack=new UnPack();
+        unPack.setData(bin);
         unPack.getShort();
         unPack.getByte();
         unPack.getInt();
@@ -472,8 +488,6 @@ public class CommonServiceImpl implements CommonService {
             Global.qq.sKey=bin.clone();
         }else if(cmd.equals("01 36")){
             Global.qq.vKey=bin.clone();
-        }else if(cmd.equals("01 1A")){
-
         }else if(cmd.equals("03 05")){
             Global.qq.sessionKey=bin.clone();
         }else if(cmd.equals("01 43")){
@@ -517,45 +531,50 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public ByteSet packStatSvcRegister(long lBid, int iStatus, long timeStamp) {
-        JceStructSvcReqRegister struct=new JceStructSvcReqRegister();
-        JceOutputStream out=new JceOutputStream();
-        struct.lUin=Global.qq.qq;
-        struct.lBid=lBid;
-        struct.iStatus=iStatus;
-        struct.timeStamp=timeStamp;
-        struct._11=15;
-        struct._12=1;
-        struct._imei_=Global.qqGlobal.imei_;
-        struct._17=2052;
-        struct._19_device=Global.qqGlobal.device;
-        struct._20_device=Global.qqGlobal.device;
-        struct._21_sys_ver=Global.qqGlobal.osVersion;
-        JceStructFactory.writeSvcReqRegister(out, struct);
-        ByteSet bin=out.toByteArray ();
+        try {
+            JceStructSvcReqRegister struct = new JceStructSvcReqRegister();
+            JceOutputStream out = new JceOutputStream();
+            struct.lUin = Global.qq.qq;
+            struct.lBid = lBid;
+            struct.iStatus = iStatus;
+            struct.timeStamp = timeStamp;
+            struct._11 = 15;
+            struct._12 = 1;
+            struct._imei_ = Global.qqGlobal.imei_;
+            struct._17 = 2052;
+            struct._19_device = Global.qqGlobal.device;
+            struct._20_device = Global.qqGlobal.device;
+            struct._21_sys_ver = Global.qqGlobal.osVersion;
+            JceStructFactory.writeSvcReqRegister(out, struct);
+            ByteSet bin = out.toByteArray();
 
 
-        out.clear ();
-        out.writeJceStruct (bin, 0);
-        bin=out.toByteArray ();
+            out.clear();
+            out.writeJceStruct(bin, 0);
+            bin = out.toByteArray();
 
-        out.clear ();
-        JceMap[] map=new JceMap[1];
-        map [1].keyType=Constants.TYPE_STRING1;
-        map [1].valType=Constants.TYPE_SIMPLE_LIST;
-        map [1].key= ByteSet.parse("SvcReqRegister".getBytes());
-        map [1].val=bin;
-        out.writeMap (map, 0);
-        bin=out.toByteArray ();
-        JceStructRequestPacket req=new JceStructRequestPacket();
-        out.clear ();
-        req.iversion=3;
-        req.sServantName="PushService";
-        req.sFuncName="SvcReqRegister";
-        req.sBuffer=bin;
-        JceStructFactory.writeRequestPacket (out, req);
-        bin=out.toByteArray ();
-        return this.makeLoginSendSsoMsg ("StatSvc.register", bin, Global.qq.token004C, Global.qqGlobal.imei, Global.qq.ksid, Global.qqGlobal.ver,false);
-
+            out.clear();
+            JceMap[] map = new JceMap[1];
+            map[0]=new JceMap();
+            map[0].keyType = Constants.TYPE_STRING1;
+            map[0].valType = Constants.TYPE_SIMPLE_LIST;
+            map[0].key = ByteSet.parse("SvcReqRegister".getBytes("gbk"));
+            map[0].val = bin;
+            out.writeMap(map, 0);
+            bin = out.toByteArray();
+            JceStructRequestPacket req = new JceStructRequestPacket();
+            out.clear();
+            req.iversion = 3;
+            req.sServantName = "PushService";
+            req.sFuncName = "SvcReqRegister";
+            req.sBuffer = bin;
+            JceStructFactory.writeRequestPacket(out, req);
+            bin = out.toByteArray();
+            return this.makeLoginSendSsoMsg("StatSvc.register", bin, Global.qq.token004C, Global.qqGlobal.imei, Global.qq.ksid, Global.qqGlobal.ver, false);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void onLine() {
@@ -566,13 +585,14 @@ public class CommonServiceImpl implements CommonService {
             }
         });
         this.networkService.send(this.packStatSvcRegisterOnline(), new NetworkReceive() {
-            private CommonService commonService=new CommonServiceImpl();
+            private CommonService commonService=CommonServiceImpl.this;
             public void receive(ByteSet bytes) {
                 this.commonService.receive(bytes);
                 if(bytes.length()<=0){
 
                 }else{
                     MsgHandle msgHandle=new MsgHandle();
+                    msgHandle.commonService=this.commonService;
                     msgHandle.start();
                 }
             }

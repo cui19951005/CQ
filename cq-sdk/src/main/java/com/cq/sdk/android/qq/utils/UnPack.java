@@ -14,9 +14,15 @@ public class UnPack {
         return Bin.bin2Hex(this.mBin);
     }
     public ByteSet getBin(int length){
-        ByteSet bin=this.mBin.getLeft(length);
-        this.mBin=this.mBin.getRight(this.mBin.length()-length);
-        return bin;
+        if(length>this.mBin.length()) {
+            this.mBin=ByteSet.empty();
+            return this.mBin;
+        }else {
+            ByteSet bin = this.mBin.getLeft(length);
+            this.mBin = this.mBin.getRight(this.mBin.length() - length);
+            return bin;
+        }
+
     }
     public byte getByte(){
         ByteSet bin=this.mBin.getLeft(1);

@@ -59,7 +59,6 @@ public class GenerateBean {
                 Object obj=sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file,mybatisTrusteeship.mapperInterface())));
                 objectList.add(obj);
             }
-            objectList.add(dataSource);
             TransactionManager transactionManager=mybatisTrusteeship.transactionManager();
             Field field=transactionManager.getClass().getDeclaredField("transaction");
             field.setAccessible(true);

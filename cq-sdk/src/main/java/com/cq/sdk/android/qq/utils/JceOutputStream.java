@@ -31,31 +31,31 @@ public class JceOutputStream {
     }
     public void writeObj(int type,ByteSet val,int tag){
         switch (type){
-            case 0:
+            case Constants.TYPE_BYTE:
                 this.writeByte((byte) Number.byte4ToInt(val),tag);
                 break;
-            case 1:
+            case Constants.TYPE_SHORT:
                 this.writeShort((short) Number.byte4ToInt(val),tag);
                 break;
-            case 2:
+            case Constants.TYPE_INT:
                 this.writeInt(Number.byte4ToInt(val),tag);
                 break;
-            case 3:
+            case Constants.TYPE_LONG:
                 this.writeLong(Number.bytesToLong(val),tag);
                 break;
-            case 13:
+            case Constants.TYPE_SIMPLE_LIST:
                 this.writeSimpleList(val,tag);
                 break;
-            case 8:
+            case Constants.TYPE_MAP:
                 Logger.error("writeObj错误8");
                 break;
-            case 6:
+            case Constants.TYPE_STRING1:
                 this.writeStringByte(new String(val.getByteSet()),tag);
                 break;
-            case 9:
+            case Constants.TYPE_LIST:
                 this.writeList(val,tag);
                 break;
-            case 7:
+            case Constants.TYPE_STRING4:
                 this.writeStringByte(new String(val.getByteSet()),tag);
                 break;
         }

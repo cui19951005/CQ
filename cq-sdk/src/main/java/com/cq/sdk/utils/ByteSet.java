@@ -51,7 +51,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         return this.subByteSet(startIndex,this.length()-startIndex);
     }
     public ByteSet getLeft(int length){
-        if(this.length()<=length){
+        if(this.length()<length){
             return null;
         }
         ByteSet result=new ByteSet(length);

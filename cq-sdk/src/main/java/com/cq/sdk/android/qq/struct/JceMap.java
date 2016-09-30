@@ -7,7 +7,7 @@ import com.cq.sdk.utils.ByteSet;
  */
 public class JceMap {
     public int keyType;
-    public ByteSet key;
+    public ByteSet key=new ByteSet();
     public int valType;
-    public ByteSet val;
+    public ByteSet val=new ByteSet();
 }

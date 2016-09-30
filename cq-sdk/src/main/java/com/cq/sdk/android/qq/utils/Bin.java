@@ -83,16 +83,16 @@ public class Bin {
         return flip(Number.longToByte8(value));
     }
     public static final long bin2Long(ByteSet bytes){
-        return Number.bytesToLong(flip(bytes));
+        return Number.bytesToLong(bytes);
     }
     public static final ByteSet short2Bin(short value){
        return flip(Number.unsignedShortToByte2(value));
     }
     public static final short bin2Short(ByteSet bytes){
-        return Number.byte2ToUnsignedShort(flip(bytes));
+        return Number.byte2ToUnsignedShort(bytes);
     }
     public static final int bin2Byte(ByteSet bytes){
-        return Number.byte4ToInt(bytes);
+        return bytes.get(0);
     }
     public static final ByteSet byte2Bin(byte b){
         return flip(new ByteSet(b));

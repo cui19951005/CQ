@@ -199,10 +199,13 @@ public class Trusteeship {
                     this.propertiesList.add(properties);
                 }
             }
+            this.addManager(this.mainClass);
             this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
             this.loadClass(absPath);
             for(Map.Entry<Class,Object> item : this.objectMap.entrySet()){
-                item.setValue(this.injection(item.getKey()));
+                if(item.getValue()==null) {
+                    item.setValue(this.injection(item.getKey()));
+                }
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -260,14 +263,17 @@ public class Trusteeship {
             if (clazz.isInterface()) {
                 Class temp = this.impl(clazz);
                 if (this.objectMap.get(temp)==null) {
-                    object=this.addManager(this.injection(temp));
+                    object=this.addManager(this.injection(temp),temp);
                 } else {
                     return null;
                 }
             } else {
                 object = this.createObj(clazz);
             }
-            return (T) this.injection(object);
+            if(object!=null) {
+                return (T) this.injection(object);
+            }
+            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -337,6 +343,7 @@ public class Trusteeship {
         }
         if(!clazz.isInterface()&&field.isAnnotationPresent(Autowired.class)){
             Class temp=this.addManager(clazz);
+            Object object=Trusteeship.this.addManager(Trusteeship.this.injection(temp),temp);
             return new Map.Entry<Class, Object>() {
                 @Override
                 public Class getKey() {
@@ -344,11 +351,11 @@ public class Trusteeship {
                 }
                 @Override
                 public Object getValue() {
-                    return Trusteeship.this.addManager(Trusteeship.this.injection(temp));
+                    return object;
                 }
                 @Override
                 public Object setValue(Object value) {
-                    return Trusteeship.this.addManager(value);
+                    return Trusteeship.this.addManager(value,temp);
                 }
             };
         }

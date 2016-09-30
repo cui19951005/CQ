@@ -28,12 +28,18 @@ public class Tlv {
         return Tlv.tlvPack("00 01",pack.getAll());
     }
     public static final ByteSet tlv2(String code,ByteSet vieryToken){
-        Pack pack=new Pack();
-        pack.setInt(code.length());
-        pack.setBin(ByteSet.parse(code.getBytes()));
-        pack.setShort((short) vieryToken.length());
-        pack.setBin(vieryToken);
-        return Tlv.tlvPack("00 02",pack.getAll());
+        try {
+            Pack pack = new Pack();
+            pack.setInt(code.length());
+            ByteSet bytes = ByteSet.parse(code.getBytes("gbk"));
+            pack.setBin(bytes);
+            pack.setShort((short) vieryToken.length());
+            pack.setBin(vieryToken);
+            return Tlv.tlvPack("00 02", pack.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
     public static final ByteSet tlv106(ByteSet user,ByteSet md5pass,ByteSet md52pass,ByteSet tgtKey,ByteSet imei_,ByteSet time, int appId){
         Pack pack=new Pack();
@@ -131,14 +137,25 @@ public class Tlv {
     }
     public static final ByteSet tlv16e(String device){
         Pack pack=new Pack();
-        pack.setBin(ByteSet.parse(device.getBytes()));
-        return Tlv.tlvPack("01 6E",pack.getAll());
+        try {
+            pack.setBin(ByteSet.parse(device.getBytes("gbk")));
+            return Tlv.tlvPack("01 6E", pack.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
     public static final ByteSet tlv142(String apkId){
-        Pack pack=new Pack();
-        pack.setInt(apkId.getBytes().length);
-        pack.setBin(ByteSet.parse(apkId.getBytes()));
-        return Tlv.tlvPack("01 42",pack.getAll());
+        try {
+            Pack pack = new Pack();
+            ByteSet bytes = ByteSet.parse(apkId.getBytes("gbk"));
+            pack.setInt(bytes.length());
+            pack.setBin(bytes);
+            return Tlv.tlvPack("01 42", pack.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
     public static final ByteSet tlv154(int ssoSeq){
         Pack pack=new Pack();

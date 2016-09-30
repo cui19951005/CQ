@@ -3,6 +3,8 @@ package com.cq.sdk.android.qq.utils;
 import com.cq.sdk.utils.ByteSet;
 import com.cq.sdk.utils.Number;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by CuiYaLei on 2016/8/14.
  */
@@ -42,7 +44,11 @@ public class Pack {
         this.setBin(Number.longToByte8(MathUtils.toULong(uint)));
     }
     public void setStr(String str){
-        this.mBin.append(str.getBytes());
+        try {
+            this.mBin.append(str.getBytes("gbk"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
     public void setToken(ByteSet token){
         setShort((short) token.length());
