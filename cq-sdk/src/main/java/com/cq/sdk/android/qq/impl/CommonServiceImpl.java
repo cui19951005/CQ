@@ -181,8 +181,10 @@ public class CommonServiceImpl implements CommonService {
 
         }else if(serviceCmd.equals("MessageSvc.PushReaded")){
             //其他客户端查看过消息会发送此命令通知
+            Logger.info("其他设备已查看消息");
         }else if(serviceCmd.equals("MessageSvc.PushNotify")){
             //消息通知
+            Logger.info("消息通知");
         }else if(serviceCmd.equals("StatSvc.get")){
             Logger.info("心跳包");
         }else if(serviceCmd.equals("SummaryCard.ReqSummaryCard")){
@@ -234,11 +236,11 @@ public class CommonServiceImpl implements CommonService {
         }else if(serviceCmd.equals("SQQzoneSvc.getApplist")){
 
         }else{
+            Logger.info("未处理消息:CMD:{0}HEX:{1}",serviceCmd,bin.toStringHex());
             return ;
         }
         if(unPack.length()>0){
-            Logger.info("消息未处理结束");
-            Logger.info("CMD:{0}\nHEX:{1}",serviceCmd,unPack.getAll().toStringHex());
+            Logger.info("消息未处理结束:CMD:{0}HEX:{1}",serviceCmd,unPack.getAll().toStringHex());
         }
     }
 
@@ -401,7 +403,6 @@ public class CommonServiceImpl implements CommonService {
         unPack.getBin(2);
         int result=unPack.getByte();
         bin=unPack.getBin(len-16-1);
-        Global.qq.shareKey=new ByteSet("16{149,124,58,175,191,111,175,29,44,47,25,165,234,4,229,28}");
         bin=Hash.unQQTea(bin,Global.qq.shareKey);
         if(result!=0){
             if(result==2){
@@ -430,7 +431,7 @@ public class CommonServiceImpl implements CommonService {
         unPack.getByte();
         unPack.getInt();
         unPack.getShort();
-        int type=unPack.getInt();
+        unPack.getInt();
         String title=new String(unPack.getBin(unPack.getShort()).getByteSet());
         String message=new String(unPack.getBin(unPack.getShort()).getByteSet());
         Logger.error("title:{0},message:{1}",title,message);
@@ -546,7 +547,7 @@ public class CommonServiceImpl implements CommonService {
             struct._20_device = Global.qqGlobal.device;
             struct._21_sys_ver = Global.qqGlobal.osVersion;
             JceStructFactory.writeSvcReqRegister(out, struct);
-            ByteSet bin = out.toByteArray();
+            ByteSet bin = out.toByteArray();//101
 
 
             out.clear();
@@ -579,7 +580,7 @@ public class CommonServiceImpl implements CommonService {
 
     public void onLine() {
         this.networkService.send(this.packOidbSvc0x7a20(), new NetworkReceive() {
-            private CommonService commonService=new CommonServiceImpl();
+            private CommonService commonService=CommonServiceImpl.this;
             public void receive(ByteSet bytes) {
                 this.commonService.receive(bytes);
             }
@@ -603,12 +604,14 @@ public class CommonServiceImpl implements CommonService {
         int wait=500;
         ByteSet mBin=new ByteSet();
         UnPack unPack=new UnPack();
-        int len=0;
+        int len;
         for(int i=0;i<20;i++){
             ByteSet bin=this.networkService.receive();
             if(bin==null){
                 break;
             }else if(bin.length()==0){
+                continue;
+            }else if(bin.trim().length()==0){
                 continue;
             }
             mBin.append(bin);

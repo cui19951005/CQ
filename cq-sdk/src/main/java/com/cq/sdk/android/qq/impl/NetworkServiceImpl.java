@@ -35,6 +35,7 @@ public class NetworkServiceImpl implements NetworkService {
 
     public boolean send(ByteSet bytes, NetworkReceive networkReceive) {
         Global.increaseSsoSeq();
+        Logger.info(bytes);
         try {
             OutputStream outputStream=this.clicent.getOutputStream();
             outputStream.write(bytes.getByteSet());
@@ -64,12 +65,12 @@ public class NetworkServiceImpl implements NetworkService {
     public ByteSet receive() {
         try {
             InputStream inputStream=this.clicent.getInputStream();
-            ByteSet data = new ByteSet(1024);
+            byte[] data = new byte[1024];
             ByteSet result = new ByteSet();
             while (true) {
-                int length = inputStream.read(data.getByteSet(), 0, data.length());
-                result.append(data.subByteSet(0, length));
-                if(length!=data.length()){
+                int length = inputStream.read(data, 0, data.length);
+                result.append(ByteSet.parse(data).subByteSet(0, length));
+                if(length!=data.length){
                     break;
                 }
             }

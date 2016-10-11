@@ -11,6 +11,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,11 +19,9 @@ import java.util.List;
  */
 public class InvocationHandlerImpl implements MethodInterceptor {
     private Object object;
-    private List<AopClass> aopClassList;
-    private TransactionManager transactionManager;
-    public InvocationHandlerImpl(List<AopClass> aopClassList,TransactionManager transactionManager) {
+    private Collection<AopClass> aopClassList;
+    public InvocationHandlerImpl(Collection<AopClass> aopClassList) {
         this.aopClassList = aopClassList;
-        this.transactionManager=transactionManager;
     }
 
     public Object bind(Object obj){

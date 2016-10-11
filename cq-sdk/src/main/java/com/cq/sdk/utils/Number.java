@@ -64,8 +64,8 @@ public class Number {
         char[] value=this.value.clone();
         CharBuffer sb=new CharBuffer();
         int baseLen=18;
-        int maxLen=0;
-        int length=0;
+        int maxLen;
+        int length;
         if(value.length>number.length){
             maxLen=value.length;
             number=CharUtils.prefixZeroize(number,value.length-number.length,'0');

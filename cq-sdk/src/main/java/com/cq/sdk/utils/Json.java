@@ -211,9 +211,9 @@ public class Json {
     }
 
     public static final <T> T fromJson(String json,Class<T> type){
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Json.analysis(json, 0, "", map);
-        return field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),new ArrayList<String>());
+        return field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),new ArrayList());
     }
     private static <T> T field(Object json,Field field,ClassSuper type,List<String> name){
         try {
@@ -258,6 +258,8 @@ public class Json {
                         Object value=Json.exists((Map<String, Object>)json,name,0);
                         if(value instanceof List){
                             list= (List) value;
+                        }else if(value==null){
+                            list=new ArrayList<>();
                         }
                     }
                 }
@@ -441,9 +443,18 @@ public class Json {
                         return Json.field(Json.exists((Map<String, Object>) json,name,0),null,classSuper,null);
                     }
                 }
-            } else {
+            }else if(type.getClazz().isEnum()){
+                if(json instanceof Map){
+                    String value= (String) Json.exists((Map<String, Object>) json,name,0);
+                    return (T) Enum.valueOf(type.getClazz(),value);
+                }else{
+                    return (T) Enum.valueOf(type.getClazz(), (String) json);
+                }
+            }
+            else {
                 Object obj=type.getClazz().newInstance();
                 for(Field f : type.getClazz().getDeclaredFields()){
+                    f.setAccessible(true);
                     name.add(f.getName());
                     f.set(obj,Json.field(json,f,new ClassSuper(f.getType()),name));
                     name.remove(name.size()-1);
@@ -548,7 +559,7 @@ public class Json {
             List<Object> list=new ArrayList<Object>();
             rightIndex=Json.findRight(json,baseIndex+1,"[","]")+1;//+1到]
             String arrayText=json.substring(baseIndex,rightIndex);
-            Pattern pattern=Pattern.compile("\\[(\\d|\"\\w\"|,)+\\]");
+            Pattern pattern=Pattern.compile("\\[(\\d|\"\\w\"|,|-)+\\]");
             Matcher matcher=pattern.matcher(arrayText);
             if(matcher.find()&&matcher.group().equals(arrayText)){
                 String[] array=arrayText.substring(1,arrayText.length()-1).split(",");

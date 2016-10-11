@@ -265,7 +265,7 @@ public class Trusteeship {
                 if (this.objectMap.get(temp)==null) {
                     object=this.addManager(this.injection(temp),temp);
                 } else {
-                    return null;
+                    return (T) this.objectMap.get(temp);
                 }
             } else {
                 object = this.createObj(clazz);
@@ -472,7 +472,7 @@ public class Trusteeship {
         }
     }
     private Object addAop(Object object) {
-        Object temp=new InvocationHandlerImpl(new ArrayList(this.aopMap.values()),this.transactionManager).bind(object);
+        Object temp=new InvocationHandlerImpl(this.aopMap.values()).bind(object);
         return temp;
     }
     /**
@@ -527,11 +527,15 @@ public class Trusteeship {
         this.objectMap.put(clazz,object);
         return object;
     }
-    private void addAopManager(Class clazz) throws IllegalAccessException, InstantiationException {
-        Aspect aspect=(Aspect)clazz.getAnnotation(Aspect.class);
-        if(aspect!=null){
-            Object object=this.createObj(clazz);
-            this.aopMap.put(clazz.getName(),this.analysisAopClass(object));
+    private void addAopManager(Class clazz) {
+        try {
+            Aspect aspect = (Aspect) clazz.getAnnotation(Aspect.class);
+            if (aspect != null) {
+                Object object = this.createObj(clazz);
+                this.aopMap.put(clazz.getName(), this.analysisAopClass(object));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
     private void addDatabaseManager(Class clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, ClassNotFoundException {
@@ -575,7 +579,12 @@ public class Trusteeship {
         return null;
     }
     public <T> T add(Class<T> clazz){
-        return (T) this.addManager(this.injection(this.addManager(clazz)),clazz);
+        if(clazz.isAnnotationPresent(Aspect.class)){
+           this.addAopManager(clazz);
+            return null;
+        }else {
+            return (T) this.addManager(this.injection(this.addManager(clazz)), clazz);
+        }
     }
 
 }

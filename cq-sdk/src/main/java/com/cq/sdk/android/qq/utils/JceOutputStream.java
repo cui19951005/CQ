@@ -77,7 +77,7 @@ public class JceOutputStream {
         }
     }
     public void writeInt(int val,int tag){
-        if(val>=-Short.MIN_VALUE && val<=Short.MAX_VALUE){
+        if(val>=Short.MIN_VALUE && val<=Short.MAX_VALUE){
             this.writeShort((short) val,tag);
         }else{
             this.writeHead(2,tag);
@@ -105,13 +105,13 @@ public class JceOutputStream {
         }
     }
     public void writeStringByte(String val,int tag){
-        ByteSet byteSet= ByteSet.parse(val.getBytes());//默认utf-8
+        ByteSet byteSet= ByteSet.parse(val.getBytes());//默认utf-8不用-1
         if(byteSet.length()>255){
-            this.writeHead(7,tag);
+            this.writeHead(Constants.TYPE_STRING4,tag);
             this.pack.setInt(byteSet.length());
             this.pack.setBin(byteSet);
         }else{
-            this.writeHead(6,tag);
+            this.writeHead(Constants.TYPE_STRING1,tag);
             this.pack.setByte((byte) byteSet.length());
             this.pack.setBin(byteSet);
         }

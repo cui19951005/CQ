@@ -234,7 +234,25 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         }
         return true;
     }
-
+    public ByteSet trim(){
+        int startIndex = -1,endIndex=0;
+       for(int i=0;i<this.length();i++){
+           if(this.get(i)!=0){
+               startIndex=i;
+               break;
+           }
+       }
+       if(startIndex==-1){
+           startIndex=this.length();
+       }
+       for(int i=this.length()-1;i>-1;i--){
+           if(this.get(i)!=0){
+               endIndex=i-startIndex;
+               break;
+           }
+       }
+       return this.subByteSet(startIndex,endIndex);
+    }
     /**
      * 将字节数组转换字节集
      * @param byteSet
