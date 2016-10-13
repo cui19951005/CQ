@@ -24,7 +24,7 @@ public class Global {
             Global.qqGlobal.appId = 537042771;
             Global.qqGlobal.pcVer = "1F 41";
             Global.qqGlobal.osType = "android";
-            Global.qqGlobal.osVersion = "4.4.4";
+            Global.qqGlobal.osVersion = "7.0.0";
             Global.qqGlobal.networkType = 2;
             Global.qqGlobal.apn = "wifi";
             Global.qqGlobal.device = "vivo X5Max+";

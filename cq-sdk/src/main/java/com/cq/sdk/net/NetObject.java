@@ -2,7 +2,9 @@ package com.cq.sdk.net;
 
 import com.cq.sdk.net.udp.ReceiveData;
 import com.cq.sdk.net.udp.UDP;
+import com.cq.sdk.net.uitls.NetClass;
 import com.cq.sdk.potential.utils.FileUtils;
+import com.cq.sdk.potential.utils.PackUtils;
 import com.cq.sdk.utils.*;
 import com.cq.sdk.utils.Number;
 
@@ -52,7 +54,7 @@ public class NetObject {
         }
         return receiveObject.getObject();
     }
-    public List<NetClass> getList(String packName,List<Class> annotationList){
+    public List<NetClass> getList(String packName, List<Class> annotationList){
         ReceiveObject receiveObject=new ReceiveObject();
         this.udp=new UDP(host, port,receiveObject);
         ByteArrayOutputStream outputStream=null;
@@ -162,7 +164,7 @@ public class NetObject {
                     List<NetClass> classList=new ArrayList<>();
                     fileList.stream().forEach(file -> {
                         try {
-                            Class clazz = Class.forName(StringUtils.filePathConvertPack(file, packName));
+                            Class clazz = Class.forName(PackUtils.filePathToPack(file, packName));
                             annotationList.stream().filter(s->clazz.isAnnotationPresent(s)).limit(1).forEach(
                                     s-> {
                                         NetClass netClass=new NetClass();

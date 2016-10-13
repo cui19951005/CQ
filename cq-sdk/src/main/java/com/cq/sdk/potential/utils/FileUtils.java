@@ -1,7 +1,5 @@
 package com.cq.sdk.potential.utils;
 
-import com.cq.sdk.utils.*;
-
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;

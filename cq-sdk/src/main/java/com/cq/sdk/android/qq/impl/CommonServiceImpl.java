@@ -5,7 +5,6 @@ import com.cq.sdk.android.qq.utils.*;
 import com.cq.sdk.android.qq.CommonService;
 import com.cq.sdk.android.qq.NetworkService;
 import com.cq.sdk.android.qq.QQService;
-import com.cq.sdk.android.qq.auxiliary.MsgHandle;
 import com.cq.sdk.android.qq.inter.NetworkReceive;
 import com.cq.sdk.potential.annotation.Autowired;
 import com.cq.sdk.potential.annotation.Service;
@@ -334,11 +333,11 @@ public class CommonServiceImpl implements CommonService {
 
     }
 
-    public ByteSet makeSendSsoMsgSimple(String serviceCmd, short iversion, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer) {
-        return this.makeSendSsoMsg(serviceCmd,this.packSendSsoMsgSimple(iversion,iRequestId,sServantName,sFuncName,mapKey,wupBuffer));
+    public ByteSet makeSendSsoMsgSimple(String serviceCmd, short version, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer) {
+        return this.makeSendSsoMsg(serviceCmd,this.packSendSsoMsgSimple(version,iRequestId,sServantName,sFuncName,mapKey,wupBuffer));
     }
 
-    public ByteSet packSendSsoMsgSimple(short iversion, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer) {
+    public ByteSet packSendSsoMsgSimple(short version, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer) {
         try {
             JceOutputStream out = new JceOutputStream();
             out.writeJceStruct(wupBuffer, 0);
@@ -354,7 +353,7 @@ public class CommonServiceImpl implements CommonService {
             bin = out.toByteArray();
             out.clear();
             JceStructRequestPacket req = new JceStructRequestPacket();
-            req.iversion = iversion;
+            req.iversion = version;
             req.iRequestId = iRequestId;
             req.sServantName = sServantName;
             req.sFuncName = sFuncName;
@@ -394,7 +393,8 @@ public class CommonServiceImpl implements CommonService {
     public ByteSet unPackLoginPc(ByteSet bin) {
         UnPack unPack=new UnPack();
         unPack.setData(bin);
-        int len=unPack.getInt();
+        int len;
+        unPack.getInt();
         bin=unPack.getAll();
         unPack.setData(bin);
         unPack.getByte();
@@ -590,11 +590,20 @@ public class CommonServiceImpl implements CommonService {
             public void receive(ByteSet bytes) {
                 this.commonService.receive(bytes);
                 if(bytes.length()<=0){
-
+                    return;
                 }else{
-                    MsgHandle msgHandle=new MsgHandle();
-                    msgHandle.commonService=this.commonService;
-                    msgHandle.start();
+                    Timer.open(new Timer.TimerTask() {
+                        @Override
+                        public void execute() {
+                            commonService.heartbeat();
+                        }
+                    },4*60*1000);
+                    Timer.open(new Timer.TimerTask() {
+                        @Override
+                        public void execute() {
+                            commonService.keep();
+                        }
+                    },200);
                 }
             }
         });

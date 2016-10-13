@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * json转换
  * Created by CuiYaLei on 2016/8/27.
  */
 public class Json {
@@ -213,7 +214,7 @@ public class Json {
     public static final <T> T fromJson(String json,Class<T> type){
         Map<String, Object> map = new HashMap<>();
         Json.analysis(json, 0, "", map);
-        return field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),new ArrayList());
+        return (T)field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),null);
     }
     private static <T> T field(Object json,Field field,ClassSuper type,List<String> name){
         try {
@@ -235,6 +236,8 @@ public class Json {
                         for(Map.Entry<String,Object> entry: ((Map<String,Object>)json).entrySet()) {
                             return (T) Json.convert(json, type, entry.getValue());
                         }
+                    }else{
+                        return (T) Json.convert(json,type,json);
                     }
                 }else{
                     if (json instanceof Map) {
@@ -417,7 +420,7 @@ public class Json {
                                 }else{
                                     key=Json.convert(json,new ClassSuper(type.getParams()[0].toString()),entry.getKey());
                                 }
-                                Object value=null;
+                                Object value;
                                 if(type.getParams()[1] instanceof ParameterizedTypeImpl){//泛型套泛型
                                     ParameterizedTypeImpl parameterizedType= (ParameterizedTypeImpl) type.getParams()[1];
                                     ClassSuper classSuper=new ClassSuper(parameterizedType.getRawType());

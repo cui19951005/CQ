@@ -1,6 +1,6 @@
 package com.cq.sdk.potential;
 
-import com.cq.sdk.net.NetClass;
+import com.cq.sdk.net.uitls.NetClass;
 import com.cq.sdk.net.NetObject;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.inter.AutowiredInterface;
@@ -14,7 +14,7 @@ import com.cq.sdk.potential.utils.AopClass;
 import com.cq.sdk.potential.utils.InjectionType;
 import com.cq.sdk.potential.utils.AopMethod;
 import com.cq.sdk.utils.Logger;
-import com.cq.sdk.utils.PackUtils;
+import com.cq.sdk.potential.utils.PackUtils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;

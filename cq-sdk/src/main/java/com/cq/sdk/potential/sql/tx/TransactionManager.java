@@ -2,7 +2,7 @@ package com.cq.sdk.potential.sql.tx;
 
 import com.cq.sdk.potential.annotation.Autowired;
 import com.cq.sdk.potential.sql.tx.utils.TransactionMethod;
-import com.cq.sdk.utils.PackUtils;
+import com.cq.sdk.potential.utils.PackUtils;
 
 import java.util.List;
 import java.util.regex.Pattern;

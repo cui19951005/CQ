@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
+ *  字节集
  * Created by admin on 2016/8/17.
  */
 public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
@@ -87,20 +88,20 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         return -1;
     }
     public int indexOf(ByteSet bytes){
-        return this.indexOf(bytes,0);
+        return this.indexOf(bytes.byteSet);
     }
     public int indexOf(ByteSet bytes,int startIndex){
         return this.indexOf(bytes.byteSet,startIndex);
     }
     public ByteSet append(byte[]... bytes){
-        for(int i=0;i<bytes.length;i++){
-            if(bytes[i].length==0){
+        for(byte[] item : bytes){
+            if(item.length==0){
                 continue;
             }
             ByteSet temp=this.clone();
-            this.byteSet=new byte[this.length()+bytes[i].length];
+            this.byteSet=new byte[this.length()+item.length];
             System.arraycopy(temp.byteSet,0,this.byteSet,0,temp.length());
-            System.arraycopy(bytes[i],0,this.byteSet,temp.length(),bytes[i].length);
+            System.arraycopy(item,0,this.byteSet,temp.length(),item.length);
         }
         return this;
     }
@@ -153,31 +154,31 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         return toStringUInt();
     }
     public String toStringUInt(){
-        StringBuffer stringBuffer=new StringBuffer();
-        stringBuffer.append(this.length());
-        stringBuffer.append("{");
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append(this.length());
+        stringBuilder.append("{");
         for(int i=0;i<this.length();i++){
-            stringBuffer.append(ByteSet.byteToUByte(this.byteSet[i]));
+            stringBuilder.append(ByteSet.byteToUByte(this.byteSet[i]));
             if(i!=this.length()-1){
-                stringBuffer.append(",");
+                stringBuilder.append(",");
             }
         }
-        stringBuffer.append("}");
-        return stringBuffer.toString();
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
     public String toStringHex(){
-        StringBuffer stringBuffer=new StringBuffer();
+        StringBuilder stringBuilder=new StringBuilder();
         for(int i=0;i<this.length();i++){
             String b= Number.baseString(ByteSet.byteToUByte(this.get(i)),16);
             if(b.length()<2){
-                stringBuffer.append("0");
+                stringBuilder.append("0");
             }
-            stringBuffer.append(b);
+            stringBuilder.append(b);
             if(i<this.length()-1) {
-                stringBuffer.append(" ");
+                stringBuilder.append(" ");
             }
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
     public Iterator<Byte> iterator() {
         return new Iterator<Byte>() {
@@ -208,7 +209,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             Byte[] bytes=(Byte[]) obj;
             byte[] temp=new byte[bytes.length];
             for(int i=0;i<temp.length;i++){
-                temp[i]=(byte) (bytes[i]==null?0:bytes[i]);
+                temp[i]=(bytes[i]==null?0:bytes[i]);
             }
             return this.equals(temp);
         }else if(obj instanceof byte[]){
@@ -255,8 +256,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     /**
      * 将字节数组转换字节集
-     * @param byteSet
-     * @return
+     * @param byteSet 字节数组
+     * @return 返回字节集
      */
     public static ByteSet parse(byte[] byteSet){
         return new ByteSet(byteSet);
@@ -266,8 +267,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     /**
      * 将16进制字节文本转换为字节集
-     * @param hex
-     * @return
+     * @param hex 16进制字节文本
+     * @return 返回字节集
      */
     public static ByteSet parse(String hex){
         return new ByteSet(hex);
@@ -275,7 +276,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
 
     /**
      * 返回空字节集
-     * @return
+     * @return 返回空字节集
      */
     public static ByteSet empty(){
         return ByteSet.empty(0);
@@ -283,8 +284,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
 
     /**
      * 返回指定长度空的字节集
-     * @param length
-     * @return
+     * @param length 空字符长度
+     * @return 返回字节集
      */
     public static ByteSet empty(int length){
         ByteSet bytes= ByteSet.parse(new byte[length]);
@@ -295,21 +296,21 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     /**
      * 到ip地址
-     * @param ip
-     * @return
+     * @param ip 4 or 6 字节ip地址
+     * @return 返回ip地址
      */
     public static final String toIP(byte[] ip){
         if(ip.length!=6 && ip.length!=4){
             return null;
         }
-        StringBuffer stringBuffer=new StringBuffer();
+        StringBuilder stringBuilder=new StringBuilder();
         for(int i=0;i<ip.length;i++){
-            stringBuffer.append(ByteSet.byteToUByte(ip[i]));
+            stringBuilder.append(ByteSet.byteToUByte(ip[i]));
             if(i<ip.length-1){
-                stringBuffer.append(".");
+                stringBuilder.append(".");
             }
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
     public static final String toIP(ByteSet bytes){
         return ByteSet.toIP(bytes.getByteSet());

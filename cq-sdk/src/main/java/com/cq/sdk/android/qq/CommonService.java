@@ -30,7 +30,15 @@ public interface CommonService {
     ByteSet packOidbSvc0x7a20();
     ByteSet packStatSvcRegisterOnline();
     ByteSet packStatSvcRegister(long lBid,int iStatus,long timeStamp);
+
+    /**
+     * 上线
+     */
     void onLine();
+
+    /**
+     * 等待数据
+     */
     void keep();
     /**
      * 心跳

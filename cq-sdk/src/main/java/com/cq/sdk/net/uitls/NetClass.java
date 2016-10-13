@@ -1,4 +1,4 @@
-package com.cq.sdk.net;
+package com.cq.sdk.net.uitls;
 
 import java.io.Serializable;
 

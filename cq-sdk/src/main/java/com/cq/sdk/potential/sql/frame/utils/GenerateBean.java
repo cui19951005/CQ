@@ -9,6 +9,7 @@ import com.cq.sdk.potential.sql.tx.TransactionManager;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
 import com.cq.sdk.potential.sql.frame.MybatisTrusteeship;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateSessionManager;
+import com.cq.sdk.potential.utils.PackUtils;
 import com.cq.sdk.potential.utils.SynchronizationType;
 import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.utils.Logger;
@@ -56,7 +57,7 @@ public class GenerateBean {
             final List<Object> objectList = new ArrayList();
             fileList = FileUtils.findFileList(mybatisTrusteeship.mapperInterface());
             for (File file : fileList) {
-                Object obj=sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(StringUtils.filePathConvertPack(file,mybatisTrusteeship.mapperInterface())));
+                Object obj=sqlSession.getClass().getMethod("getMapper",Class.class).invoke(sqlSession,Class.forName(PackUtils.filePathToPack(file,mybatisTrusteeship.mapperInterface())));
                 objectList.add(obj);
             }
             TransactionManager transactionManager=mybatisTrusteeship.transactionManager();
@@ -142,7 +143,7 @@ public class GenerateBean {
             List<File> mappingFile=FileUtils.findFileList(hibernateTrusteeship.mapping());
             Class mappingReference$Type=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference$Type");
             for(File file : mappingFile){
-                Object mappingReference=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference").getConstructor(mappingReference$Type,String.class).newInstance(mappingReference$Type.getEnumConstants()[1],StringUtils.filePathConvertPack(file,hibernateTrusteeship.mapping()));
+                Object mappingReference=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference").getConstructor(mappingReference$Type,String.class).newInstance(mappingReference$Type.getEnumConstants()[1],PackUtils.filePathToPack(file,hibernateTrusteeship.mapping()));
                 mappingReferences.add(mappingReference);
             }
             mappingReferencesField.set(aggregatedCfgXml,mappingReferences);
