@@ -540,7 +540,7 @@ public class Json {
             }
             ifType(json,type,name,leftIndex,map,false);
         }else{
-            //取"a"
+            //取"qq"
             ifType(json,json.substring(baseIndex,rightIndex+1),"",baseIndex,map,false);
         }
 

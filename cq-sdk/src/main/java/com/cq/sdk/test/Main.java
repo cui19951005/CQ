@@ -2,32 +2,18 @@ package com.cq.sdk.test;
 
 import com.cq.sdk.android.qq.CommonService;
 import com.cq.sdk.android.qq.UserService;
-import com.cq.sdk.android.qq.struct.QQ;
-import com.cq.sdk.android.qq.utils.*;
-import com.cq.sdk.hibernate.LoginAccountEntity;
-import com.cq.sdk.net.NetObject;
-import com.cq.sdk.net.udp.ReceiveData;
-import com.cq.sdk.net.udp.UDP;
+import com.cq.sdk.android.qq.inter.MessageHandle;
+import com.cq.sdk.android.qq.utils.DataType;
+import com.cq.sdk.android.qq.utils.Global;
 import com.cq.sdk.potential.Trusteeship;
 import com.cq.sdk.potential.annotation.*;
-import com.cq.sdk.potential.sql.frame.hibernate.HibernateSessionManager;
-import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.potential.utils.InjectionType;
 import com.cq.sdk.test.dao.LoginaccountMapper;
 import com.cq.sdk.utils.*;
-import com.cq.sdk.utils.Number;
-import com.cq.sdk.utils.Timer;
 import org.hibernate.*;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.xml.ConfigurationParser;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.util.*;
+import java.util.Scanner;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Created by admin on 2016/9/2.
@@ -49,13 +35,27 @@ public class Main {
     public static void main(String[] args) throws Exception {
         /*NetObject netObject=new NetObject(2021,"localhost",2020);
         netObject.messageHandle(null);*/
-        //Trusteeship trusteeship=new Trusteeship(Main.class);
+        Trusteeship trusteeship=new Trusteeship(Main.class);
         //trusteeship.add(TestAop.class);
-        //trusteeship.get(UserService.class).login("2534549160","sj17839969220");
-        /*Semaphore semaphore=new Semaphore(3);
-        for(int i=0;i<100;i++) {
-            new Thread(new Test(semaphore,i)).start();
-        }*/
+        UserService userService=trusteeship.get(UserService.class);
+        userService.login("2534549160", "sj17839969220", new MessageHandle() {
+            @Override
+            public void message(DataType.MsgType msgType) {
+                if(msgType== DataType.MsgType.LoginEnd){
+                    userService.friendList();
+                }
+                Logger.info(msgType);
+            }
+        });
+        Logger.info("欢迎登录QQ您的帐号:{0} 昵称:{1}", userService.getQQ().account,userService.getQQ().nick);
+        while (true){
+            Scanner scanner=new Scanner(System.in);
+            Logger.info("请输入好友QQ:");
+            String qq=scanner.next();
+            Logger.info("请输入发送消息:");
+            String message=scanner.next();
+            userService.sendMessage(qq,message);
+        }
 
     }
     private static class Test implements Runnable{

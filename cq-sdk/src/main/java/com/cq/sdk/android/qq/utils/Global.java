@@ -12,8 +12,6 @@ public class Global {
     public static int requestId=999;
     public static int pcSubCmd=-1;
     public static QQGlobal qqGlobal=new QQGlobal();
-    public static QQ qq=new QQ();
-    public static JceStructFriendInfo[] friends=new JceStructFriendInfo[0];
     /**
      * QQ设备信息
      */

@@ -1,6 +1,7 @@
 package com.cq.sdk.android.qq.utils;
 
 import com.cq.sdk.utils.ByteSet;
+import com.cq.sdk.utils.Hex;
 import com.cq.sdk.utils.Number;
 import com.cq.sdk.utils.Random;
 
@@ -109,7 +110,7 @@ public class Bin {
     public static final String bin2Hex(ByteSet bin){
         StringBuffer stringBuffer=new StringBuffer();
         for(int i=0;i<bin.length();i++){
-            String b=Number.baseString(ByteSet.byteToUByte(bin.get(i)),16);
+            String b= Hex.baseString(ByteSet.byteToUByte(bin.get(i)),16);
             if(b.length()<2){
                 stringBuffer.append("0");
             }

@@ -1,6 +1,7 @@
 package com.cq.sdk.android.qq;
 
 import com.cq.sdk.android.qq.struct.CardData;
+import com.cq.sdk.android.qq.struct.QQ;
 import com.cq.sdk.android.qq.utils.JceInputStream;
 import com.cq.sdk.utils.ByteSet;
 
@@ -16,11 +17,17 @@ public interface CommonService {
     ByteSet unPack(ByteSet bytes,boolean bool);
     void msgHandle(int ssoSeq,String serviceCmd,ByteSet bin);
     void unPackRequestPacket(ByteSet bin, CardData cardData);
+
+    /**
+     * 解包
+     * @param jceInputStream
+     * @param cardData
+     */
     void unPackMap(JceInputStream jceInputStream, CardData cardData);
     ByteSet packAddFriendReq(long friendUin,int type,String msg);
     ByteSet makeSendSsoMsg(String serviceCmd,ByteSet wupBuffer);
-    ByteSet makeSendSsoMsgSimple(String serviceCmd, short iversion, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer);
-    ByteSet packSendSsoMsgSimple(short iversion,int iRequestId,String sServantName,String sFuncName,String mapKey,ByteSet wupBuffer);
+    ByteSet makeSendSsoMsgSimple(String serviceCmd, short version, int iRequestId, String sServantName, String sFuncName, String mapKey, ByteSet wupBuffer);
+    ByteSet packSendSsoMsgSimple(short version,int iRequestId,String sServantName,String sFuncName,String mapKey,ByteSet wupBuffer);
     boolean unPackLogin(ByteSet bin);
     ByteSet unPackLoginPc(ByteSet bin);
     void unPackVieryImage(ByteSet bin);
@@ -41,8 +48,30 @@ public interface CommonService {
      */
     void keep();
     /**
-     * 心跳
+     * 心跳数据
      */
     void heartbeat();
     ByteSet packStatSvcGet();
+
+    /**
+     * 发送qq消息
+     * @param account 目标帐号
+     * @param message 消息
+     * @return
+     */
+    ByteSet packMessageSvcOfflinemsg(long account,String message);
+
+    /**
+     * 获取好友列表
+     * @param startIndex
+     * @param getFriendCount
+     */
+    void funSendGetFriendList(int startIndex,int getFriendCount);
+    ByteSet packFriendListGetFriendGroupList(int startIndex, int getFriendCount);
+
+    /**
+     * 传入qq对象
+     * @param qq
+     */
+    void setQQ(QQ qq);
 }

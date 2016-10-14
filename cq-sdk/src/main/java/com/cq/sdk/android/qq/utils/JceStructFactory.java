@@ -1,7 +1,12 @@
 package com.cq.sdk.android.qq.utils;
 
 import com.cq.sdk.android.qq.struct.*;
-import com.cq.sdk.utils.ByteSet;
+import com.cq.sdk.utils.*;
+import com.cq.sdk.utils.Number;
+import com.sun.prism.impl.BaseMesh;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by CuiYaLei on 2016/8/20.
@@ -187,5 +192,193 @@ public class JceStructFactory {
             }
         }
         return fsrespStruts;
+    }
+    public static final void readEncounterSvcRespGetEncounterV2(ByteSet bin,List<RespEncounterInfo> respEncounterInfo){
+        Logger.info("正在写入附近人数据");
+        JceInputStream in=new JceInputStream();
+        in.wrap(bin);
+        in.readByte(0);
+        in.readInt(0);
+        int type=in.readType();
+        RespEncounterInfo info=new RespEncounterInfo();
+        if(type==Constants.TYPE_STRUCT_BEGIN){
+            in.readLong(0);
+            in.readLong(1);
+            in.readLong(2);
+            in.readLong(3);
+            in.readLong(4);
+            info.province=in.readString(5);
+            ByteSet temp=in.readSimpleList(6);
+        }
+        in.readType();
+        type=in.readType();
+        if(type==Constants.TYPE_LIST){
+            int count=in.readShort(0);
+            for(int i=0;i<count;i++){
+                in.readByte(0);
+                info.num=in.readLong(0);
+                in.readShort(1);
+                in.readInt(2);
+                info.strDescription=in.readString(3);
+                in.readShort(4);
+                info.gender=in.readShort(5);
+                info.age= String.valueOf(in.readShort(6));
+                info.strNick=in.readString(7);
+                in.readByte(8);
+                respEncounterInfo.add(info);
+                in.skipToEnd();
+            }
+        }
+    }
+    public static final void readGroupMngRes2(QQ qq,ByteSet bin){
+        String text=StringUtils.subString(bin.toStringHex(),"2C 3C 4D","59 00");
+        ByteSet group=ByteSet.parse("00"+ text.substring(text.length()-6));
+        Logger.info(group.toStringHex());
+
+        ByteSet topBin=ByteSet.parse(StringUtils.left(bin.toStringHex(),"0B 69")+"0B");
+        text=StringUtils.subString(bin.toStringHex().replace(" ",""),Hex.baseNum(String.valueOf(qq.qq),10,16),"2C3C4D");
+        int groupCount= Integer.parseInt(Hex.baseNum(text.substring(text.length()-2),16,10));
+        bin=topBin.replace(1,StringUtils.left(topBin.toStringHex(),"59 00").length()/2,ByteSet.empty());
+        bin=bin.replace(1,3,ByteSet.empty());
+        JceInputStream in=new JceInputStream();
+        in.wrap(bin);
+        List<Group> groupList=new ArrayList<>();
+        for(int i=0;i<groupCount;i++){
+            in.readByte(0);
+            long code=in.readLong(0);
+            long uin=in.readLong(1);
+            in.readInt(2);
+            in.readInt(3);
+            String name=in.readString(4);
+            if(Number.NumberSize(uin)>1){
+                Group g=new Group();
+                g.code= code;
+                g.id= uin;
+                g.name=name;
+            }
+            in.readString(5);
+            in.readLong(6);
+            in.readInt(7);
+            in.readInt(8);
+            in.readInt(9);
+            in.readInt(10);
+            in.readInt(11);
+            in.readInt(12);
+            in.readInt(13);
+            in.readInt(14);
+            in.readInt(15);
+            in.readInt(16);
+            in.readInt(17);
+            in.skipToEnd();
+        }
+        qq.groupList=groupList;
+    }
+    public static final void readGroupMemberList(QQ qq,ByteSet bin){
+        JceInputStream in=new JceInputStream();
+        in.wrap(bin);
+        in.readByte(0);
+        JceStructGroupMemberList groupMember=new JceStructGroupMemberList();
+        groupMember.qq =in.readLong(0);
+        groupMember.group =in.readLong(1);
+        groupMember.c=in.readLong(2);
+        in.readToTag(3);
+        int count=in.readByte(0);
+        List<GroupMember> groupMemberList=new ArrayList<>();
+        for(int i=0;i<count;i++){
+            in.readByte(0);
+            GroupMember gm=new GroupMember();
+            in.readInt(1);
+            gm.qq=in.readLong(0);
+            gm.age=in.readShort(2);
+            gm.sex=in.readShort(3);
+            gm.name=in.readString(4);
+            in.readShort (5);
+            in.readString (6);
+            in.readString (8);
+            in.readShort (9);
+            in.readString (10);
+            in.readString (11);
+            in.readString (12);
+            String name2 = in.readString (13);
+            in.readShort (14);
+            in.readLong (15);
+            in.readLong (16);
+            in.readShort (17);
+            in.readShort (18);
+            in.readShort (19);
+            in.readShort (20);
+            in.readShort (21);
+            in.readShort (22);
+            in.readString (23);
+            in.readShort (24);
+            in.readString (25);
+            in.readShort (4);
+            in.readShort (5);
+            in.readShort (6);
+            in.readShort (7);
+            in.skipToEnd ();
+            groupMemberList.add(gm);
+        }
+        qq.groupList.stream().filter(g->g.id==groupMember.group).forEach(g->g.groupMemberList=groupMemberList);
+    }
+    public static final void readOnlineFriendList(QQ qq,ByteSet bin){
+        JceInputStream in=new JceInputStream();
+        in.wrap(bin);
+        in.readByte(0);
+        in.readLong(0);
+        in.readToTag(1);
+        int count=in.readByte(0);
+        List<Friend> friendList=qq.friendList;
+        for(int i=0;i<count;i++){
+            in.readByte(0);
+            long uin=in.readLong(0);
+            Friend friend=null;
+            for(Friend item : friendList){
+                if(item.qq==uin){
+                    friend=item;
+                    break;
+                }
+            }
+            in.readInt (1);
+            in.readInt (2);
+            in.readInt (3);
+            in.readInt (4);
+            in.readInt (5);
+            in.readInt (6);
+            in.readString (7);
+            in.readInt (8);
+            in.readInt (9);
+            in.readInt (10);
+            in.readInt (11);
+            in.readInt (12);
+            in.readInt (13);
+            friend.state=in.readString(14);
+            in.skipToEnd();
+        }
+    }
+    public static final void ReadAFRESP(QQ qq,ByteSet bin){
+        JceInputStream in=new JceInputStream();
+        in.wrap(bin);
+        in.readByte(0);
+        in.readLong(0);
+        in.readByte(1);
+        in.readByte(2);
+        in.readShort(3);
+        in.readShort(4);
+        in.readShort(6);
+        int type=in.readShort(7);
+        AddFriendResult addFriendResult=new AddFriendResult();
+        addFriendResult.message=in.readString(7);
+        if(type==0){
+            addFriendResult.suc=true;
+        }
+        qq.addFriendResult=addFriendResult;
+    }
+    public static final void ReadGroupMngRes(QQ qq,ByteSet bin){
+        String hex=bin.toStringHex();
+        String pack=StringUtils.left(hex,"69 00");
+        String mainPack=pack.replace(StringUtils.subString(pack,"0A 02 0C","12 00"),"");
+        mainPack=mainPack.replace(StringUtils.subString(mainPack,"2C 31","46"),"");
+        return;//未完
     }
 }

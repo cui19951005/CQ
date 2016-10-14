@@ -1,14 +1,18 @@
 package com.cq.sdk.android.qq.struct;
 
+import com.cq.sdk.android.qq.inter.MessageHandle;
 import com.cq.sdk.android.qq.utils.DataType;
 import com.cq.sdk.utils.ByteSet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * QQ登录信息
  * Created by CuiYaLei on 2016/8/13.
  */
 public class QQ {
-    public String account;
+    public long account;
     public long qq;
     public ByteSet user;
     public ByteSet caption;
@@ -38,5 +42,8 @@ public class QQ {
     public ByteSet vieryToken1;
     public ByteSet vieryToken2;
     public ByteSet viery;
-
+    public List<Group> groupList=new ArrayList<>();
+    public List<Friend> friendList=new ArrayList<>();
+    public AddFriendResult addFriendResult=new AddFriendResult();
+    public MessageHandle messageHandle;
 }

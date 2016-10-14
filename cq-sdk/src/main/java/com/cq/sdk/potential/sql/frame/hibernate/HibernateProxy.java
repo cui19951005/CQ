@@ -29,7 +29,7 @@ public class HibernateProxy {
 
     public static InvocationHandler getInvocationHandler(Object proxy) {
         if(!(proxy instanceof HibernateProxyImpl)) {
-            throw new IllegalArgumentException("Object is not a proxy");
+            throw new IllegalArgumentException("Object is not qq proxy");
         } else {
             return ((HibernateProxy)proxy).h;
         }

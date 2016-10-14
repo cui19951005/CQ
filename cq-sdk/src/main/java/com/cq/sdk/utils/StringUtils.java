@@ -19,4 +19,10 @@ public class StringUtils {
             str=temp;
         }while (true);
     }
+    public static final String subString(String text,String left,String right){
+        return text.substring(text.indexOf(left)+left.length(),text.lastIndexOf(right));
+    }
+    public static final String left(String text,String left){
+        return text.substring(0,text.indexOf(left));
+    }
 }

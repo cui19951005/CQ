@@ -11,6 +11,9 @@ import com.cq.sdk.potential.annotation.Service;
 import com.cq.sdk.utils.*;
 import com.cq.sdk.utils.Number;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by CuiYaLei on 2016/8/20.
  */
@@ -20,13 +23,14 @@ public class CommonServiceImpl implements CommonService {
     private QQService qqService;
     @Autowired
     private NetworkService networkService;
+    private QQ qq;
     public void receive(ByteSet bytes) {
         if(bytes.length()==0){
             return;
         }
         Logger.info(bytes);
         bytes=this.unPack(bytes,false);
-        bytes= Hash.unQQTea(bytes, Global.qq.key);
+        bytes= Hash.unQQTea(bytes, this.qq.key);
         UnPack unPack=new UnPack();
         unPack.setData(bytes);
         int headLen=unPack.getInt();
@@ -54,15 +58,15 @@ public class CommonServiceImpl implements CommonService {
             pack.setHex("00 00 00 08 02 00 00 00 04");
         }else if(type==1){
             pack.setHex("00 00 00 08 01 00 00");
-            pack.setShort((short) (Global.qq.token002C.length()+4));
-            pack.setBin(Global.qq.token002C);
+            pack.setShort((short) (this.qq.token002C.length()+4));
+            pack.setBin(this.qq.token002C);
         }else{
             pack.setHex("00 00 00 09 01");
             pack.setInt(Global.requestId);
         }
         pack.setHex("00 00 00");
-        pack.setShort((short) (Global.qq.caption.length()+4));
-        pack.setBin(Global.qq.caption);
+        pack.setShort((short) (this.qq.caption.length()+4));
+        pack.setBin(this.qq.caption);
         pack.setBin(bin);
         bin=pack.getAll();
         pack.empty();
@@ -102,7 +106,7 @@ public class CommonServiceImpl implements CommonService {
             pack.setInt(buffer.length() + 4);
             pack.setBin(buffer);
             Logger.info(pack.getAll());
-            return pack(Hash.QQTea(pack.getAll(), Global.qq.key), isLogin ? 0 : 1);
+            return pack(Hash.QQTea(pack.getAll(), this.qq.key), isLogin ? 0 : 1);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -114,7 +118,7 @@ public class CommonServiceImpl implements CommonService {
         pack.setHex(Global.qqGlobal.pcVer);
         pack.setHex(cmd);
         pack.setShort((short) Global.getSubCmd());
-        pack.setBin(Global.qq.user);
+        pack.setBin(this.qq.user);
         pack.setHex("03 07 00 00 00 00 02 00 00 00 00 00 00 00 00");
         boolean ext_bin_null;
         if(extBin!=null && extBin.length()>0){
@@ -145,11 +149,11 @@ public class CommonServiceImpl implements CommonService {
 
 
     public ByteSet unPack(ByteSet bytes, boolean bool) {
-        int index=bytes.indexOf(Global.qq.caption);
-        bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length());
+        int index=bytes.indexOf(this.qq.caption);
+        bytes=bytes.getRight(bytes.length()-index-this.qq.caption.length());
         if(bool){
-            index=bytes.indexOf(Global.qq.caption);
-            bytes=bytes.getRight(bytes.length()-index-Global.qq.caption.length());
+            index=bytes.indexOf(this.qq.caption);
+            bytes=bytes.getRight(bytes.length()-index-this.qq.caption.length());
         }
         return bytes;
     }
@@ -194,7 +198,7 @@ public class CommonServiceImpl implements CommonService {
                 this.unPackRequestPacket(bin,null);
             }
         }else if(serviceCmd.equals("ConfigPushSvc.PushReq")){
-
+            this.qq.messageHandle.message(DataType.MsgType.LoginEnd);
         }else if(serviceCmd.equals("OidbSvc.0x4ff_9")){
             Logger.info("修改昵称完成");
         }else if(serviceCmd.equals("QQServiceDiscussSvc.ReqGetDiscuss")){
@@ -256,8 +260,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public void unPackMap(JceInputStream jceInputStream, CardData cardData) {
-        int type=jceInputStream.readType();
-        if(type!= Constants.TYPE_MAP){
+        if(jceInputStream.readType()!= Constants.TYPE_MAP){
             return ;
         }
         boolean isFirendsReq=false;
@@ -270,20 +273,65 @@ public class CommonServiceImpl implements CommonService {
             if(key.equals("FLRESP")){
                 ByteSet bytes=jceInputStream.readSimpleList(1);
                 JceStructFriendListResp friendListResp=new JceStructFriendListResp();
-                Global.friends=JceStructFactory.readFLRESP(bytes,friendListResp);
-                isFirendsReq=true;
+                JceStructFriendInfo[] jceStructFriendInfos=JceStructFactory.readFLRESP(bytes,friendListResp);
+                if(friendListResp.startIndex+friendListResp.getfriendCount<friendListResp.totoal_friend_count){
+                    this.funSendGetFriendList(friendListResp.startIndex,friendListResp.getfriendCount);
+                }else{
+                    List<Friend> friendList=new ArrayList<>();
+                    for(JceStructFriendInfo jceStructFriendInfo : jceStructFriendInfos){
+                        Friend friend=new Friend();
+                        friend.qq=jceStructFriendInfo.friendUin;
+                        friend.name=jceStructFriendInfo.name;
+                    }
+                    this.qq.friendList=friendList;
+                    Logger.info(friendList);
+                    this.qq.messageHandle.message(DataType.MsgType.Friend);
+                }
             }else if(key.equals("FSRESP")){
                 ByteSet bytes=jceInputStream.readSimpleList(1);
                 FSRESPStruts fsrespStruts=JceStructFactory.readFSRESP(bytes);
-                this.qqService.addFriendsGetSetResult(Global.qq.qq,friendUin,tVerifyType,question);
+                this.qqService.addFriendsGetSetResult(this.qq.qq,friendUin,tVerifyType,question);
             }else if(key.equals("RespGetEncounterV2")){
-                type=jceInputStream.readType();
+                int type=jceInputStream.readType();
                 if(type==Constants.TYPE_MAP){
                     int j=jceInputStream.readShort(0);
                     for(int z=0;i<j;z++){
                         key=jceInputStream.readString(0);
                         ByteSet bin=jceInputStream.readSimpleList(1);
                         if(key.equals("EncounterSvc.RespGetEncounterV2")){
+                            List<RespEncounterInfo> respEncounterInfoList=new ArrayList<>();
+                            JceStructFactory.readEncounterSvcRespGetEncounterV2(bin,respEncounterInfoList);
+                            Logger.info(Json.toJson(respEncounterInfoList));
+                            Logger.info("附近人获取完毕");
+                        }
+                    }
+                }
+            }else if(key.equals("GetTroopListRespV2")){
+                Logger.info("获取群列表");
+                ByteSet bin=jceInputStream.readSimpleList(1);
+                JceStructFactory.readGroupMngRes2(this.qq,bin);
+            }else if(key.equals("GTMLRESP")){
+                Logger.info("获取群成员");
+                ByteSet bin=jceInputStream.readSimpleList(1);
+                JceStructFactory.readGroupMemberList(this.qq,bin);
+            }else if(key.equals("RespHeader")){
+                ByteSet bin=jceInputStream.readSimpleList(1);
+            }else if(key.equals("FSOLRESP")){
+                ByteSet bin=jceInputStream.readSimpleList(1);
+                JceStructFactory.readOnlineFriendList(this.qq,bin);
+            }else if(key.equals("GAIRESP")){
+                ByteSet bin=jceInputStream.readSimpleList(1);
+
+            }else if(key.equals("AFRESP")){
+                ByteSet bin=jceInputStream.readSimpleList(1);
+                JceStructFactory.ReadAFRESP(qq,bin);
+            }else if(key.equals("GroupMngRes")){
+                int type=jceInputStream.readType();
+                if(type==Constants.TYPE_MAP){
+                    int c= jceInputStream.readShort(0);
+                    for(int j=0;j<c;j++){
+                        String t_key= jceInputStream.readString(0);
+                        if(t_key.equals("KQQ.GroupMngRes")){
 
                         }
                     }
@@ -294,7 +342,7 @@ public class CommonServiceImpl implements CommonService {
 
     public ByteSet packAddFriendReq(long friendUin, int type, String msg) {
         JceOutputStream out=new JceOutputStream();
-        out.writeInt(Number.longToInt(Global.qq.qq),0);
+        out.writeInt(Number.longToInt(this.qq.qq),0);
         out.writeInt(Number.longToInt(friendUin),1);
         out.writeShort((short) type,1);
         out.writeByte((byte) 1,3);
@@ -325,7 +373,7 @@ public class CommonServiceImpl implements CommonService {
             pack.setInt(temp.length() + 4);
             pack.setBin(temp);
             pack.setBin(wupBuffer);
-            return this.pack(Hash.QQTea(pack.getAll(), Global.qq.key), 2);
+            return this.pack(Hash.QQTea(pack.getAll(), this.qq.key), 2);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -382,11 +430,10 @@ public class CommonServiceImpl implements CommonService {
         unPack.getInt();
         int len=unPack.getShort();
         bin=unPack.getBin(len);
-        bin= Hash.unQQTea(bin,Global.qq.tgtKey);
+        bin= Hash.unQQTea(bin,this.qq.tgtKey);
         this.unTlv(bin);
-        Global.qq.key=Global.qq.sessionKey;
-        Logger.info(Json.toJson(Global.qq));
-        Global.qq.loginState= DataType.UserState.Success;
+        this.qq.key=this.qq.sessionKey;
+        this.qq.loginState= DataType.UserState.Success;
         return true;
     }
 
@@ -403,17 +450,17 @@ public class CommonServiceImpl implements CommonService {
         unPack.getBin(2);
         int result=unPack.getByte();
         bin=unPack.getBin(len-16-1);
-        bin=Hash.unQQTea(bin,Global.qq.shareKey);
+        bin=Hash.unQQTea(bin,this.qq.shareKey);
         if(result!=0){
             if(result==2){
                 this.unPackVieryImage(bin);
                 Logger.info("需要输入验证码");
-                Global.qq.loginState=DataType.UserState.Verification;
+                this.qq.loginState=DataType.UserState.Verification;
                 return null;
             }
             this.unPackErrMsg(bin);
         }
-        Global.qq.loginState= DataType.UserState.Login;
+        this.qq.loginState= DataType.UserState.Login;
         return bin;
     }
 
@@ -459,15 +506,15 @@ public class CommonServiceImpl implements CommonService {
         }else if(cmd.equals("01 0C")){
 
         }else if(cmd.equals("01 0A")){
-            Global.qq.token004C=bin.clone();
+            this.qq.token004C=bin.clone();
         }else if(cmd.equals("01 0D")){
 
         }else if(cmd.equals("01 14")){
-            Global.qq.token0058= Tlv.tlv114Get0058(bin);
+            this.qq.token0058= Tlv.tlv114Get0058(bin);
         }else if(cmd.equals("01 0E")){
-            Global.qq.mST1Key=bin.clone();
+            this.qq.mST1Key=bin.clone();
         }else if(cmd.equals("01 03")){
-            Global.qq.stweb=bin.toStringHex();
+            this.qq.stweb=bin.toStringHex();
         }else if(cmd.equals("01 1F")){
 
         }else if(cmd.equals("01 38")){
@@ -483,18 +530,18 @@ public class CommonServiceImpl implements CommonService {
             byte age=unPack.getByte();
             byte gander=unPack.getByte();
             int len=unPack.getByte();
-            Global.qq.nick=new String(unPack.getBin(len).getByteSet());
-            Logger.info("nickName:{0},face:{1},age:{2},gander:{3}",Global.qq.nick,face,age,gander);
+            this.qq.nick=new String(unPack.getBin(len).getByteSet());
+            Logger.info("nickName:{0},face:{1},age:{2},gander:{3}",this.qq.nick,face,age,gander);
         }else if(cmd.equals("01 20")){
-            Global.qq.sKey=bin.clone();
+            this.qq.sKey=bin.clone();
         }else if(cmd.equals("01 36")){
-            Global.qq.vKey=bin.clone();
+            this.qq.vKey=bin.clone();
         }else if(cmd.equals("03 05")){
-            Global.qq.sessionKey=bin.clone();
+            this.qq.sessionKey=bin.clone();
         }else if(cmd.equals("01 43")){
-            Global.qq.token002C=bin.clone();
+            this.qq.token002C=bin.clone();
         }else if(cmd.equals("01 64")){
-            Global.qq.sId=bin.clone();
+            this.qq.sId=bin.clone();
         }else if(cmd.equals("01 18")){
 
         }else if(cmd.equals("01 30")){
@@ -504,19 +551,19 @@ public class CommonServiceImpl implements CommonService {
             Logger.info("time:{0},ip:{1}",time,ip);
         }else if(cmd.equals("01 05")){
             int len=unPack.getShort();
-            Global.qq.vieryToken1=unPack.getBin(len);
+            this.qq.vieryToken1=unPack.getBin(len);
             len=unPack.getShort();
-            Global.qq.viery=unPack.getBin(len);
+            this.qq.viery=unPack.getBin(len);
         }else if(cmd.equals("01 04")){
-            Global.qq.vieryToken2=bin.clone();
+            this.qq.vieryToken2=bin.clone();
         }else if(cmd.equals("01 65")){//需要输入验证码
 
         }else if(cmd.equals("01 08")){//ksid
 
         }else if(cmd.equals("01 6D")){
-            Global.qq.superKey=bin.clone();
+            this.qq.superKey=bin.clone();
         }else if(cmd.equals("01 6C")){
-            Global.qq.psKey=bin.clone();
+            this.qq.psKey=bin.clone();
         }else{
             Logger.info("未找到TLV命令:{0}",bin.toStringHex());
         }
@@ -524,7 +571,7 @@ public class CommonServiceImpl implements CommonService {
 
     public ByteSet packOidbSvc0x7a20() {
         ByteSet bin=ByteSet.parse("08 A2 0F 10 00 18 00 22 02 08 00");
-        return this.makeLoginSendSsoMsg("OidbSvc.0x7a2_0",bin,Global.qq.token004C,Global.qqGlobal.imei,Global.qq.ksid,Global.qqGlobal.ver,false);
+        return this.makeLoginSendSsoMsg("OidbSvc.0x7a2_0",bin,this.qq.token004C,Global.qqGlobal.imei,this.qq.ksid,Global.qqGlobal.ver,false);
     }
 
     public ByteSet packStatSvcRegisterOnline() {
@@ -535,7 +582,7 @@ public class CommonServiceImpl implements CommonService {
         try {
             JceStructSvcReqRegister struct = new JceStructSvcReqRegister();
             JceOutputStream out = new JceOutputStream();
-            struct.lUin = Global.qq.qq;
+            struct.lUin = this.qq.qq;
             struct.lBid = lBid;
             struct.iStatus = iStatus;
             struct.timeStamp = timeStamp;
@@ -571,7 +618,7 @@ public class CommonServiceImpl implements CommonService {
             req.sBuffer = bin;
             JceStructFactory.writeRequestPacket(out, req);
             bin = out.toByteArray();
-            return this.makeLoginSendSsoMsg("StatSvc.register", bin, Global.qq.token004C, Global.qqGlobal.imei, Global.qq.ksid, Global.qqGlobal.ver, false);
+            return this.makeLoginSendSsoMsg("StatSvc.register", bin, this.qq.token004C, Global.qqGlobal.imei, this.qq.ksid, Global.qqGlobal.ver, false);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -610,7 +657,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     public void keep() {
-        int wait=500;
         ByteSet mBin=new ByteSet();
         UnPack unPack=new UnPack();
         int len;
@@ -649,7 +695,7 @@ public class CommonServiceImpl implements CommonService {
 
     public ByteSet packStatSvcGet() {
         JceOutputStream out=new JceOutputStream();
-        out.writeInt (Number.longToInt(Global.qq.qq), 0);
+        out.writeInt (Number.longToInt(this.qq.qq), 0);
         out.writeByte ((byte) 7, 1);
         out.writeStringByte ("", 2);
         out.writeByte ((byte)11, 3);
@@ -665,6 +711,52 @@ public class CommonServiceImpl implements CommonService {
 
         return this.makeSendSsoMsgSimple ("StatSvc.get", (short) 3, 1819559151, "PushService", "SvcReqGet", "SvcReqGet", bin);
 
+    }
+
+    @Override
+    public ByteSet packMessageSvcOfflinemsg(long account, String message) {
+        JceOutputStream out=new JceOutputStream();
+        out.writeLong(this.qq.qq,0);
+        out.writeLong(this.qq.qq,1);
+        out.writeLong(account,2);
+        out.writeLong(Other.timeStamp(false),3);
+        out.writeStringByte(message,4);
+        out.writeStringByte("",5);
+        out.writeInt(0,6);
+        out.writeInt(0,7);
+        out.writeInt(1,8);
+        out.writeSimpleList(ByteSet.parse(message.getBytes()),9);
+        out.writeInt(0,10);
+        out.writeInt(0,11);
+        out.writeInt(0,12);
+        out.writeInt(0,14);
+        return this.makeSendSsoMsgSimple("MessageSvc.offlinemsg", (short) 3,Global.requestId,"MessageSvc","offlinemsg","req_offlinemsg",out.toByteArray());
+    }
+
+    @Override
+    public void funSendGetFriendList(int startIndex, int getFriendCount) {
+        this.networkService.send(this.packFriendListGetFriendGroupList(startIndex,getFriendCount));
+    }
+
+    @Override
+    public ByteSet packFriendListGetFriendGroupList(int startIndex, int getFriendCount) {
+        JceStructFL structFL=new JceStructFL();
+        structFL._0_reqtype=3;
+        structFL._1_ifReflush=1;
+        structFL.luin=this.qq.qq;
+        structFL._3_startIndex= (short) startIndex;
+        structFL._4_getfriendCount=(short) getFriendCount;
+        structFL._6_friend_count=1;
+        structFL._10=1;
+        structFL._11=5;
+        JceOutputStream out=new JceOutputStream();
+        JceStructFactory.writeFL(out,structFL);
+        return this.makeSendSsoMsgSimple("friendlist.getFriendGroupList",(short) 3,2014428573,"mqq.IMService.FriendListServiceServantObj","GetFriendListReq","FL",out.toByteArray());
+    }
+
+    @Override
+    public void setQQ(QQ qq) {
+        this.qq=qq;
     }
 
 }

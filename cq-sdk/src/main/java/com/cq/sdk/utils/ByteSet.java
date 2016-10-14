@@ -28,7 +28,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         if(hex.indexOf("{")==-1) {
             this.byteSet = new byte[hex.length() / 2];
             for (int i = 0; i < this.length(); i++) {
-                this.byteSet[i] = ByteSet.uByteToByte(Integer.valueOf(Number.baseNum(hex.substring(i * 2, (i + 1) * 2), 16, 10)));
+                this.byteSet[i] = ByteSet.uByteToByte(Integer.valueOf(Hex.baseNum(hex.substring(i * 2, (i + 1) * 2), 16, 10)));
             }
         }else{
             String content=hex.substring(hex.indexOf("{")+1,hex.indexOf("}"));
@@ -59,13 +59,34 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         System.arraycopy(this.byteSet,0,result.byteSet,0,length);
         return result;
     }
-    public final ByteSet getRight(int length){
+    public ByteSet getRight(int length){
         if(length>this.length()){
             return null;
         }
         ByteSet result= new ByteSet(length);
         System.arraycopy(this.byteSet,this.length()-length,result.byteSet,0,length);
         return result;
+    }
+    public ByteSet replace(ByteSet oldByte,ByteSet newByte){
+        ByteSet temp=this.clone();
+        for(int i=0;i<temp.length();i++){
+            if(temp.subByteSet(i,oldByte.length()).equals(oldByte)){
+                temp=this.replace(i,oldByte.length(),newByte);
+                i+=newByte.length();
+            }
+        }
+        return temp;
+    }
+    public ByteSet replace(int startIndex,int length,ByteSet newByte){
+        byte[] left=new byte[startIndex];
+        byte[] right=new byte[this.length()-startIndex-length];
+        System.arraycopy(this.byteSet,0,left,0,left.length);
+        System.arraycopy(this.byteSet,startIndex+length,right,0,right.length);
+        ByteSet bytes=new ByteSet(left.length+newByte.length()+right.length);
+        bytes.append(left);
+        bytes.append(newByte);
+        bytes.append(right);
+        return bytes;
     }
     public int indexOf(byte[] bytes){
         return this.indexOf(bytes,0);
@@ -169,7 +190,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     public String toStringHex(){
         StringBuilder stringBuilder=new StringBuilder();
         for(int i=0;i<this.length();i++){
-            String b= Number.baseString(ByteSet.byteToUByte(this.get(i)),16);
+            String b= Hex.baseString(ByteSet.byteToUByte(this.get(i)),16);
             if(b.length()<2){
                 stringBuilder.append("0");
             }

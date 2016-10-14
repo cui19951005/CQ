@@ -29,4 +29,30 @@ public class DataType {
             this.msg = msg;
         }
     }
+    public enum MsgType{
+        Group(0,"群列表"),Friend(1,"好友"),GroupMember(2,"群成员"),LoginEnd(3,"登录结束");
+        private int type;
+        private String msg;
+
+        MsgType(int type, String msg) {
+            this.type = type;
+            this.msg = msg;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+    }
 }
