@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * Created by CuiYaLei on 2016/8/12.
  */
-public class Number {
+public final class Number {
     private char[] value;
     private boolean isNegative;
     public Number(String val) {

@@ -106,7 +106,7 @@ public class CommonServiceImpl implements CommonService {
             pack.setInt(buffer.length() + 4);
             pack.setBin(buffer);
             Logger.info(pack.getAll());
-            return pack(Hash.QQTea(pack.getAll(), this.qq.key), isLogin ? 0 : 1);
+            return this.pack(Hash.QQTea(pack.getAll(), this.qq.key), isLogin ? 0 : 1);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -639,23 +639,12 @@ public class CommonServiceImpl implements CommonService {
                 if(bytes.length()<=0){
                     return;
                 }else{
-                    Timer.open(new Timer.TimerTask() {
-                        @Override
-                        public void execute() {
-                            commonService.heartbeat();
-                        }
-                    },4*60*1000);
-                    Timer.open(new Timer.TimerTask() {
-                        @Override
-                        public void execute() {
-                            commonService.keep();
-                        }
-                    },200);
+                    Timer.open(() -> commonService.heartbeat(),4*60*1000);
+                    Timer.open(() -> commonService.keep(),200);
                 }
             }
         });
     }
-
     public void keep() {
         ByteSet mBin=new ByteSet();
         UnPack unPack=new UnPack();

@@ -5,7 +5,7 @@ import com.cq.sdk.net.NetObject;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.inter.AutowiredInterface;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
-import com.cq.sdk.potential.sql.frame.MybatisTrusteeship;
+import com.cq.sdk.potential.sql.frame.mybatis.MybatisTrusteeship;
 import com.cq.sdk.potential.sql.frame.utils.GenerateBean;
 import com.cq.sdk.potential.sql.tx.TransactionAop;
 import com.cq.sdk.potential.sql.tx.TransactionManager;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * 托管类
  * Created by admin on 2016/9/1.
  */
-public class Trusteeship {
+public final class Trusteeship {
     private String packagePath;
     private String mainMethod;
     private Map<Class,Object> objectMap =new HashMap<>();
@@ -170,7 +170,6 @@ public class Trusteeship {
                             annotationsAttribute.addAnnotation(new Annotation(annotation,ctClass.getClassFile().getConstPool()));
                         });
                         ctClass.getClassFile().addAttribute(annotationsAttribute);
-                        ctClass.debugWriteFile("D:\\project\\");
                         this.addAutowiredManager(ctClass.toClass());
                     } catch (NotFoundException e) {
                         e.printStackTrace();
@@ -202,11 +201,9 @@ public class Trusteeship {
             this.addManager(this.mainClass);
             this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
             this.loadClass(absPath);
-            for(Map.Entry<Class,Object> item : this.objectMap.entrySet()){
-                if(item.getValue()==null) {
-                    item.setValue(this.injection(item.getKey()));
-                }
-            }
+            this.objectMap.entrySet().stream().filter(item -> item.getValue() == null).forEach(item -> {
+                item.setValue(this.injection(item.getKey()));
+            });
         }catch (Exception ex){
             ex.printStackTrace();
         }

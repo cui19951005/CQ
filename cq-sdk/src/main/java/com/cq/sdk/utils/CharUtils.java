@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by admin on 2016/8/22.
  */
-public class CharUtils {
+public final class CharUtils {
     public static char[] subChars(char[] chars,int startIndex,int endIndex){
         if(startIndex==0&&endIndex==chars.length){
             return chars;

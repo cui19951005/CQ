@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/cq-sdk" />
-            <option value="$PROJECT_DIR$/hibernate" />
           </set>
         </option>
       </GradleProjectSettings>

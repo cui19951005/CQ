@@ -2,6 +2,5 @@
   dependencies {
     compile "cglib:cglib-nodep:3.2.4"
     compile "org.javassist:javassist:3.20.0-GA"
-    compile project(":hibernate")
 
   }

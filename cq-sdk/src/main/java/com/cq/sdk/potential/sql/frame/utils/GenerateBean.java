@@ -3,17 +3,19 @@ package com.cq.sdk.potential.sql.frame.utils;
 import com.cq.sdk.potential.SynchronizationManager;
 import com.cq.sdk.potential.annotation.Autowired;
 import com.cq.sdk.potential.inter.AutowiredInterface;
+import com.cq.sdk.potential.sql.frame.hibernate.HibernateClassName;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateProxy;
+import com.cq.sdk.potential.sql.frame.mybatis.MybatisClassName;
 import com.cq.sdk.potential.sql.tx.Transaction;
 import com.cq.sdk.potential.sql.tx.TransactionManager;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
-import com.cq.sdk.potential.sql.frame.MybatisTrusteeship;
+import com.cq.sdk.potential.sql.frame.mybatis.MybatisTrusteeship;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateSessionManager;
 import com.cq.sdk.potential.utils.PackUtils;
 import com.cq.sdk.potential.utils.SynchronizationType;
 import com.cq.sdk.potential.utils.FileUtils;
 import com.cq.sdk.utils.Logger;
-import com.cq.sdk.utils.StringUtils;
+
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,13 +37,13 @@ public class GenerateBean {
         try {
             DataSource dataSource = mybatisTrusteeship.dataSource();
             String mapper=mybatisTrusteeship.mappers();
-            Class configClass=Class.forName("org.apache.ibatis.session.Configuration");
-            Class environment=Class.forName("org.apache.ibatis.mapping.Environment");
-            Class transactionFactoryClass=Class.forName("org.apache.ibatis.transaction.TransactionFactory");
+            Class configClass=Class.forName(MybatisClassName.Configuration.getClassName());
+            Class environment=Class.forName(MybatisClassName.Environment.getClassName());
+            Class transactionFactoryClass=Class.forName(MybatisClassName.TransactionFactory.getClassName());
             Constructor constructor=environment.getConstructor(String.class,transactionFactoryClass,DataSource.class);
-            Object envObj=constructor.newInstance("frame",Class.forName("org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory").newInstance(),dataSource);
+            Object envObj=constructor.newInstance("frame",Class.forName(MybatisClassName.JdbcTransactionFactory.getClassName()).newInstance(),dataSource);
             Object configObj=configClass.newInstance();
-            Class xMLMapperBuilder=Class.forName("org.apache.ibatis.builder.xml.XMLMapperBuilder");
+            Class xMLMapperBuilder=Class.forName(MybatisClassName.XMLMapperBuilder.getClassName());
             List<File> fileList=FileUtils.findFileList(mapper);
             for(File file :  fileList){//解析xml文件
                 Constructor xMLMapperBuilderCon=xMLMapperBuilder.getConstructor(InputStream.class,configClass,String.class, Map.class);
@@ -50,7 +52,7 @@ public class GenerateBean {
             }
             configClass.getMethod("setEnvironment",environment).invoke(configObj,envObj);
             configObj=mybatisTrusteeship.configuration(configObj,dataSource);
-            Class sqlSessionFactoryBuilder=Class.forName("org.apache.ibatis.session.SqlSessionFactoryBuilder");
+            Class sqlSessionFactoryBuilder=Class.forName(MybatisClassName.SqlSessionFactoryBuilder.getClassName());
             Object sqlSessionFactoryBuilderObj=sqlSessionFactoryBuilder.newInstance();
             Object sqlSessionFactory = sqlSessionFactoryBuilder.getMethod("build",configClass).invoke(sqlSessionFactoryBuilderObj,configObj);
             Object sqlSession = sqlSessionFactory.getClass().getMethod("openSession").invoke(sqlSessionFactory);
@@ -119,14 +121,14 @@ public class GenerateBean {
             Properties properties = (Properties) field.get(configuration);
             properties.put("hibernate.cache.use_query_cache",false);
             properties.put("hibernate.cache.use_second_level_cache",true);
-            properties.put("hibernate.dialect","org.hibernate.dialect.MySQL5Dialect");
+            properties.put("hibernate.dialect",HibernateClassName.MySQL5Dialect.getClassName());
             properties=hibernateTrusteeship.properties(properties);
             configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
             configuration=hibernateTrusteeship.configuration(configuration,dataSource);
             if(dataSource!=null) {
                 properties.put("hibernate.connection.datasource",dataSource);
             }
-            properties.put("hibernate.current_session_context_class", HibernateProxy.getProxyClass(HibernateSessionManager.class.getClassLoader(),new Class[]{Class.forName("org.hibernate.context.spi.CurrentSessionContext")}).getName());
+            properties.put("hibernate.current_session_context_class", HibernateProxy.getProxyClass(HibernateSessionManager.class.getClassLoader(),new Class[]{Class.forName(HibernateClassName.CurrentSessionContext.getClassName())}).getName());
             configuration.getClass().getMethod("setProperties",Properties.class).invoke(configuration,properties);
             field=configuration.getClass().getDeclaredField("standardServiceRegistryBuilder");
             field.setAccessible(true);
@@ -141,9 +143,9 @@ public class GenerateBean {
                 mappingReferences=new ArrayList();
             }
             List<File> mappingFile=FileUtils.findFileList(hibernateTrusteeship.mapping());
-            Class mappingReference$Type=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference$Type");
+            Class mappingReference$Type=Class.forName(HibernateClassName.MappingReference$Type.getClassName());
             for(File file : mappingFile){
-                Object mappingReference=Class.forName("org.hibernate.boot.cfgxml.spi.MappingReference").getConstructor(mappingReference$Type,String.class).newInstance(mappingReference$Type.getEnumConstants()[1],PackUtils.filePathToPack(file,hibernateTrusteeship.mapping()));
+                Object mappingReference=Class.forName(HibernateClassName.MappingReference.getClassName()).getConstructor(mappingReference$Type,String.class).newInstance(mappingReference$Type.getEnumConstants()[1],PackUtils.filePathToPack(file,hibernateTrusteeship.mapping()));
                 mappingReferences.add(mappingReference);
             }
             mappingReferencesField.set(aggregatedCfgXml,mappingReferences);

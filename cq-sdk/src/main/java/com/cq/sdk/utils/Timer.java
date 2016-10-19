@@ -6,7 +6,7 @@ import java.util.Vector;
  * 定时器
  * Created by admin on 2016/10/12.
  */
-public class Timer {
+public final class Timer {
     private static Vector<TimerTaskThread> timerVector=new Vector<>();
     public static int open(TimerTask timerTask, int interval){
         TimerTaskThread timerTaskThread=new TimerTaskThread(false,timerTask,interval);

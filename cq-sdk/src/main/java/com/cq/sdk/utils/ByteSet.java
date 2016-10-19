@@ -8,7 +8,7 @@ import java.util.Iterator;
  *  字节集
  * Created by admin on 2016/8/17.
  */
-public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
+public final class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     private byte[] byteSet=new byte[0];
 
     public ByteSet() {
@@ -100,6 +100,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             for(int j=0;j<bytes.length;j++){
                 if(i+j<this.length()&&this.byteSet[i+j]!=bytes[j]){
                     isTrue=false;
+                    break;
                 }
             }
             if(isTrue){
@@ -129,10 +130,10 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     public ByteSet append(byte... bytes){
         return this.append(bytes,new byte[0]);
     }
-    public ByteSet append(String... hexs){
-        byte[][] bytes=new byte[hexs.length][0];
-        for(int i=0;i<hexs.length;i++){
-            bytes[i]= ByteSet.parse(hexs[i]).getByteSet();
+    public ByteSet append(String... hex){
+        byte[][] bytes=new byte[hex.length][0];
+        for(int i=0;i<hex.length;i++){
+            bytes[i]= ByteSet.parse(hex[i]).getByteSet();
         }
         return this.append(bytes);
     }
@@ -152,8 +153,8 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         return this.byteSet.length;
     }
     public byte get(int index){return this.byteSet[index];}
-    public void set(int index,byte b){
-        this.byteSet[index]=b;
+    public void set(int index,int b){
+        this.byteSet[index]= (byte) b;
     }
     @Override
     public ByteSet clone()  {
@@ -179,7 +180,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         stringBuilder.append(this.length());
         stringBuilder.append("{");
         for(int i=0;i<this.length();i++){
-            stringBuilder.append(ByteSet.byteToUByte(this.byteSet[i]));
+            stringBuilder.append(ByteSet.byteToUByte(this.get(i)));
             if(i!=this.length()-1){
                 stringBuilder.append(",");
             }
@@ -209,7 +210,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             }
             public Byte next() {
                 this.index++;
-                return ByteSet.this.byteSet[this.index];
+                return ByteSet.this.get(this.index);
             }
             public void remove() {
                 ByteSet byteSet= ByteSet.this.clone();
@@ -250,7 +251,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             return false;
         }
         for(int i=0;i<byteSet.length;i++){
-            if(byteSet[i]!=this.byteSet[i]){
+            if(byteSet[i]!=this.get(i)){
                 return false;
             }
         }
@@ -258,22 +259,22 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     }
     public ByteSet trim(){
         int startIndex = -1,endIndex=0;
-       for(int i=0;i<this.length();i++){
-           if(this.get(i)!=0){
-               startIndex=i;
-               break;
-           }
-       }
-       if(startIndex==-1){
-           startIndex=this.length();
-       }
-       for(int i=this.length()-1;i>-1;i--){
-           if(this.get(i)!=0){
-               endIndex=i-startIndex;
-               break;
-           }
-       }
-       return this.subByteSet(startIndex,endIndex);
+        for(int i=0;i<this.length();i++){
+            if(this.get(i)!=0){
+                startIndex=i;
+                break;
+            }
+        }
+        if(startIndex==-1){
+            startIndex=this.length();
+        }
+        for(int i=this.length()-1;i>-1;i--){
+            if(this.get(i)!=0){
+                endIndex=i-startIndex;
+                break;
+            }
+        }
+        return this.subByteSet(startIndex,endIndex);
     }
     /**
      * 将字节数组转换字节集
@@ -311,7 +312,7 @@ public class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
     public static ByteSet empty(int length){
         ByteSet bytes= ByteSet.parse(new byte[length]);
         for(int i=0;i<bytes.length();i++){
-            bytes.byteSet[i]=0;
+            bytes.set(i,0);
         }
         return bytes;
     }

@@ -19,37 +19,13 @@ import java.lang.reflect.Modifier;
  */
 public class HibernateSessionManager implements InvocationHandler {
 
-    /**
-     * 动态创建类
-     */
-    static {
-        try {
-            String clazz = HibernateProxyImpl.class.getName();
-            StringBuilder sb=new StringBuilder();
-            Class session = Class.forName(HibernateClassName.SessionFactoryImplementor.getClassName());
-            ClassPool classPool = ClassPool.getDefault();
-            CtClass ctClass = classPool.get(clazz);
-            classPool.clearImportedPackages();
-            CtField ctField=new CtField(classPool.get("java.lang.Object"),"sessionFactoryImplementor",ctClass);
-            ctClass.addField(ctField);
-            CtConstructor ctConstructor = new CtConstructor(new CtClass[]{classPool.get(session.getName())}, ctClass);
-            sb.append("{this.sessionFactoryImplementor=$1;}");
-            ctConstructor.setBody(sb.toString());
-            ctClass.addConstructor(ctConstructor);
-            ctClass.setName(HibernateProxyImpl.HibernateProxyImpl);
-            ctClass.toClass();
-        }catch (Exception ex){
-            ex.printStackTrace();
-            Logger.error("HibernateProxy init fail",ex);
-        }
-    }
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
         Class[] params=new Class[objects.length];
         for(int i=0;i<objects.length;i++){
             params[i]=objects[i].getClass();
         }
-       return HibernateSessionManager.class.getMethod(method.getName(),params).invoke(this,objects);
+       return this.getClass().getMethod(method.getName(),params).invoke(this,objects);
     }
     public Object currentSession() {
         return SynchronizationManager.get(SynchronizationType.HibernateSession);

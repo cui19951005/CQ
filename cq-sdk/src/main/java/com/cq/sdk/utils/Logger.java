@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 /**
  * Created by CuiYaLei on 2016/8/20.
  */
-public class Logger {
+public final class Logger {
     static StringBuffer stringBuffer=new StringBuffer();
     public static final void error(Object object) {
         error(object,null);

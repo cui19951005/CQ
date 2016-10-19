@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
  * 时间扩展类
  * Created by Administrator on 2016/7/13 0013.
  */
-public class Date extends java.util.Date   {
+public final class Date extends java.util.Date   {
     private DateTime dateTime=new DateTime();
     private static final int[] months=new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     public Date(){

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * json转换
  * Created by CuiYaLei on 2016/8/27.
  */
-public class Json {
+public final class Json {
     public static final String toJson(Object object){
         StringBuilder sb=new StringBuilder();
         sb.append(field(null,object.getClass(),object));
@@ -46,22 +46,25 @@ public class Json {
             sb.append("\":");
         }
         if (value instanceof String
-                || value instanceof Byte
-                || value instanceof Short
-                || value instanceof Integer
-                || value instanceof Long
                 || value instanceof Character
-                || value instanceof Boolean
-                || value instanceof Float
-                || value instanceof Double
-                || type.getName().equals("int") || type.getName().equals("byte") || type.getName().equals("short")
-                || type.getName().equals("long") || type.getName().equals("char") || type.getName().equals("float")
-                || type.getName().equals("double")
+                ||  type.getName().equals("char")
                 ) {
             sb.append("\"");
             sb.append(value);
             sb.append("\"");
-        }else if(value instanceof java.util.Date){
+        }else if(value instanceof Byte
+                || value instanceof Short
+                || value instanceof Integer
+                || value instanceof Long
+                || value instanceof Boolean
+                || value instanceof Float
+                || value instanceof Double
+                || type.getName().equals("int") || type.getName().equals("byte") || type.getName().equals("short")
+                || type.getName().equals("long") || type.getName().equals("float")
+                || type.getName().equals("double")){
+            sb.append(value);
+        }
+        else if(value instanceof java.util.Date){
             sb.append("\"");
             sb.append(new Date((java.util.Date)value));
             sb.append("\"");
@@ -214,7 +217,7 @@ public class Json {
     public static final <T> T fromJson(String json,Class<T> type){
         Map<String, Object> map = new HashMap<>();
         Json.analysis(json, 0, "", map);
-        return (T)field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),null);
+        return (T)field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),new ArrayList<>());
     }
     private static <T> T field(Object json,Field field,ClassSuper type,List<String> name){
         try {
@@ -546,7 +549,7 @@ public class Json {
 
     }
     private static void ifType(String json,String type,String name,int baseIndex,Map<String,Object> map,boolean parent){
-        int rightIndex;
+        int rightIndex ;
         if(type.equals(quotes)){//普通类型
             if(parent){
                 disp(json,baseIndex,map);
@@ -589,14 +592,27 @@ public class Json {
             if(name.length()==0){
                 name=Json.emptyName+baseIndex;
             }
-            Map<String, Object> temp = new HashMap<String, Object>();
+            Map<String, Object> temp = new HashMap<>();
             rightIndex = Json.findRight(json, baseIndex+1, "{", "}");
             Json.analysis(json.substring(baseIndex+1, rightIndex), 0, "", temp);//解析对象baseIndex没过{第一次
             map.put(name,temp);//将解析的对象添加到属性
             Json.analysis(json,rightIndex+2,"",map);//继续下一个+1过}+1过,
         }else{
-            map.put(emptyName+baseIndex,type.replace("\"",""));
-            Json.analysis(json,baseIndex+type.length()+1,"",map);
+            char[] text=json.substring(baseIndex).toCharArray();
+            rightIndex=text.length;
+            for(int i=0;i<text.length;i++){
+                if(text[i]=='}' || text[i]==','){
+                    rightIndex=i;
+                    break;
+                }
+            }
+            String value=json.substring(baseIndex,baseIndex+rightIndex);
+            if(name.length()==0) {
+                map.put(emptyName + baseIndex, value);
+            }else{
+                map.put(name,value);
+            }
+            Json.analysis(json,baseIndex+value.length()+1,"",map);
         }
     }
     /**

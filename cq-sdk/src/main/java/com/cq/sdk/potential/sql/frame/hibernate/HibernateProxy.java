@@ -1,5 +1,10 @@
 package com.cq.sdk.potential.sql.frame.hibernate;
 
+import com.cq.sdk.utils.Logger;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
 import net.sf.cglib.core.CodeGenerationException;
 import net.sf.cglib.proxy.*;
 
@@ -24,6 +29,25 @@ public class HibernateProxy {
     };
 
     public HibernateProxy() {
+        try {
+            String clazz = HibernateProxyImpl.class.getName();
+            StringBuilder sb=new StringBuilder();
+            Class session = Class.forName(HibernateClassName.SessionFactoryImplementor.getClassName());
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass ctClass = classPool.get(clazz);
+            classPool.clearImportedPackages();
+            CtField ctField=new CtField(classPool.get("java.lang.Object"),"sessionFactoryImplementor",ctClass);
+            ctClass.addField(ctField);
+            CtConstructor ctConstructor = new CtConstructor(new CtClass[]{classPool.get(session.getName())}, ctClass);
+            sb.append("{this.sessionFactoryImplementor=$1;}");
+            ctConstructor.setBody(sb.toString());
+            ctClass.addConstructor(ctConstructor);
+            ctClass.setName(HibernateProxyImpl.HibernateProxyImpl);
+            ctClass.toClass();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            Logger.error("HibernateProxy init fail",ex);
+        }
         Enhancer.registerCallbacks(this.getClass(), new Callback[]{this.h, null});
     }
 

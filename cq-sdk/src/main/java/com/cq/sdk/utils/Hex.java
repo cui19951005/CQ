@@ -5,7 +5,7 @@ import java.util.Stack;
 /**
  * Created by admin on 2016/10/14.
  */
-public class Hex {
+public final class Hex {
     /**
      * 16进制内任意进制转换
      * @param num
