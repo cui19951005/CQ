@@ -43,7 +43,7 @@ public final class Hex {
      */
     public static String baseString(int num,int base){
         StringBuffer str = new StringBuffer("");
-        Stack<Character> s = new Stack<Character>();
+        Stack<Character> s = new Stack<>();
         while(num != 0){
             int val=num%base;
             if(val<10) {

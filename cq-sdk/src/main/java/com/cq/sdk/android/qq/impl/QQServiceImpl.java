@@ -13,8 +13,7 @@ import com.cq.sdk.utils.Logger;
  */
 @Service
 public class QQServiceImpl implements QQService {
-    @Autowired
-    private NetworkService networkService;
+    private NetworkService networkService=new NetworkServiceImpl();
     public void groupMessage(long qq, StructGroupMsg struct) {
         String name=new String(struct.sendName.getByteSet());
         StringBuilder sb=new StringBuilder();

@@ -6,7 +6,6 @@ import com.cq.sdk.android.qq.CommonService;
 import com.cq.sdk.android.qq.NetworkService;
 import com.cq.sdk.android.qq.QQService;
 import com.cq.sdk.android.qq.inter.NetworkReceive;
-import com.cq.sdk.potential.annotation.Autowired;
 import com.cq.sdk.potential.annotation.Service;
 import com.cq.sdk.utils.*;
 import com.cq.sdk.utils.Number;
@@ -19,10 +18,8 @@ import java.util.List;
  */
 @Service
 public class CommonServiceImpl implements CommonService {
-    @Autowired
-    private QQService qqService;
-    @Autowired
-    private NetworkService networkService;
+    private QQService qqService=new QQServiceImpl();
+    private NetworkService networkService=new NetworkServiceImpl();
     private QQ qq;
     public void receive(ByteSet bytes) {
         if(bytes.length()==0){
@@ -198,7 +195,7 @@ public class CommonServiceImpl implements CommonService {
                 this.unPackRequestPacket(bin,null);
             }
         }else if(serviceCmd.equals("ConfigPushSvc.PushReq")){
-            this.qq.messageHandle.message(DataType.MsgType.LoginEnd);
+            this.qq.messageHandle.message(DataType.MsgType.LoginEnd,this.qq);
         }else if(serviceCmd.equals("OidbSvc.0x4ff_9")){
             Logger.info("修改昵称完成");
         }else if(serviceCmd.equals("QQServiceDiscussSvc.ReqGetDiscuss")){
@@ -263,7 +260,6 @@ public class CommonServiceImpl implements CommonService {
         if(jceInputStream.readType()!= Constants.TYPE_MAP){
             return ;
         }
-        boolean isFirendsReq=false;
         int count=jceInputStream.readShort(0);
         long friendUin = 0;
         int tVerifyType = 0;
@@ -284,8 +280,7 @@ public class CommonServiceImpl implements CommonService {
                         friend.name=jceStructFriendInfo.name;
                     }
                     this.qq.friendList=friendList;
-                    Logger.info(friendList);
-                    this.qq.messageHandle.message(DataType.MsgType.Friend);
+                    this.qq.messageHandle.message(DataType.MsgType.Friend,this.qq);
                 }
             }else if(key.equals("FSRESP")){
                 ByteSet bytes=jceInputStream.readSimpleList(1);

@@ -11,5 +11,4 @@ public interface UserService {
     int login(String user, String password, MessageHandle messageHandle);
     void sendMessage(String account,String message);
     void friendList();
-    QQ getQQ();
 }

@@ -7,7 +7,6 @@ import java.security.MessageDigest;
  */
 public final class Encryption {
     public final static ByteSet MD5(ByteSet btInput) {
-        char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
         try {
             // 获得MD5摘要算法的 MessageDigest 对象
             MessageDigest mdInst = MessageDigest.getInstance("MD5");

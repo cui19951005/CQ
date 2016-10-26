@@ -1,10 +1,11 @@
 package com.cq.sdk.android.qq.inter;
 
+import com.cq.sdk.android.qq.struct.QQ;
 import com.cq.sdk.android.qq.utils.DataType;
 
 /**
  * Created by admin on 2016/10/14.
  */
 public interface MessageHandle {
-    void message(DataType.MsgType msgType);
+    void message(DataType.MsgType msgType, QQ qq);
 }
