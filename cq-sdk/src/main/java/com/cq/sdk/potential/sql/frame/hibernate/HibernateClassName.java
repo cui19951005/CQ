@@ -4,6 +4,7 @@ package com.cq.sdk.potential.sql.frame.hibernate;
  * Created by admin on 2016/9/13.
  */
 public enum  HibernateClassName {
+    Configuration("org.hibernate.cfg.Configuration"),
     SessionFactoryImplementor("org.hibernate.engine.spi.SessionFactoryImplementor"),
     SessionFactory("org.hibernate.SessionFactory"),
     MappingReference$Type("org.hibernate.boot.cfgxml.spi.MappingReference$Type"),

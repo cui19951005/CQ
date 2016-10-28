@@ -40,6 +40,7 @@ public class Window extends JFrame {
                         Window.this.game.operation(3);
                         break;
                 }
+                Window.this.repaint();
             }
 
             @Override

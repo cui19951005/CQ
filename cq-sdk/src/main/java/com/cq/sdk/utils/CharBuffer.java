@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * Created by admin on 2016/8/25.
  */
-public class CharBuffer  implements Appendable {
+public final class CharBuffer  implements Appendable {
 
     int defaultLength =28;
 

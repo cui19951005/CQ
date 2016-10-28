@@ -3,8 +3,8 @@
     <output-path>$PROJECT_DIR$/build/classes/artifacts/CQ_jar</output-path>
     <root id="archive" name="CQ.jar">
       <element id="module-output" name="cq-sdk_main" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/cglib/cglib-nodep/3.2.4/42c972dee25a436b32c6027e848287ff47ed6750/cglib-nodep-3.2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

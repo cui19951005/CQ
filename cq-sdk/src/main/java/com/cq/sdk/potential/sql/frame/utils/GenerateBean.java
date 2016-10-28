@@ -74,7 +74,7 @@ public class GenerateBean {
                     try {
                          this.connection=dataSource.getConnection();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        Logger.error("transaction begin fail",e);
                     }
                 }
 
@@ -83,7 +83,7 @@ public class GenerateBean {
                     try {
                         this.connection.commit();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        Logger.error("transaction commit fail",e);
                     }
                 }
 
@@ -92,7 +92,7 @@ public class GenerateBean {
                     try {
                         this.connection.rollback();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        Logger.error("transaction rollback fail",e);
                     }
                 }
             });
@@ -107,7 +107,6 @@ public class GenerateBean {
                 }
             };
         }catch (Exception ex){
-            ex.printStackTrace();
             Logger.error("mybatis join trusteeship fail",ex);
         }
         return null;
@@ -115,7 +114,7 @@ public class GenerateBean {
     public static final AutowiredInterface hibernate(HibernateTrusteeship hibernateTrusteeship){
         try {
             DataSource dataSource = hibernateTrusteeship.dataSource();
-            Object configuration = Class.forName("org.hibernate.cfg.Configuration").newInstance();
+            Object configuration = Class.forName( HibernateClassName.Configuration.getClassName()).newInstance();
             Field field=configuration.getClass().getDeclaredField("properties");
             field.setAccessible(true);
             Properties properties = (Properties) field.get(configuration);
@@ -162,15 +161,15 @@ public class GenerateBean {
                 public void begin() {
                     try {
                         if((this.session=SynchronizationManager.get(SynchronizationType.HibernateSession))==null&&!(Boolean)this.session.getClass().getMethod("isConnected").invoke(this.session)) {
-                            this.session = sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
+                            this.session =this.sessionFactory.getClass().getMethod("openSession").invoke(sessionFactory);
                             SynchronizationManager.bind(SynchronizationType.HibernateSession,this.session);
                         }else{
                             this.session=SynchronizationManager.get(SynchronizationType.HibernateSession);
                         }
-                        this.transaction=session.getClass().getMethod("getTransaction").invoke(session);
+                        this.transaction=this.session.getClass().getMethod("getTransaction").invoke(session);
                         this.transaction.getClass().getMethod("begin").invoke(this.transaction);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Logger.error("transaction begin fail",e);
                     }
                 }
 
@@ -179,7 +178,7 @@ public class GenerateBean {
                     try {
                         this.transaction.getClass().getMethod("commit").invoke(this.transaction);
                     }catch (Exception e){
-                        e.printStackTrace();
+                        Logger.error("transaction commit fail",e);
                     }
                 }
 
@@ -189,7 +188,7 @@ public class GenerateBean {
                         this.transaction.getClass().getMethod("rollback").invoke(this.transaction);
                         this.session.getClass().getMethod("close").invoke(this.transaction);
                     }catch (Exception e){
-                        e.printStackTrace();
+                        Logger.error("transaction rollback fail",e);
                     }
                 }
             });
@@ -208,8 +207,7 @@ public class GenerateBean {
                 }
             };
         }catch (Exception ex){
-            ex.printStackTrace();
-            Logger.info("hibernate join trusteeship fail");
+            Logger.error("hibernate join trusteeship fail",ex);
         }
         return null;
     }

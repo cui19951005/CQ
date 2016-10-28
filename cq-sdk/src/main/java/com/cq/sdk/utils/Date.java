@@ -84,9 +84,9 @@ public final class Date extends java.util.Date   {
     public static Date toDate(String date,String format) throws ParseException {
         return new Date(new SimpleDateFormat(format).parse(date).getTime());
     }
-    public static DateTime convert(long timespan){
+    public static DateTime convert(long timeSpan){
         DateTime dateTime=new DateTime();
-        timespan=timespan/1000+8*60*60+31*24*60*60+24*60*60;
+        timeSpan=timeSpan/1000+8*60*60+31*24*60*60+24*60*60;
         int i=1970;
         int sum=0;
         boolean isBreak=false;
@@ -97,7 +97,7 @@ public final class Date extends java.util.Date   {
                 }else{
                     sum += months[j] * 24 * 60 * 60;
                 }
-                if((sum+months[j+1==12?0:j+1]* 24 * 60 * 60)>timespan){
+                if((sum+months[j+1==12?0:j+1]* 24 * 60 * 60)>timeSpan){
                     dateTime.setMonth(j+1);
                     isBreak=true;
                     break;
@@ -109,7 +109,7 @@ public final class Date extends java.util.Date   {
             i++;
         }while (true);
         dateTime.setYear(i);
-        long surplus=timespan-sum;
+        long surplus=timeSpan-sum;
         dateTime.setDay((int)surplus/(24*60*60));
         surplus-=dateTime.getDay()*24*60*60;
         dateTime.setHour((int)surplus/(60*60));

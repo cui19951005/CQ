@@ -1,18 +1,22 @@
 package com.cq.sdk.test;
+import com.cq.sdk.utils.Json;
+import com.cq.sdk.utils.Logger;
 import com.cq.sdk.utils.ObjectUtils;
 import com.cq.sdk.utils.Random;
 import com.sun.glass.ui.Size;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2016/10/21.
  */
 public class Block {
     private Size size;
-    private List<Point> position;
+    public List<Point> position;
     private int type;
     private int style;
     private Color color;
@@ -55,94 +59,230 @@ public class Block {
         return list;
     }
     public static int getStyleNumber(int type){
-        switch (type){
-            case 0:
-                return 2;
-            case 1:
-                return 1;
-            case 2:
-                return 4;
-            case 3:
-                return 2;
-            default:
-                return -1;
-        }
+        return Block.BLOCK_MAP.get(type).size();
     }
     public static Color getColor(int type){
         switch (type){
-            case 0:
+            /*case 0:
                 return new Color(22, 4, 213);
             case 1:
-                return new Color(255, 14, 149);
+                return new Color(171, 0, 255);
             case 2:
-                return new Color(109, 255, 48);
+                return new Color(22, 255, 9);
             case 3:
-                return new Color(0, 247, 255);
+                return new Color(0, 255, 211);*/
             default:
                 return new Color(0, 0, 0);
         }
     }
     public static Block createRandom(Size size){
-        int type=Random.random(0,4);
+        int type=Random.random(0,Block.BLOCK_MAP.size());
         return Block.create(size,type,Random.random(0,Block.getStyleNumber(type)));
     }
-    public static Block create(Size size,int type, int style){
-        List<Point> list=new ArrayList<>();
-        if(type==0){//长条
-            if(style==0) {//一
-                list.add(new Point(0,0));
-                list.add(new Point(1,0));
-                list.add(new Point(2,0));
-                list.add(new Point(3,0));
-            }else if(style==1){// |
-                list.add(new Point(0,0));
-                list.add(new Point(0,1));
-                list.add(new Point(0,2));
-                list.add(new Point(0,3));
-            }
-        }else if(type==1){//四方
-            if(style==0){
-                list.add(new Point(0,0));
-                list.add(new Point(0,1));
-                list.add(new Point(1,0));
-                list.add(new Point(1,1));
-            }
-        }else if(type==2) {
-            if(style==0){//┳
-                list.add(new Point(0,0));
-                list.add(new Point(1,0));
-                list.add(new Point(2,0));
-                list.add(new Point(1,1));
-            }else if(style==1){//┣
-                list.add(new Point(0,0));
-                list.add(new Point(0,1));
-                list.add(new Point(0,2));
-                list.add(new Point(1,1));
-            }else if(style==2){//┻
-                list.add(new Point(1,0));
-                list.add(new Point(0,1));
-                list.add(new Point(1,1));
-                list.add(new Point(2,1));
-            }else if(style==3){//┫
-                list.add(new Point(0,1));
-                list.add(new Point(1,0));
-                list.add(new Point(1,1));
-                list.add(new Point(1,2));
-            }
-        }else if(type==3){
-            if(style==0){//梯子
-                list.add(new Point(0,1));
-                list.add(new Point(1,1));
-                list.add(new Point(1,0));
-                list.add(new Point(2,0));
-            }else if(style==1){
-                list.add(new Point(0,0));
-                list.add(new Point(0,1));
-                list.add(new Point(1,1));
-                list.add(new Point(1,2));
-            }
+    public final static Map<Integer,Map<Integer,ArrayList<Point>>> BLOCK_MAP=new HashMap<Integer,Map<Integer,ArrayList<Point>>>(){
+        {
+            this.put(0,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(1,0));
+                    this.add(new Point(2,0));
+                    this.add(new Point(3,0));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(0,2));
+                    this.add(new Point(0,3));
+                }});
+            }});
+            this.put(1,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                }});
+            }});
+            this.put(2,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(1,0));
+                    this.add(new Point(2,0));
+                    this.add(new Point(1,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(0,2));
+                    this.add(new Point(1,1));
+                }});
+                this.put(2,new ArrayList<Point>(){{
+                    this.add(new Point(1,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                    this.add(new Point(2,1));
+                }});
+                this.put(3,new ArrayList<Point>(){{
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                    this.add(new Point(1,2));
+                }});
+            }});
+            this.put(3,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                    this.add(new Point(1,0));
+                    this.add(new Point(2,0));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                    this.add(new Point(1,2));
+                }});
+            }});
+            this.put(4,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                    this.add(new Point(2,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                    this.add(new Point(0,1));
+                    this.add(new Point(0,2));
+                }});
+            }});
+            this.put(5,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//━┓
+                    this.add(new Point(1,0));
+                    this.add(new Point(2,0));
+                    this.add(new Point(2,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(1,0));//  ┃
+                    this.add(new Point(1,1));//  ┛
+                    this.add(new Point(1,2));
+                    this.add(new Point(0,2));
+                }});
+                this.put(2,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┗━
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                    this.add(new Point(2,1));
+                }});
+                this.put(3,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┏
+                    this.add(new Point(1,0));//┃
+                    this.add(new Point(0,1));
+                    this.add(new Point(0,2));
+                }});
+            }});
+            this.put(6,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┏━
+                    this.add(new Point(1,0));
+                    this.add(new Point(2,0));
+                    this.add(new Point(0,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┃
+                    this.add(new Point(0,1));//┗
+                    this.add(new Point(0,2));
+                    this.add(new Point(1,2));
+                }});
+                this.put(2,new ArrayList<Point>(){{
+                    this.add(new Point(0,1));//━┛
+                    this.add(new Point(1,1));
+                    this.add(new Point(2,1));
+                    this.add(new Point(2,0));
+                }});
+                this.put(3,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┓
+                    this.add(new Point(1,0));//┃
+                    this.add(new Point(1,1));
+                    this.add(new Point(1,2));
+                }});
+            }});
+            this.put(7,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(1,0));//  ┃
+                    this.add(new Point(0,1));//━━━
+                    this.add(new Point(1,1));//  ┃
+                    this.add(new Point(2,1));
+                    this.add(new Point(1,2));
+                }});
+
+            }});
+            this.put(8,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(1,0));//┛
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┗
+                    this.add(new Point(0,1));
+                    this.add(new Point(1,1));
+                }});
+                this.put(2,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┏
+                    this.add(new Point(1,0));
+                    this.add(new Point(0,1));
+                }});
+                this.put(3,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┓
+                    this.add(new Point(1,0));
+                    this.add(new Point(1,1));
+                }});
+            }});
+            this.put(9,new HashMap<Integer,ArrayList<Point>>(){{
+                this.put(0,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));//┃  ┃
+                    this.add(new Point(0,1));// ━━
+                    this.add(new Point(1,1));//
+                    this.add(new Point(2,1));
+                    this.add(new Point(2,0));
+                }});
+                this.put(1,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));// ━━
+                    this.add(new Point(1,0));//┃
+                    this.add(new Point(0,1));// ━━
+                    this.add(new Point(0,2));
+                    this.add(new Point(1,2));
+                }});
+                this.put(2,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));// ━━
+                    this.add(new Point(1,0));//┃  ┃
+                    this.add(new Point(2,0));//┃  ┃
+                    this.add(new Point(0,1));
+                    this.add(new Point(2,1));
+                }});
+                this.put(3,new ArrayList<Point>(){{
+                    this.add(new Point(0,0));// ━━
+                    this.add(new Point(1,0));//    ┃
+                    this.add(new Point(1,1));// ━━
+                    this.add(new Point(1,2));
+                    this.add(new Point(0,2));
+                }});
+            }});
+
         }
-        return new Block(size,list,type,style);
+    };
+
+    public static Block create(Size size,int type, int style){
+        return new Block(size, (List<Point>) ObjectUtils.clone(Block.BLOCK_MAP.get(type).get(style)),type,style);
     }
     public static int isBorder(Size size,Rectangle rect,List<Point> points,java.util.List<Block> blockList){
         for(Point point : points){
@@ -195,7 +335,7 @@ public class Block {
         if(style+value>=count){
             style=0;
         }else if(style+value<0){
-            style=5;
+            style=count-1;
         }else{
             style+=value;
         }

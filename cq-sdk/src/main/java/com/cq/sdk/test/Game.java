@@ -2,39 +2,42 @@ package com.cq.sdk.test;
 
 import com.sun.glass.ui.Size;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import com.cq.sdk.utils.Timer;
 /**
  * Created by admin on 2016/10/24.
  */
 public class Game {
     private Block block;
-    private JFrame frame;
     private Size blockSize;
     private Point base;
     private Size size;
-    private java.util.List<Block> blockList;
-    public Game(JFrame frame,Size blockSize,Point base) {
-        this.frame = frame;
+    private List<Block> blockList;
+    private Rectangle pane;
+    private int integral;
+    public Game( Size blockSize, Point base,Rectangle rectangle) {
         this.blockSize=blockSize;
         this.base=base;
+        this.pane=rectangle;
         this.size=new Size(this.getPane().width/blockSize.width,this.getPane().height/blockSize.height);
     }
 
-    public void start(){
+    public void start(Timer.TimerTask timerTask,int interval){
         this.create();
-        com.cq.sdk.utils.Timer.open(()-> {
+        Timer.open(()-> {
             this.block.add(new Point(0,1));
             if(Block.isBorder(this.blockSize,this.getPane(),this.block.getPosition(),this.removeListEle(this.blockList,this.block))!=-1){
                 this.block.add(new Point(0,-1));
                 this.eliminate();
                 this.create();
             }
-            this.frame.repaint();
-        },500);
+            timerTask.execute();
+        },interval);
     }
     public void eliminate(){
         Map<Integer,Integer> map=new HashMap<>();
@@ -48,13 +51,16 @@ public class Game {
                 }
             }
         }
-        for(Map.Entry<Integer,Integer> entry : map.entrySet()){
-            if(entry.getValue()==this.size.width){
-                for(Block block : this.blockList){
-                    block.removeY(entry.getKey());
-                    block.less(entry.getKey(),1);
-                }
+        Supplier<Stream<Map.Entry<Integer,Integer>>> supplier=()->map.entrySet().stream().filter(entry -> entry.getValue() == this.size.width);
+        supplier.get().forEach(entry -> {
+            for (Block block : this.blockList) {
+                block.removeY(entry.getKey());
+                block.less(entry.getKey(), 1);
             }
+        });
+        long count=supplier.get().count();
+        if(count>0) {
+            this.integral += count * 100 + (count - 1) * 50;
         }
     }
     public void create(){
@@ -70,12 +76,12 @@ public class Game {
         if(this.blockList==null){
             return ;
         }
-        for(Block block : this.blockList){
-            block.draw(g);
+        for(int i=0;i<this.blockList.size();i++){
+            this.blockList.get(i).draw(g);
         }
     }
     private Rectangle getPane(){
-        return new Rectangle(new Point(),this.frame.getContentPane().getSize());
+        return this.pane;
     }
     public void operation(int type){
         List<Block> list=this.removeListEle(this.blockList,this.block);
@@ -93,7 +99,6 @@ public class Game {
                 this.block.down(this.getPane(),list);
                 break;
         }
-        this.frame.repaint();
     }
     private <T> List<T> removeListEle(List<T> list,Object object){
         Object[] objects=list.toArray();
@@ -104,5 +109,9 @@ public class Game {
             }
         }
         return objList;
+    }
+
+    public int getIntegral() {
+        return integral;
     }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Created by admin on 2016/10/19.
  */
-public class ConcurrentObject<T> {
+public final class ConcurrentObject<T> {
     private T[] objects;
     private static final int OBJECT_COUNT=10;
     private Semaphore semaphore;

@@ -13,6 +13,7 @@ public final class Logger {
 
     public static final void error(Object object, Exception e) {
         String info= formatMsg(object);
+        e.printStackTrace();
         System.err.println(info);
     }
 

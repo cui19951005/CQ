@@ -2,9 +2,13 @@ package com.cq.sdk.test;
 import com.cq.sdk.android.qq.UserService;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.utils.InjectionType;
+import com.cq.sdk.utils.Logger;
+import com.cq.sdk.utils.ObjectUtils;
+import com.sun.glass.ui.Pixels;
 import com.sun.glass.ui.Size;
 
 import java.awt.*;
+import java.lang.reflect.Modifier;
 
 
 /**
@@ -31,13 +35,22 @@ public class Main {
             }
             Logger.info(msgType);
         });*/
+
+
         Window frame=new Window();
         frame.setTitle("my title");
         frame.setLocation(0,0);
         frame.setSize(300,500);
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.setGame(new Game(frame,new Size(20,20),new Point((frame.getWidth()-frame.getContentPane().getWidth())/2,frame.getHeight()-frame.getContentPane().getHeight())));
-        frame.getGame().start();
+        frame.setGame(new Game(
+                 new Size(20,20)
+                ,new Point((frame.getWidth()-frame.getContentPane().getWidth())/2,frame.getHeight()-frame.getContentPane().getHeight())
+                ,new Rectangle(new Point(),frame.getContentPane().getSize())
+        ));
+        frame.getGame().start(()->{
+            frame.repaint();
+            frame.setTitle("积分:"+frame.getGame().getIntegral());
+        },500);
     }
 }
