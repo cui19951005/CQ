@@ -13,8 +13,8 @@ public final class Logger {
 
     public static final void error(Object object, Exception e) {
         String info= formatMsg(object);
-        e.printStackTrace();
         System.err.println(info);
+        e.getStackTrace();
     }
 
     public static final void info(Object object) {
@@ -36,14 +36,14 @@ public final class Logger {
         stringBuilder.append(".");
         stringBuilder.append(nowClass.getMethodName());
         stringBuilder.append("(");
-        /*stringBuilder.append(nowClass.getClassName());
-        stringBuilder.append(":");*/
+        stringBuilder.append(nowClass.getFileName());
+        stringBuilder.append(":");
         //太长了
         stringBuilder.append(nowClass.getLineNumber());
         stringBuilder.append(")");
         stringBuilder.append(":");
         stringBuilder.append(msg(object));
-        stringBuffer.append(stringBuilder.toString());
+        stringBuffer.append(stringBuilder);
         return stringBuilder.toString();
     }
     public static final void error(String format,Exception e,Object... objects){

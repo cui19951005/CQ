@@ -1,6 +1,6 @@
 package com.cq.sdk.net;
 
-import com.cq.sdk.net.udp.ReceiveData;
+import com.cq.sdk.net.udp.UdpReceiveData;
 import com.cq.sdk.net.udp.UDP;
 import com.cq.sdk.net.uitls.NetClass;
 import com.cq.sdk.potential.utils.FileUtils;
@@ -140,7 +140,7 @@ public class NetObject {
         private Map<Class,Object> objectMap;
         @Override
         public void run() {
-            this.netObject.udp=new UDP(this.netObject.localPort,this.netObject.host,this.netObject.port, new ReceiveData() {
+            this.netObject.udp=new UDP(this.netObject.localPort,this.netObject.host,this.netObject.port, new UdpReceiveData() {
                 @Override
                 public void receive(UDP udp, ByteSet byteSet, String host,int port) {
                     int headLen=Number.byte4ToInt(byteSet.subByteSet(0,4));
@@ -272,7 +272,7 @@ public class NetObject {
         this.port = port;
     }
 
-    private static class ReceiveObject implements ReceiveData{
+    private static class ReceiveObject implements UdpReceiveData {
         private Object object;
         @Override
         public void receive(UDP udp, ByteSet byteSet, String host,int port) {

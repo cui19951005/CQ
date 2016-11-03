@@ -63,7 +63,7 @@ public final class Trusteeship {
                     }
             );
             this.injectionType=entrance.injectionType();
-            addNetObject(mainClass);
+            this.addNetObject(mainClass);
             this.init();
             this.start();
         }

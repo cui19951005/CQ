@@ -20,6 +20,7 @@ public class Game {
     private List<Block> blockList;
     private Rectangle pane;
     private int integral;
+    private int timerId;
     public Game( Size blockSize, Point base,Rectangle rectangle) {
         this.blockSize=blockSize;
         this.base=base;
@@ -29,17 +30,21 @@ public class Game {
 
     public void start(Timer.TimerTask timerTask,int interval){
         this.create();
-        Timer.open(()-> {
+        this.timerId=Timer.open((int id)-> {
             this.block.add(new Point(0,1));
             if(Block.isBorder(this.blockSize,this.getPane(),this.block.getPosition(),this.removeListEle(this.blockList,this.block))!=-1){
                 this.block.add(new Point(0,-1));
                 this.eliminate();
+                this.accelerate();
                 this.create();
             }
-            timerTask.execute();
+            timerTask.execute(id);
         },interval);
     }
-    public void eliminate(){
+    private void accelerate(){
+        Timer.set(this.timerId,1000-this.getIntegral()/10);
+    }
+    private void eliminate(){
         Map<Integer,Integer> map=new HashMap<>();
         for(Block block : this.blockList){
             for(Point point : block.getPosition()){
@@ -110,7 +115,6 @@ public class Game {
         }
         return objList;
     }
-
     public int getIntegral() {
         return integral;
     }

@@ -1,6 +1,7 @@
 package com.cq.sdk.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * 时间扩展类
@@ -52,6 +53,10 @@ public final class Date extends java.util.Date   {
     }
     public String toString(String format){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format);
+        return simpleDateFormat.format(this);
+    }
+    public String toString(String format,Locale locale){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,locale);
         return simpleDateFormat.format(this);
     }
     public DateTime getDateTime(){

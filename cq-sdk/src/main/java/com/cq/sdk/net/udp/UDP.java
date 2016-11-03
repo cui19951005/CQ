@@ -8,23 +8,22 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 
 /**
  * Created by admin on 2016/9/14.
  */
 public class UDP {
     private DatagramSocket datagramSocket;
-    private ReceiveData receiveData;
+    private UdpReceiveData receiveData;
     private int port;
     private String host;
     Receive receive;
 
-    public UDP(String host,int port, ReceiveData receive) {
+    public UDP(String host,int port, UdpReceiveData receive) {
         this(-1,host,port,receive);
     }
 
-    public UDP(int localPort, String host, int port, ReceiveData receiveData){
+    public UDP(int localPort, String host, int port, UdpReceiveData receiveData){
         try {
             this.port = port;
             this.host = host;
@@ -78,7 +77,7 @@ public class UDP {
                         pack.add(this.getData());
                     }
                     if(pack.getMd5().equals(Encryption.MD5(byteSet.subByteSet(16)))) {
-                        this.udp.receiveData.receive(this.udp, pack.getData(), this.datagramPacket.getAddress().getHostAddress(),this.datagramPacket.getPort());
+                        this.udp.receiveData.receive(this.udp,pack.getData(), this.datagramPacket.getAddress().getHostAddress(),this.datagramPacket.getPort());
                         this.lastData=pack.getSurplusData();
                     }
                 }

@@ -634,8 +634,8 @@ public class CommonServiceImpl implements CommonService {
                 if(bytes.length()<=0){
                     return;
                 }else{
-                    Timer.open(() -> commonService.heartbeat(),4*60*1000);
-                    Timer.open(() -> commonService.keep(),200);
+                    Timer.open((int id) -> commonService.heartbeat(),4*60*1000);
+                    Timer.open((int id) -> commonService.keep(),200);
                 }
             }
         });
