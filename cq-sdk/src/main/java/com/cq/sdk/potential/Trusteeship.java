@@ -13,20 +13,19 @@ import com.cq.sdk.potential.sql.tx.utils.TransactionMethod;
 import com.cq.sdk.potential.utils.AopClass;
 import com.cq.sdk.potential.utils.InjectionType;
 import com.cq.sdk.potential.utils.AopMethod;
+import com.cq.sdk.utils.ClassUtils;
 import com.cq.sdk.utils.Logger;
 import com.cq.sdk.potential.utils.PackUtils;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.*;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.annotation.Annotation;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -54,14 +53,12 @@ public final class Trusteeship {
             if(entrance.method().length()>0){
                 this.mainMethod=mainClass.getName()+"."+entrance.method();
             }
-            Stream.of(mainClass.getDeclaredMethods()).filter(s->s.isAnnotationPresent(Execute.class)).limit(1).forEach(
-                    method->{
+            Stream.of(mainClass.getDeclaredMethods()).filter(s->s.isAnnotationPresent(Execute.class)).limit(1).forEach(method->{
                         Execute execute=method.getAnnotation(Execute.class);
                         if(execute !=null){
                             this.mainMethod=mainClass.getName()+"."+method.getName();
                         }
-                    }
-            );
+                    });
             this.injectionType=entrance.injectionType();
             this.addNetObject(mainClass);
             this.init();
@@ -91,7 +88,9 @@ public final class Trusteeship {
                         CtClass ctClass = classPool.makeClass(netClass.getName()+"$");
                         CtField ctField=new CtField(classPool.get(netObject.getClass().getName()),"netObject",ctClass);
                         StringBuilder sb=new StringBuilder();
-                        sb.append("new com.cq.sdk.net.NetObject(");
+                        sb.append("new ");
+                        sb.append(NetObject.class.getName());
+                        sb.append("(");
                         sb.append(netAddress.port());
                         sb.append(",\"");
                         sb.append(array[0]);
@@ -192,11 +191,17 @@ public final class Trusteeship {
             String absPath=this.rootDir+packagePath.replace(".","/").replace("*","");
             LoadProperties loadProperties= (LoadProperties) this.mainClass.getAnnotation(LoadProperties.class);
             if(loadProperties!=null){//加载属性文件
-                for(String file : loadProperties.value()) {
-                    Properties properties = new Properties();
-                    properties.load(new FileInputStream(this.getClass().getResource("/"+file).getFile()));
-                    this.propertiesList.add(properties);
-                }
+                Stream.of(loadProperties.value()).filter(file->Thread.currentThread().getClass().getResource("/"+file)!=null).forEach(file->{
+                    try {
+                        Properties properties = new Properties();
+                        properties.load(new FileInputStream(this.getClass().getResource("/" + file).getFile()));
+                        this.propertiesList.add(properties);
+                    }catch (FileNotFoundException e) {
+                        Logger.error("properties file not find",e);
+                    } catch (IOException e) {
+                        Logger.error("properties file stream open error",e);
+                    }
+                });
             }
             this.addManager(this.mainClass);
             this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());
@@ -281,7 +286,8 @@ public final class Trusteeship {
             Field[] fields = object.getClass().getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
-                if (field.getType().isPrimitive()) {
+                if (ClassUtils.isPrimitive(field.getType())!=null) {
+                    this.injectionProperties(field,object);
                     continue;
                 }
                 Class type = field.getType();
@@ -412,17 +418,14 @@ public final class Trusteeship {
         }
         return false;
     }
-    private Object createObj(Class clazz) throws InstantiationException, IllegalAccessException {
+    private Object createObj(Class clazz) throws IllegalAccessException, InstantiationException {
         Constructor[] constructors=clazz.getConstructors();
-        if(constructors.length==0){
-            return clazz.newInstance();
+        if(constructors.length!=0){
+           if(Stream.of(constructors).filter(c->c.getParameters().length==0).count()==0){
+               return null;
+           }
         }
-        for(Constructor constructor : constructors){
-            if(constructor.getParameterCount()==0){
-                return clazz.newInstance();
-            }
-        }
-        return null;
+        return clazz.newInstance();
     }
 
     /**
@@ -433,44 +436,61 @@ public final class Trusteeship {
      */
     private void injectionProperties(Field field, Object object) throws InvocationTargetException, IllegalAccessException {
         Property property=field.getAnnotation(Property.class);
-        if(property != null){
-            Method[] methods=object.getClass().getMethods();
-            for(Method item : methods){
-                item.setAccessible(true);
-                if(item.getName().length()>3&& item.getName().substring(0,3).equals("set")) {
-                    for (Properties properties : propertiesList) {
-                        String name=item.getName().substring(3,4).toLowerCase()+item.getName().substring(4);
-                        String value = properties.getProperty(property.value() + name);
-                        if(value!=null) {
-                            Class params= item.getParameterTypes()[0];
-                            if(params.isAssignableFrom(Integer.class) || params.getName().equals("int")){
-                                item.invoke(object, Integer.valueOf(value));
-                            }else if(params.isAssignableFrom(Byte.class) || params.getName().equals("byte")){
-                                item.invoke(object, Byte.valueOf(value));
-                            }else if(params.isAssignableFrom(Short.class) || params.getName().equals("short")){
-                                item.invoke(object, Short.valueOf(value));
-                            }else if(params.isAssignableFrom(Long.class) || params.getName().equals("long")){
-                                item.invoke(object, Long.valueOf(value));
-                            }else if(params.isAssignableFrom(Boolean.class) || params.getName().equals("boolean")){
-                                item.invoke(object, Boolean.valueOf(value));
-                            }else if(params.isAssignableFrom(Float.class) || params.getName().equals("float")){
-                                item.invoke(object, Float.valueOf(value));
-                            }else if(params.isAssignableFrom(Double.class) || params.getName().equals("double")){
-                                item.invoke(object, Double.valueOf(value));
-                            }else if(params.isAssignableFrom(Character.class) || params.getName().equals("char")){
-                                item.invoke(object, value.charAt(0));
-                            }else{
-                                item.invoke(object, value);
+        if(property != null) {
+            if (property.value().substring(property.value().length() - 1).equals("*")) {
+                Method[] methods = object.getClass().getMethods();
+                for (Method method : methods) {
+                    method.setAccessible(true);
+                    if (method.getName().length() > 3 && method.getName().substring(0, 3).equals("set")) {
+                        for (Properties properties : this.propertiesList) {
+                            String name = method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
+                            String value = properties.getProperty(property.value() + name);
+                            if (value != null) {
+                                Class params = method.getParameterTypes()[0];
+                                method.invoke(object,this.convertBaseTypeValue(params,value));
                             }
                         }
                     }
                 }
+            }else{
+               this.propertiesList.stream().forEach(properties -> {
+                    String value=properties.getProperty(property.value());
+                   if(value!=null){
+                       try {
+                           field.set(object,this.convertBaseTypeValue(field.getType(),value));
+                       } catch (IllegalAccessException e) {
+                           e.printStackTrace();
+                       } catch (InvocationTargetException e) {
+                           e.printStackTrace();
+                       }
+                   }
+               });
             }
         }
     }
+    private Object convertBaseTypeValue(Class params,String value) throws InvocationTargetException, IllegalAccessException {
+        if (params.isAssignableFrom(Integer.class) || params.getName().equals("int")) {
+            return Integer.valueOf(value);
+        } else if (params.isAssignableFrom(Byte.class) || params.getName().equals("byte")) {
+           return Byte.valueOf(value);
+        } else if (params.isAssignableFrom(Short.class) || params.getName().equals("short")) {
+            return Short.valueOf(value);
+        } else if (params.isAssignableFrom(Long.class) || params.getName().equals("long")) {
+            return Long.valueOf(value);
+        } else if (params.isAssignableFrom(Boolean.class) || params.getName().equals("boolean")) {
+            return Boolean.valueOf(value);
+        } else if (params.isAssignableFrom(Float.class) || params.getName().equals("float")) {
+           return Float.valueOf(value);
+        } else if (params.isAssignableFrom(Double.class) || params.getName().equals("double")) {
+           return Double.valueOf(value);
+        } else if (params.isAssignableFrom(Character.class) || params.getName().equals("char")) {
+           return value.charAt(0);
+        } else {
+           return value;
+        }
+    }
     private Object addAop(Object object) {
-        Object temp=new InvocationHandlerImpl(this.aopMap.values()).bind(object);
-        return temp;
+        return new InvocationHandlerImpl(this.aopMap.values()).bind(object);
     }
     /**
      * 将对象注解切面表达式存入对象

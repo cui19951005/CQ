@@ -2,17 +2,21 @@ package com.cq.sdk.potential;
 
 import com.cq.sdk.potential.aop.JoinPoint;
 import com.cq.sdk.potential.aop.ProceedingJoinPoint;
-import com.cq.sdk.potential.sql.tx.TransactionManager;
 import com.cq.sdk.potential.utils.AopClass;
 import com.cq.sdk.utils.Logger;
+import com.cq.sdk.utils.ObjectUtils;
+import javassist.*;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by CuiYaLei on 2016/9/4.
@@ -25,15 +29,27 @@ public class InvocationHandlerImpl implements MethodInterceptor {
     }
 
     public Object bind(Object obj){
-        if(obj.getClass().getModifiers()!=1 || obj.getClass().getName().indexOf(obj.getClass().getSuperclass().getName())!=-1){
+        if((obj.getClass().getModifiers() & Modifier.FINAL)==Modifier.FINAL || obj.getClass().getName().indexOf(obj.getClass().getSuperclass().getName())!=-1){
             return obj;//final类或本身
         }
         this.object=obj;
-        Enhancer enhancer=new Enhancer();
-        enhancer.setSuperclass(obj.getClass());
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(this.object.getClass());
         enhancer.setCallback(this);
-        enhancer.setClassLoader(obj.getClass().getClassLoader());
-        Object object=enhancer.create();
+        enhancer.setClassLoader(this.object.getClass().getClassLoader());
+        Object object = enhancer.create();
+        Stream.of(this.object.getClass().getDeclaredFields()).filter(f->(f.getModifiers() & Modifier.FINAL)==0 && (f.getModifiers() & Modifier.STATIC)==0).forEach(f->{
+            try {
+                Field field=object.getClass().getSuperclass().getDeclaredField(f.getName());
+                f.setAccessible(true);
+                field.setAccessible(true);
+                field.set(object,f.get(this.object));
+            } catch (NoSuchFieldException e) {
+                Logger.error("no find field",e);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
         return object;
     }
     @Override
@@ -71,7 +87,7 @@ public class InvocationHandlerImpl implements MethodInterceptor {
                 }
             }
             if(aroundList.size()>0) {
-               object=aroundList.get(0).getRound().getMethod().invoke(aroundList.get(0).getRound().getObject(), createAround(aroundList, 0, method, objects));
+                object=aroundList.get(0).getRound().getMethod().invoke(aroundList.get(0).getRound().getObject(), createAround(aroundList, 0, method, objects));
             }else{
                 object= method.invoke(this.object,objects);
             }
@@ -123,12 +139,7 @@ public class InvocationHandlerImpl implements MethodInterceptor {
         }
     }
     private List<AopClass> exists(String name){
-        List<AopClass> aopClassList=new ArrayList<>();
-        for(AopClass aopClass : this.aopClassList){
-            if(aopClass.getPointcut().matcher(name).find()){
-                aopClassList.add(aopClass);
-            }
-        }
+        List<AopClass> aopClassList= this.aopClassList.stream().filter(aopClass -> aopClass.getPointcut().matcher(name).find()).collect(Collectors.toList());
         return aopClassList;
     }
     private Object[] createParams(Object object,Method method,Method paramsMethod,Object[] objects){
@@ -157,12 +168,12 @@ public class InvocationHandlerImpl implements MethodInterceptor {
                 params[i]=new ProceedingJoinPoint() {
                     @Override
                     public Object proceed() throws InvocationTargetException, IllegalAccessException {
-                            return paramsMethod.invoke(object, objects);
+                        return paramsMethod.invoke(object, objects);
                     }
 
                     @Override
                     public Object proceed(Object[] args) throws InvocationTargetException, IllegalAccessException {
-                            return paramsMethod.invoke(object,args);
+                        return paramsMethod.invoke(object,args);
                     }
 
                     @Override

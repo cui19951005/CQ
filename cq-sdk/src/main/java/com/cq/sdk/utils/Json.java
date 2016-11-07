@@ -1,5 +1,6 @@
 package com.cq.sdk.utils;
-import com.cq.sdk.sun.ParameterizedTypeImpl;
+
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.*;
 import java.util.*;

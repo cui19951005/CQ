@@ -21,8 +21,10 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    private CommonService commonService=new CommonServiceImpl();
-    private NetworkService networkService=new NetworkServiceImpl();
+    @Autowired
+    private CommonService commonService;
+    @Autowired
+    private NetworkService networkService;
     public int login(String user, String password, MessageHandle messageHandle) {
         try {
             if (!Validate.account(user)) {

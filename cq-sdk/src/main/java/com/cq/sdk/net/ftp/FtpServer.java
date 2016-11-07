@@ -4,14 +4,12 @@ import com.cq.sdk.net.socket.SocketReceiveData;
 import com.cq.sdk.net.socket.SocketServer;
 import com.cq.sdk.net.socket.SocketSession;
 import com.cq.sdk.utils.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.stream.Stream;
 
 /**
  * Created by admin on 2016/10/31.
@@ -74,7 +72,7 @@ public class FtpServer implements SocketReceiveData {
     @Override
     public void receive(SocketSession session, ByteSet byteSet, String host, int port) {
         try {
-            String text = new String(byteSet.getByteSet(), this.encoding).replace("\r\n", "").replace("\n", "");
+            String text = new String(byteSet.getByteSet(), SystemUtil.getSystemEncoding()).replace("\r\n", "").replace("\n", "");
             String[] array=text.split(" ");
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder.append(array[0]);
@@ -86,7 +84,7 @@ public class FtpServer implements SocketReceiveData {
             }
             text=stringBuilder.toString();
             Logger.info(text);
-            if (text.length() >= ClientCommand.USER.length() && text.substring(0, ClientCommand.USER.length()).toUpperCase().equals(ClientCommand.USER)) {
+            if (this.isCommand(text,ClientCommand.USER)) {
                 String user = text.substring(ClientCommand.USER.length());
                 session.setAttribute(Constant.USER, user);
                 session.setAttribute(Constant.PATH, this.basePath);
@@ -95,7 +93,7 @@ public class FtpServer implements SocketReceiveData {
                 } else {
                     this.sendCommand(session.getSocket(), ServerCommand.RequestPassword.getCode());
                 }
-            } else if (text.length() >= ClientCommand.PASS.length() && text.substring(0, ClientCommand.PASS.length()).toUpperCase().equals(ClientCommand.PASS)) {
+            } else if (this.isCommand(text,ClientCommand.PASS)) {
                 String password = text.substring(ClientCommand.PASS.length());
                 int result = this.ftpUser.login(session.getAttribute(Constant.USER).toString(), password);
                 if (result == 0) {
@@ -103,9 +101,9 @@ public class FtpServer implements SocketReceiveData {
                 } else if (result == 1) {
                     this.sendCommand(session.getSocket(), ServerCommand.RequestPassword.getCode());
                 } else if (result == -1) {
-                    this.sendCommand(session.getSocket(), ServerCommand.InvaildCommand.getCode());
+                    this.sendCommand(session.getSocket(), ServerCommand.InvaildCommand.getCode(),Constant.message.get(this.language).get(Constant.USER_SUSPEND));
                 }
-            } else if (text.length() >= ClientCommand.OPTS.length() && text.substring(0, ClientCommand.OPTS.length()).toUpperCase().equals(ClientCommand.OPTS)) {
+            } else if (this.isCommand(text,ClientCommand.OPTS)) {
                 String state = text.substring(ClientCommand.OPTS.length());
                 if (state.equals("off")) {
                     this.encoding = "gbk";
@@ -116,24 +114,24 @@ public class FtpServer implements SocketReceiveData {
                 } else {
                     this.sendCommand(session.getSocket(), ServerCommand.ErrorParam.getCode());
                 }
-            } else if (text.length() >= ClientCommand.SYST.length() && text.substring(0, ClientCommand.SYST.length()).toUpperCase().equals(ClientCommand.SYST)) {
+            } else if (this.isCommand(text,ClientCommand.SYST)) {
                 this.sendCommand(session.getSocket(), ServerCommand.SystemTypeReply.getCode(), SystemUtil.getOSname().toString());
-            } else if (text.length() >= ClientCommand.SITE.length() && text.substring(0, ClientCommand.SITE.length()).toUpperCase().equals(ClientCommand.SITE)) {
+            } else if (this.isCommand(text,ClientCommand.SITE)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
-            } else if (text.length() >= ClientCommand.FEAT.length() && text.substring(0, ClientCommand.FEAT.length()).toUpperCase().equals(ClientCommand.FEAT)) {
+            } else if (this.isCommand(text,ClientCommand.FEAT)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
-            } else if ((text.length() >= ClientCommand.PWD.length() && text.substring(0, ClientCommand.PWD.length()).toUpperCase().equals(ClientCommand.PWD))
+            } else if (this.isCommand(text,ClientCommand.PWD)
                     ||
-                    (text.length() >= ClientCommand.XPWD.length() && text.substring(0, ClientCommand.XPWD.length()).toUpperCase().equals(ClientCommand.XPWD))
+                    this.isCommand(text,ClientCommand.XPWD)
                     ) {
                 String pwd = session.getAttribute(Constant.PATH).toString();
                 pwd = "/" + pwd.substring(this.basePath.length());
                 this.sendCommand(session.getSocket(), ServerCommand.NowPathName.getCode(), "\"" + (pwd == null ? "/" : pwd) + "\"");
-            } else if (text.length() >= ClientCommand.NOOP.length() && text.substring(0, ClientCommand.NOOP.length()).toUpperCase().equals(ClientCommand.NOOP)) {
+            } else if (this.isCommand(text,ClientCommand.NOOP)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
-            } else if (text.length() >= ClientCommand.TYPE.length() && text.substring(0, ClientCommand.TYPE.length()).toUpperCase().equals(ClientCommand.TYPE)) {
+            } else if (this.isCommand(text,ClientCommand.TYPE)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
-            } else if (text.length() >= ClientCommand.CWD.length() && text.substring(0, ClientCommand.CWD.length()).toUpperCase().equals(ClientCommand.CWD)) {
+            } else if (this.isCommand(text,ClientCommand.CWD)) {
                 String path = text.substring(ClientCommand.CWD.length()).replace("\\", "/");
                 if (path.length() == 0) {
                     return;
@@ -153,9 +151,9 @@ public class FtpServer implements SocketReceiveData {
                         this.sendCommand(session.getSocket(), ServerCommand.FileNotAvailable.getCode());
                     }
                 }
-            } else if (text.length() >= ClientCommand.PASV.length() && text.substring(0, ClientCommand.PASV.length()).toUpperCase().equals(ClientCommand.PASV)) {
+            } else if (this.isCommand(text,ClientCommand.PASV)) {
                 try {
-                    String[] ipArray = session.getSocket().getInetAddress().getHostAddress().split("\\.");
+                    String[] ipArray = session.getSocket().getLocalAddress().getHostAddress().split("\\.");
                     int passivePort = this.ftpUser.passiveModePort();
                     StringBuilder sb = new StringBuilder(Constant.message.get(this.language).get(ServerCommand.PassiveMode.getCode()));
                     sb.append("(");
@@ -170,7 +168,7 @@ public class FtpServer implements SocketReceiveData {
                 } catch (IOException e) {
                     Logger.error("get account error", e);
                 }
-            } else if (text.length() >= ClientCommand.PORT.length() && text.substring(0, ClientCommand.PORT.length()).toUpperCase().equals(ClientCommand.PORT)) {
+            } else if (this.isCommand(text,ClientCommand.PORT)) {
                 String[] ipArray = text.substring(ClientCommand.PORT.length()).split(",");
                 try {
                     session.setAttribute(Constant.FILE_SOCKET, new Socket(String.join(".", Arrays.copyOf(ipArray, 4)), Integer.valueOf(ipArray[4]) * 256 + Integer.valueOf(ipArray[5])));
@@ -178,9 +176,9 @@ public class FtpServer implements SocketReceiveData {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if ((text.length() >= ClientCommand.LIST.length() && text.substring(0, ClientCommand.LIST.length()).toUpperCase().equals(ClientCommand.LIST))
+            } else if (this.isCommand(text,ClientCommand.LIST)
                     ||
-                    (text.length() >= ClientCommand.NLST.length() &&text.substring(0, ClientCommand.NLST.length()).toUpperCase().equals(ClientCommand.NLST))
+                    this.isCommand(text,ClientCommand.NLST)
                     ){
                 Socket socket = null;
                 try {
@@ -199,21 +197,21 @@ public class FtpServer implements SocketReceiveData {
                         }
                     }
                 }
-            } else if (text.length() >= ClientCommand.SIZE.length() && text.substring(0, ClientCommand.SIZE.length()).toUpperCase().equals(ClientCommand.SIZE)) {
+            } else if (this.isCommand(text,ClientCommand.SIZE)) {
                 File file = new File(this.path(session.getAttribute(Constant.PATH).toString() , text.substring(ClientCommand.SITE.length())));
                 if (file.exists()) {
                     this.sendCommand(session.getSocket(), ServerCommand.FileStateReply.getCode(), String.valueOf(file.length()));
                 } else {
                     this.sendCommand(session.getSocket(), ServerCommand.FileNotAvailable.getCode());
                 }
-            } else if (text.length() >= ClientCommand.MDTM.length() && text.substring(0, ClientCommand.MDTM.length()).equals(ClientCommand.MDTM)) {
+            } else if (this.isCommand(text,ClientCommand.MDTM)) {
                 File file = new File(this.path(session.getAttribute(Constant.PATH).toString(),text.substring(ClientCommand.MDTM.length())));
                 if (file.exists()) {
                     this.sendCommand(session.getSocket(), ServerCommand.FileStateReply.getCode(), new Date(file.lastModified()).toString(Constant.FTP_DATE_FORMAT, Locale.ENGLISH));
                 } else {
                     this.sendCommand(session.getSocket(), ServerCommand.FileNotAvailable.getCode());
                 }
-            } else if (text.length() >= ClientCommand.RETR.length() && text.substring(0, ClientCommand.RETR.length()).toUpperCase().equals(ClientCommand.RETR)) {
+            } else if (this.isCommand(text,ClientCommand.RETR)) {
                 Socket socket = (Socket) session.getAttribute(Constant.FILE_SOCKET);
                 File file = new File(this.path(session.getAttribute(Constant.PATH).toString() , text.substring(ClientCommand.RETR.length())));
                 if (file.exists() && this.ftpUser.checkFileDownload(session.getAttribute(Constant.USER).toString(), file.getAbsolutePath())) {
@@ -255,8 +253,9 @@ public class FtpServer implements SocketReceiveData {
                         this.stream(inputStream,outputStream);
                         this.sendCommand(session.getSocket(), ServerCommand.EndDataConnection.getCode());
                     } catch (FileNotFoundException e) {
-                        Logger.error("file not find", e);
+                        this.sendCommand(session.getSocket(),ServerCommand.FileNotAvailable.getCode());
                     } catch (IOException e) {
+                        this.sendCommand(session.getSocket(),ServerCommand.FileNotAvailable.getCode());
                         Logger.error("file download error", e);
                     } finally {
                         try {
@@ -406,7 +405,7 @@ public class FtpServer implements SocketReceiveData {
                 }
             }
         }
-        if (absPath.substring(absPath.length() - 3).equals("/..") || absPath.substring(absPath.length() - 3).equals("../")) {
+        if (absPath.length()>=3&&(absPath.substring(absPath.length() - 3).equals("/..") || absPath.substring(absPath.length() - 3).equals("../"))) {
             absPath = absPath.substring(0, absPath.length() - 3);
             int index = absPath.lastIndexOf("/");
             if (index != -1) {

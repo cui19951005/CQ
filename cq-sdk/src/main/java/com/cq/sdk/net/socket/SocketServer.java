@@ -44,7 +44,7 @@ public class SocketServer extends java.net.ServerSocket {
                 Timer.open((streamId)->{
                     try {
                         InputStream inputStream=socket.getInputStream();
-                        byte[] bytes=new byte[1024];
+                        byte[] bytes=new byte[8192];
                         ByteSet byteSet=new ByteSet();
                         while (true){
                             int length=inputStream.read(bytes);
@@ -58,13 +58,13 @@ public class SocketServer extends java.net.ServerSocket {
                             }
                         }
                         if(byteSet.length()>0) {
-                            receiveData.receive(socketSession, byteSet, socket.getInetAddress().getHostAddress(), socket.getPort());
+                            receiveData.receive(socketSession, byteSet, socket.getLocalAddress().getHostAddress(), socket.getPort());
                             if(socketSession.getSocket().isClosed()){
                                 Timer.close(streamId);
                             }
                         }
                     } catch (IOException e) {
-                        Logger.error(socket.getInetAddress().getHostAddress(),e);
+                        Logger.error(socket.getLocalAddress().getHostAddress(),e);
                         try {
                             socket.close();
                             Timer.close(streamId);

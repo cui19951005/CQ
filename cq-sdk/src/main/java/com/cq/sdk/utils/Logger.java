@@ -1,12 +1,13 @@
 package com.cq.sdk.utils;
 
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 
 /**
  * Created by CuiYaLei on 2016/8/20.
  */
 public final class Logger {
-    static StringBuffer stringBuffer=new StringBuffer();
+     static FileOutputStream outputStream=null;
     public static final void error(Object object) {
         error(object,null);
     }
@@ -14,7 +15,9 @@ public final class Logger {
     public static final void error(Object object, Exception e) {
         String info= formatMsg(object);
         System.err.println(info);
-        e.getStackTrace();
+        if(e!=null) {
+            e.printStackTrace();
+        }
     }
 
     public static final void info(Object object) {
@@ -22,29 +25,37 @@ public final class Logger {
         System.out.println(info);
     }
     private static final String formatMsg(Object object){
-        StringBuilder stringBuilder=new StringBuilder();
-        StackTraceElement nowClass=null;
-        for(StackTraceElement stackTraceElement :Thread.currentThread().getStackTrace() ){
-            if(!stackTraceElement.getClassName().equals(Thread.class.getName()) && !stackTraceElement.getClassName().equals(Logger.class.getName())){
-                nowClass=stackTraceElement;
-                break;
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            StackTraceElement nowClass = null;
+            for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+                if (!stackTraceElement.getClassName().equals(Thread.class.getName()) && !stackTraceElement.getClassName().equals(Logger.class.getName())) {
+                    nowClass = stackTraceElement;
+                    break;
+                }
             }
+            stringBuilder.append(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"));
+            stringBuilder.append(":");
+            stringBuilder.append(nowClass.getClassName());
+            stringBuilder.append(".");
+            stringBuilder.append(nowClass.getMethodName());
+            stringBuilder.append("(");
+            stringBuilder.append(nowClass.getFileName());
+            stringBuilder.append(":");
+            //太长了
+            stringBuilder.append(nowClass.getLineNumber());
+            stringBuilder.append(")");
+            stringBuilder.append(":");
+            stringBuilder.append(msg(object));
+            if (outputStream == null) {
+                outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Date().toString("yyyy-MM-dd")+".log");
+            }
+            outputStream.write(stringBuilder.append("\r\n").toString().getBytes("utf-8"));
+            return stringBuilder.toString();
+        }catch (Exception e){
+            Logger.error(e);
+            return null;
         }
-        stringBuilder.append(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"));
-        stringBuilder.append(":");
-        stringBuilder.append(nowClass.getClassName());
-        stringBuilder.append(".");
-        stringBuilder.append(nowClass.getMethodName());
-        stringBuilder.append("(");
-        stringBuilder.append(nowClass.getFileName());
-        stringBuilder.append(":");
-        //太长了
-        stringBuilder.append(nowClass.getLineNumber());
-        stringBuilder.append(")");
-        stringBuilder.append(":");
-        stringBuilder.append(msg(object));
-        stringBuffer.append(stringBuilder);
-        return stringBuilder.toString();
     }
     public static final void error(String format,Exception e,Object... objects){
         Logger.error(Logger.format(format,objects),e);

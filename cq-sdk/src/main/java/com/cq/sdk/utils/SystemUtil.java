@@ -123,7 +123,7 @@ public class SystemUtil {
 		}else if(SystemUtil.isLinux()){
 			return "UTF-8";
 		}else{
-			return "UTF-8";
+			return "GBK";
 		}
 	}
    public enum EPlatform {
@@ -154,6 +154,7 @@ public class SystemUtil {
         public String toString(){
             return description;
         }
+
 
         private String description;
     }
