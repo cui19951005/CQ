@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk.iml" group="cq-sdk" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_main.iml" group="cq-sdk" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cq-sdk/cq-sdk_test.iml" group="cq-sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk.iml" group="sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk_main.iml" group="sdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk_test.iml" group="sdk" />
     </modules>
   </component>
 </project>

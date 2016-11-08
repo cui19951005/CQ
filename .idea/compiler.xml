@@ -29,6 +29,8 @@
       <module name="cq-sdk_test" target="1.8" />
       <module name="hibernate_main" target="1.8" />
       <module name="hibernate_test" target="1.8" />
+      <module name="sdk_main" target="1.8" />
+      <module name="sdk_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
