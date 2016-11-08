@@ -3,7 +3,7 @@ package com.cq.sdk.utils;
 /**
  * Created by admin on 2016/11/4.
  */
-public class ClassUtils {
+public final class ClassUtils {
     public static Class isPrimitive(Class clazz){
         if (clazz.isAssignableFrom(Integer.class) || clazz.getName().equals("int")) {
             return Integer.class;

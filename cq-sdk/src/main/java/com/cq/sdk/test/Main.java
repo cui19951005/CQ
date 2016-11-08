@@ -6,6 +6,10 @@ import com.cq.sdk.net.ftp.FtpUser;
 import com.cq.sdk.potential.Trusteeship;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.utils.InjectionType;
+import com.cq.sdk.utils.Json;
+import com.cq.sdk.utils.Logger;
+import com.cq.sdk.utils.StringUtils;
+import com.cq.sdk.utils.XmlAnalysis;
 
 
 /**
@@ -53,5 +57,59 @@ public class Main {
             frame.repaint();
             frame.setTitle("积分:"+frame.getGame().getIntegral());
         },500);*/
+        /*FtpServer ftpServer=new FtpServer(21);
+        ftpServer.setEncoding("gbk");
+        ftpServer.setFtpUser(new FtpUser() {
+            @Override
+            public boolean isAnonymous() {
+                return false;
+            }
+
+            @Override
+            public int login(String user, String password) {
+                if(user.equals("admin") && password.equals("admin")){
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+
+            @Override
+            public int passiveModePort() {
+                return 1111;
+            }
+
+            @Override
+            public boolean checkFileVisible(String user, String path) {
+                return true;
+            }
+
+            @Override
+            public boolean checkFileDownload(String user, String path) {
+                return true;
+            }
+
+            @Override
+            public boolean checkFileUpload(String user, String path) {
+                return true;
+            }
+
+            @Override
+            public boolean fileRename(String user, String path) {
+                return true;
+            }
+
+            @Override
+            public boolean createFolder(String user, String path) {
+                return true;
+            }
+
+            @Override
+            public boolean deleteFolder(String user, String path) {
+                return true;
+            }
+        });
+        ftpServer.setBasePath("/");
+        ftpServer.startup();*/
     }
 }

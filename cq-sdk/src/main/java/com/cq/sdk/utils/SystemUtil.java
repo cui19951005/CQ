@@ -1,6 +1,6 @@
 package com.cq.sdk.utils;
 
-public class SystemUtil {
+public final class SystemUtil {
 	private static String OS = System.getProperty("os.name").toLowerCase();  
     
     private static SystemUtil _instance = new SystemUtil();  

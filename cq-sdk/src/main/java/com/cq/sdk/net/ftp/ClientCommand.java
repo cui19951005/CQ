@@ -30,4 +30,6 @@ public interface ClientCommand {
     String XPWD="XPWD";
     String FEAT="FEAT";
     String MDTM="MDTM";
+    String EPRT="EPRT";
+    String EPSV="EPSV";
 }

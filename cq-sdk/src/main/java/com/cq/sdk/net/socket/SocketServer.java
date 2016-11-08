@@ -18,17 +18,11 @@ import java.util.Vector;
 public class SocketServer extends java.net.ServerSocket {
     private Vector<Socket> socketVector=new Vector<>();
     private String encoding="utf-8";
-    private SocketServer() throws IOException {
-
-    }
 
     public SocketServer(int port) throws IOException {
         this(port,50,null);
     }
 
-    private SocketServer(int port, int backlog) throws IOException {
-        this(port,backlog,null);
-    }
 
     private SocketServer(int port, int backlog, InetAddress bindAddr) throws IOException {
         super(port, backlog, bindAddr);
@@ -63,7 +57,7 @@ public class SocketServer extends java.net.ServerSocket {
                                 Timer.close(streamId);
                             }
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Logger.error(socket.getLocalAddress().getHostAddress(),e);
                         try {
                             socket.close();

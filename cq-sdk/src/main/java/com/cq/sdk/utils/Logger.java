@@ -42,7 +42,6 @@ public final class Logger {
             stringBuilder.append("(");
             stringBuilder.append(nowClass.getFileName());
             stringBuilder.append(":");
-            //太长了
             stringBuilder.append(nowClass.getLineNumber());
             stringBuilder.append(")");
             stringBuilder.append(":");
@@ -50,7 +49,7 @@ public final class Logger {
             if (outputStream == null) {
                 outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Date().toString("yyyy-MM-dd")+".log");
             }
-            outputStream.write(stringBuilder.append("\r\n").toString().getBytes("utf-8"));
+            outputStream.write((stringBuilder.toString()+"\r\n").getBytes("utf-8"));
             return stringBuilder.toString();
         }catch (Exception e){
             Logger.error(e);

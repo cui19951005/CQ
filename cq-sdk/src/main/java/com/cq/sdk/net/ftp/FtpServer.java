@@ -126,7 +126,7 @@ public class FtpServer implements SocketReceiveData {
                     ) {
                 String pwd = session.getAttribute(Constant.PATH).toString();
                 pwd = "/" + pwd.substring(this.basePath.length());
-                this.sendCommand(session.getSocket(), ServerCommand.NowPathName.getCode(), "\"" + (pwd == null ? "/" : pwd) + "\"");
+                this.sendCommand(session.getSocket(), ServerCommand.NowPathName.getCode(), "\"" + pwd + "\"");
             } else if (this.isCommand(text,ClientCommand.NOOP)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
             } else if (this.isCommand(text,ClientCommand.TYPE)) {
@@ -176,7 +176,21 @@ public class FtpServer implements SocketReceiveData {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if (this.isCommand(text,ClientCommand.LIST)
+            }else if(this.isCommand(text,ClientCommand.EPRT)){
+                String[] ipArray=text.substring(ClientCommand.EPRT.length()).split("\\|");
+                try {
+                    if (ipArray[1].equals("1")) {//ip4
+                        session.setAttribute(Constant.FILE_SOCKET, new Socket(ipArray[2], Integer.valueOf(ipArray[3])));
+                    }else if(ipArray[1].equals("2")){//ip6
+                        session.setAttribute(Constant.FILE_SOCKET, new Socket(ipArray[2], Integer.valueOf(ipArray[3])));
+                    }
+                    this.sendCommand(session.getSocket(),ServerCommand.Success.getCode());
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else if(this.isCommand(text,ClientCommand.EPSV)){
+                this.sendCommand(session.getSocket(),ServerCommand.InvaildCommand.getCode());
+            }else if (this.isCommand(text,ClientCommand.LIST)
                     ||
                     this.isCommand(text,ClientCommand.NLST)
                     ){
@@ -228,9 +242,7 @@ public class FtpServer implements SocketReceiveData {
                         Logger.error("file download error", e);
                     } finally {
                         try {
-                            if (inputStream != null) {
-                                inputStream.close();
-                            }
+                            if (inputStream != null) inputStream.close();
                             socket.close();
                         } catch (IOException e) {
                             Logger.error("socket close error", e);
@@ -350,7 +362,7 @@ public class FtpServer implements SocketReceiveData {
         return text.length() >= command.length() && text.substring(0, command.length()).equals(command);
     }
 
-    public String fileList(String user, String path) {
+    private String fileList(String user, String path) {
         StringBuilder sb = new StringBuilder();
         File[] fileList = new File(path).listFiles();
         for (File file : fileList) {
@@ -397,7 +409,7 @@ public class FtpServer implements SocketReceiveData {
         }
         if (absPath.indexOf("/../") != -1) {
             while (true) {
-                String temp = absPath.replaceAll("/[\\w|\\d|\\s]*/\\.\\./", "/");
+                String temp = absPath.replaceAll("/?[\\w|\\d|\\s|:]*/\\.\\./", "/");
                 if (temp.equals(absPath)) {
                     break;
                 } else {

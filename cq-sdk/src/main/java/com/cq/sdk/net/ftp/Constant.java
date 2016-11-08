@@ -50,7 +50,7 @@ public interface Constant {
                 this.put(501,"错误参数");
                 this.put(550,"文件不可用");
                 this.put(553,"文件不允许");
-                this.put(1000,"用户暂停使用");
+                this.put(Constant.USER_SUSPEND,"用户暂停使用");
                 this.put(Constant.USER_HAVE_NO_ACCESS_DOWNLOAD,"用户无权限下载");
                 this.put(Constant.USER_HAVE_NO_ACCESS_UPLOAD,"用户无权限上传");
                 this.put(Constant.USER_HAVE_NO_ACCESS_RENAME,"用户无权重命名");
