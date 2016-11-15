@@ -9,20 +9,14 @@ import java.util.Stack;
  */
 public final class Number {
     private char[] value;
-    private boolean isNegative;
     public Number(String val) {
         if(val.charAt(0)=='-'){
-            this.isNegative=true;
             this.value = val.substring(1).toCharArray();
         }else{
             this.value = val.toCharArray();
         }
     }
     public Number(long val){
-        if(val<0){
-            val=-val;
-            this.isNegative=true;
-        }
         this.value=CharUtils.valueOf(val);
     }
     private Number(char[] chars){

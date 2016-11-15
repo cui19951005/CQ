@@ -6,26 +6,13 @@ import java.util.Map;
  * Created by admin on 2016/9/2.
  */
 public final class StringUtils {
-
-    /**
-     * 替换多个空格为一个空格
-     * @param str 字符串
-     * @return
-     */
-    public static final String replaceSpace(String str){
-        do{
-            String temp=str.replace("  "," ");
-            if(temp.equals(str)){
-                return temp;
-            }
-            str=temp;
-        }while (true);
-    }
+    public final static String SPACE=" ";
+    public final static String EMPTY="";
     public static final String replace(String str,String[] c){
         while (true){
             String temp=str;
             for(String item : c){
-                temp=temp.replace(item,"");
+                temp=temp.replace(item,StringUtils.EMPTY);
             }
             if(temp==str){
                 break;
@@ -61,7 +48,11 @@ public final class StringUtils {
     public static final int subStringInt(String text, String left, String right){
         int index=text.indexOf(left);
         int baseIndex=-1,count=0;
-        String temp=text.substring(index,text.indexOf(right)+right.length());
+        int rightIndex=text.indexOf(right);
+        if(rightIndex==-1){
+            return -1;
+        }
+        String temp=text.substring(index,rightIndex+right.length());
         while (true){
             baseIndex=temp.indexOf(left,baseIndex+1);
             if(baseIndex!=-1){
@@ -83,9 +74,26 @@ public final class StringUtils {
             }
         }
         return baseIndex;
-        //return text.substring(index,baseIndex+right.length());
     }
     public static final String subStringSymmetric(String text, String left, String right){
-        return text.substring(text.indexOf(left)+left.length(),StringUtils.subStringInt(text,left,right));
+        int index=StringUtils.subStringInt(text,left,right);
+        if(index!=-1) {
+            return text.substring(text.indexOf(left) + left.length(), index);
+        }else{
+            return null;
+        }
+    }
+    public static final String join(String str,String... array){
+        return StringUtils.join(str,0,array.length,array);
+    }
+    public static final String join(String str,int off,int length,String... array){
+        StringBuilder sb=new StringBuilder();
+        for(int i=off;i<off+length;i++){
+            sb.append(array[i]);
+            if(array.length!=i+1){
+                sb.append(str);
+            }
+        }
+        return sb.toString();
     }
 }

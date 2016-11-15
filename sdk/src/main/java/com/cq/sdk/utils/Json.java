@@ -64,12 +64,11 @@ public final class Json {
                 || type.getName().equals("long") || type.getName().equals("float")
                 || type.getName().equals("double")){
             sb.append(value);
-        }
-        else if(value instanceof java.util.Date){
+        }else if(value instanceof java.util.Date){
             sb.append("\"");
             sb.append(new Date((java.util.Date)value));
             sb.append("\"");
-        } else if (type.isArray()){
+        }else if (type.isArray()){
             sb.append(baseTypeArray(type,value));
         }else if (value instanceof Map){
             sb.append("{");

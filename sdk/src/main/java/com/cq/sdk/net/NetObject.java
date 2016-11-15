@@ -223,7 +223,7 @@ public class NetObject {
                                     object= clazz.newInstance();
                                 }
                                 for (Constructor constructor : constructors) {
-                                    if (constructor.getParameterCount() == 0) {
+                                    if (constructor.getParameterTypes().length == 0) {
                                         object= clazz.newInstance();
                                     }
                                 }

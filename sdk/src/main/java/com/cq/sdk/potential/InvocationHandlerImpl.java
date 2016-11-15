@@ -111,7 +111,7 @@ public class InvocationHandlerImpl implements MethodInterceptor {
     private void exception(Method method,Object[] objects,Exception ex) throws InvocationTargetException, IllegalAccessException {
         for(AopClass aopClass : aopClassList) {
             if (aopClass.getThrowing() != null) {
-                Object[] params = new Object[aopClass.getThrowing().getMethod().getParameters().length];
+                Object[] params = new Object[aopClass.getThrowing().getMethod().getParameterTypes().length];
                 for (int i = 0; i < aopClass.getThrowing().getMethod().getParameterTypes().length; i++) {
                     if (aopClass.getThrowing().getMethod().getParameterTypes()[i].isAssignableFrom(ex.getClass())) {
                         params[i] = ex;
@@ -143,11 +143,11 @@ public class InvocationHandlerImpl implements MethodInterceptor {
         return aopClassList;
     }
     private Object[] createParams(Object object,Method method,Method paramsMethod,Object[] objects){
-        return this.createParams(object,new Object[method.getParameters().length],method,paramsMethod,objects);
+        return this.createParams(object,new Object[method.getParameterTypes().length],method,paramsMethod,objects);
     }
     private Object[] createParams(Object object,Object[] params,Method method,Method paramsMethod,Object[] objects){
         for(int i=0;i<params.length;i++){
-            if(method.getParameters()[i].getType().isAssignableFrom(JoinPoint.class)){
+            if(method.getParameterTypes()[i].isAssignableFrom(JoinPoint.class)){
                 params[i]=new JoinPoint() {
                     @Override
                     public Object getThis() {
@@ -164,7 +164,7 @@ public class InvocationHandlerImpl implements MethodInterceptor {
                         return objects;
                     }
                 };
-            }else if(method.getParameters()[i].getType().isAssignableFrom(ProceedingJoinPoint.class)){
+            }else if(method.getParameterTypes()[i].isAssignableFrom(ProceedingJoinPoint.class)){
                 params[i]=new ProceedingJoinPoint() {
                     @Override
                     public Object proceed() throws InvocationTargetException, IllegalAccessException {

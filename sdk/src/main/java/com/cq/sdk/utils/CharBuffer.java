@@ -38,8 +38,6 @@ public final class CharBuffer  implements Appendable {
     }
 
 
-    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-
     public void setLength(int newLength) {
         if (count < newLength) {
             Arrays.fill(value, count, newLength, '\0');
@@ -60,44 +58,6 @@ public final class CharBuffer  implements Appendable {
     }
 
 
-
-    public CharBuffer append(Object obj) {
-        return append(String.valueOf(obj));
-    }
-
-
-    public CharBuffer append(String str) {
-        if (str == null)
-            return appendNull();
-        int len = str.length();
-        ensureCapacityInternal(count + len);
-        str.getChars(0, len, value, count);
-        count += len;
-
-        return this;
-    }
-
-    // Documentation in subclasses because of synchro difference
-    public CharBuffer append(StringBuffer sb) {
-        if (sb == null)
-            return appendNull();
-        int len = sb.length();
-        ensureCapacityInternal(count + len);
-        sb.getChars(0, len, value, count);
-        count += len;
-        return this;
-    }
-    private CharBuffer appendNull() {
-        int c = count;
-        ensureCapacityInternal(c + 4);
-        final char[] value = this.value;
-        value[c++] = 'n';
-        value[c++] = 'u';
-        value[c++] = 'l';
-        value[c++] = 'l';
-        count = c;
-        return this;
-    }
 
 
     public Appendable append(CharSequence csq) throws IOException {

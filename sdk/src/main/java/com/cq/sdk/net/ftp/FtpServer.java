@@ -115,7 +115,7 @@ public class FtpServer implements SocketReceiveData {
                     this.sendCommand(session.getSocket(), ServerCommand.ErrorParam.getCode());
                 }
             } else if (this.isCommand(text,ClientCommand.SYST)) {
-                this.sendCommand(session.getSocket(), ServerCommand.SystemTypeReply.getCode(), SystemUtil.getOSname().toString());
+                this.sendCommand(session.getSocket(), ServerCommand.SystemTypeReply.getCode(), SystemUtil.getOSName().toString());
             } else if (this.isCommand(text,ClientCommand.SITE)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
             } else if (this.isCommand(text,ClientCommand.FEAT)) {
@@ -157,7 +157,7 @@ public class FtpServer implements SocketReceiveData {
                     int passivePort = this.ftpUser.passiveModePort();
                     StringBuilder sb = new StringBuilder(Constant.message.get(this.language).get(ServerCommand.PassiveMode.getCode()));
                     sb.append("(");
-                    sb.append(String.join(",", ipArray));
+                    sb.append(StringUtils.join(",", ipArray));
                     sb.append(",");
                     sb.append(passivePort / 256);
                     sb.append(",");
@@ -171,7 +171,7 @@ public class FtpServer implements SocketReceiveData {
             } else if (this.isCommand(text,ClientCommand.PORT)) {
                 String[] ipArray = text.substring(ClientCommand.PORT.length()).split(",");
                 try {
-                    session.setAttribute(Constant.FILE_SOCKET, new Socket(String.join(".", Arrays.copyOf(ipArray, 4)), Integer.valueOf(ipArray[4]) * 256 + Integer.valueOf(ipArray[5])));
+                    session.setAttribute(Constant.FILE_SOCKET, new Socket(StringUtils.join(".", Arrays.copyOf(ipArray, 4)), Integer.valueOf(ipArray[4]) * 256 + Integer.valueOf(ipArray[5])));
                     this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
                 } catch (IOException e) {
                     e.printStackTrace();

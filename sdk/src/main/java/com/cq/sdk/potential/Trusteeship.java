@@ -421,7 +421,7 @@ public final class Trusteeship {
     private Object createObj(Class clazz) throws IllegalAccessException, InstantiationException {
         Constructor[] constructors=clazz.getConstructors();
         if(constructors.length!=0){
-           if(Stream.of(constructors).filter(c->c.getParameters().length==0).count()==0){
+           if(Stream.of(constructors).filter(c->c.getParameterTypes().length==0).count()==0){
                return null;
            }
         }

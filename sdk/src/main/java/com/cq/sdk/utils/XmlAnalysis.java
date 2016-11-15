@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  */
 public final class XmlAnalysis {
 
+    public static Node toObject(String xml){
+        return XmlAnalysis.analysis(new Node(),xml);
+    }
     /**
      * xml解析
      * 父节点罗列子节点内容，遍历子节点内容，递归每个子节点内容，子节点变父节点
@@ -20,11 +23,12 @@ public final class XmlAnalysis {
      * @param xml
      * @return
      */
-    public static Node analysis(String xml){
-        xml=xml.replaceAll("<!--.*?-->","");
-        Node node=new Node();
-        String tag=StringUtils.subString(xml,"<",">");
-        int endIndex=tag.indexOf(" ");
+    private static Node analysis(Node node,String xml){
+        xml=xml.replaceAll("<!--[\\S|\\s]*?-->",StringUtils.EMPTY).replaceAll("<![\\S|\\s]*?>",StringUtils.EMPTY).replaceAll("<\\?.*?\\?>",StringUtils.EMPTY);
+        int leftIndex=xml.indexOf("<");
+        int rightIndex=xml.indexOf(">");
+        String tag=xml.substring(leftIndex+1,rightIndex);
+        int endIndex=tag.indexOf(StringUtils.SPACE);
         String endTag;
         String attributeText=null;
         if(endIndex!=-1){
@@ -35,7 +39,6 @@ public final class XmlAnalysis {
             node.setName(tag);
             endTag="</"+tag+">";
         }
-        xml=StringUtils.subStringSymmetric(xml,"<"+tag+">",endTag);
         if(attributeText!=null){
             Map<String,String> map=new HashMap<>();
             Matcher matcher=Pattern.compile("\\w[\\w|\\S]*?=\".*?\"").matcher(attributeText);
@@ -45,6 +48,17 @@ public final class XmlAnalysis {
                 map.put(array[0],array[1].substring(1,array[1].length()-1));
             }
             node.setAttributes(map);
+        }
+        if(tag.charAt(tag.length()-1)=='/'){
+            XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
+            return node;
+        }
+        String temp=StringUtils.subStringSymmetric(xml,"<"+tag+">",endTag);
+        if(temp==null){
+            XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
+            return node;
+        }else{
+            xml=temp;
         }
         if(xml.indexOf("<")!=-1){
             if(xml.indexOf("<![CDATA[")!=-1){
@@ -65,15 +79,26 @@ public final class XmlAnalysis {
                 }
                 node.setText(sb.toString());
             }else {
-                node.setNodes(XmlAnalysis.getTagText(xml).stream().map(item -> XmlAnalysis.analysis( item)).collect(Collectors.toList()));
+                node.setNodes(XmlAnalysis.getTagText(xml).stream().map(item -> {
+                    Node n=new Node();
+                    n.setParent(node);
+                    return XmlAnalysis.analysis(n,item);
+                }).collect(Collectors.toList()));
             }
         }else{
             node.setText(XmlAnalysis.escape(xml));
         }
         return node;
     }
+    private static void setParentText(String xml,int rightIndex,Node parent){
+        int leftIndex=xml.indexOf("<",rightIndex);
+        if(leftIndex==-1){
+            leftIndex=xml.length();
+        }
+        parent.setText((parent.getText()==null?StringUtils.EMPTY:parent.getText())+XmlAnalysis.escape(xml.substring(rightIndex+1,leftIndex)));
+    }
     private static String escape(String text){
-        return text.replace("&amp;","&").replace("&lt;","<").replace("&gt;",">").replace("&quot;","\"").replace("&apos","'");
+        return text.replace("&amp;","&").replace("&lt;","<").replace("&gt;",">").replace("&quot;","\"").replace("&apos","'").replaceAll("\\s*",StringUtils.EMPTY);
     }
     /**
      * 根据xml内容获取根节点下一级子节点内容
@@ -86,8 +111,12 @@ public final class XmlAnalysis {
             String tag = StringUtils.subString(xml, "<", ">", true);
             if(tag==null){
                 return list;
+            }else if(tag.charAt(tag.length()-2)=='/'){
+                list.add(tag);
+                xml=xml.substring(xml.indexOf("/>")+2);
+                continue;
             }
-            int endIndex = tag.indexOf(" ");
+            int endIndex = tag.indexOf(StringUtils.SPACE);
             String endTag;
             if (endIndex != -1) {
                 endTag = "</" + tag.substring(1, endIndex) + ">";
@@ -95,46 +124,18 @@ public final class XmlAnalysis {
                 endTag = "</" + tag.substring(1);
             }
             int index=StringUtils.subStringInt(xml,tag,endTag);
-            list.add(tag+xml.substring(xml.indexOf(tag)+tag.length(),index)+endTag);
-            xml=xml.substring(index+endTag.length());
-        }
-    }
-    private static class Node{
-        private String name;
-        private Map<String,String> attributes;
-        private String text;
-        private List<Node> nodes;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Map<String, String> getAttributes() {
-            return attributes;
-        }
-
-        public void setAttributes(Map<String, String> attributes) {
-            this.attributes = attributes;
-        }
-
-        public List<Node> getNodes() {
-            return nodes;
-        }
-
-        public void setNodes(List<Node> nodes) {
-            this.nodes = nodes;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
+            if(index!=-1) {
+                list.add(tag + xml.substring(xml.indexOf(tag) + tag.length(), index) + endTag);
+                xml = xml.substring(index + endTag.length());
+            }else{
+                xml=xml.substring(xml.indexOf(tag)+tag.length());
+                int leftIndex=xml.indexOf("<");
+                if(leftIndex==-1){
+                    leftIndex=xml.length();
+                }
+                list.add(tag+xml.substring(0,leftIndex).replaceAll("\\s*",StringUtils.EMPTY));
+                xml=xml.substring(leftIndex);
+            }
         }
     }
 }

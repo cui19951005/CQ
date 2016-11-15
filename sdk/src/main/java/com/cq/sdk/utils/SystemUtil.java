@@ -77,7 +77,7 @@ public final class SystemUtil {
         return OS.indexOf("openvms")>=0;  
     }  
 
-    public static EPlatform getOSname(){  
+    public static EPlatform getOSName(){
         if(isAix()){  
             _instance.platform = EPlatform.AIX;  
         }else if (isDigitalUnix()) {  

@@ -108,8 +108,8 @@ public class GenerateBean {
             };
         }catch (Exception ex){
             Logger.error("mybatis join trusteeship fail",ex);
+            return null;
         }
-        return null;
     }
     public static final AutowiredInterface hibernate(HibernateTrusteeship hibernateTrusteeship){
         try {
@@ -208,7 +208,8 @@ public class GenerateBean {
             };
         }catch (Exception ex){
             Logger.error("hibernate join trusteeship fail",ex);
+            return null;
         }
-        return null;
+
     }
 }
