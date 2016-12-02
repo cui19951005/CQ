@@ -1,6 +1,4 @@
 package com.cq.sdk.test;
-import com.cq.sdk.utils.Json;
-import com.cq.sdk.utils.Logger;
 import com.cq.sdk.utils.ObjectUtils;
 import com.cq.sdk.utils.Random;
 import com.sun.glass.ui.Size;
@@ -16,7 +14,7 @@ import java.util.Map;
  */
 public class Block {
     private Size size;
-    public List<Point> position;
+    private List<Point> position;
     private int type;
     private int style;
     private Color color;
@@ -76,8 +74,8 @@ public class Block {
         }
     }
     public static Block createRandom(Size size){
-        int type=Random.random(0,Block.BLOCK_MAP.size());
-        return Block.create(size,type,Random.random(0,Block.getStyleNumber(type)));
+        int type=Random.value(0,Block.BLOCK_MAP.size());
+        return Block.create(size,type,Random.value(0,Block.getStyleNumber(type)));
     }
     public final static Map<Integer,Map<Integer,ArrayList<Point>>> BLOCK_MAP=new HashMap<Integer,Map<Integer,ArrayList<Point>>>(){
         {

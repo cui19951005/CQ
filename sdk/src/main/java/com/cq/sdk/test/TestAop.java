@@ -1,8 +1,6 @@
 package com.cq.sdk.test;
 
-import com.cq.sdk.potential.annotation.*;
-import com.cq.sdk.potential.aop.JoinPoint;
-import com.cq.sdk.potential.aop.ProceedingJoinPoint;
+import com.cq.sdk.potential.aop.*;
 import com.cq.sdk.utils.Logger;
 
 import java.lang.reflect.InvocationTargetException;

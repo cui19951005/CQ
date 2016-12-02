@@ -3,6 +3,7 @@ package com.cq.sdk.potential;
 import com.cq.sdk.net.uitls.NetClass;
 import com.cq.sdk.net.NetObject;
 import com.cq.sdk.potential.annotation.*;
+import com.cq.sdk.potential.aop.*;
 import com.cq.sdk.potential.inter.AutowiredInterface;
 import com.cq.sdk.potential.sql.frame.hibernate.HibernateTrusteeship;
 import com.cq.sdk.potential.sql.frame.mybatis.MybatisTrusteeship;

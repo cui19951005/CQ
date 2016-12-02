@@ -9,6 +9,7 @@ import com.cq.sdk.utils.*;
 import com.cq.sdk.utils.Number;
 
 import java.io.*;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

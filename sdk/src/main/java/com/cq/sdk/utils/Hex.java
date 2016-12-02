@@ -1,5 +1,7 @@
 package com.cq.sdk.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Stack;
 
 /**
@@ -31,9 +33,9 @@ public final class Hex {
                     n+=(val-65+10)*Math.pow(srcBase, len - i - 1);
                 }
             }
-            return n + "";
+            return String.valueOf(n);
         }
-        return baseString(Integer.valueOf(num),destBase);
+        return baseString(new BigDecimal(num),BigDecimal.valueOf(destBase));
     }
     /**
      * 将数转为任意进制
@@ -41,21 +43,24 @@ public final class Hex {
      * @param base
      * @return
      */
-    public static String baseString(int num,int base){
-        StringBuffer str = new StringBuffer("");
+    public static String baseString(BigDecimal num,BigDecimal base){
+        StringBuilder str = new StringBuilder();
         Stack<Character> s = new Stack<>();
-        while(num != 0){
-            int val=num%base;
+        while(!num.equals(BigDecimal.valueOf(0))){
+            long val=num.divideAndRemainder(base)[1].longValue();
             if(val<10) {
                 s.push((char)(val+48));
             }else{
                 s.push((char)(val+65-10));
             }
-            num/=base;
+            num=num.divide(base,0,RoundingMode.DOWN);
         }
         while(!s.isEmpty()){
             str.append(s.pop());
         }
         return str.toString();
+    }
+    public static String baseString(int num,int base){
+        return Hex.baseString(BigDecimal.valueOf(num),BigDecimal.valueOf(base));
     }
 }

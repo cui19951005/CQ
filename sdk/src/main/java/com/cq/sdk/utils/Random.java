@@ -14,20 +14,29 @@ public final class Random {
         this.max = max;
     }
 
-    public int random(){
+    public int repetition(){
         if(this.list==null ||this.list.length!=max){
             this.list=new Integer[max];
         }else if(count==max){
             return -1;
         }
         int val;
-        while (this.list[(val=Random.random(this.min,this.max))]!=null){}
+        while (this.list[(val=Random.value(this.min,this.max))]!=null){}
         this.list[val]=val;
         this.count++;
         return val;
     }
-
-    public static final int random(int min, int max){
-       return (int)(Math.random()*(max-min)+min);
+    private final static Random random=new Random(0,100);
+    private static int randomCount;
+    public static int pseudo(int probability) {
+        int val = Random.random.repetition();
+        if(val<probability&&++Random.randomCount==probability){
+            Random.randomCount=0;
+            Random.random.list=null;
+        }
+        return val;
+    }
+    public static final int value(int min, int max){
+        return (int)(Math.random()*(max-min)+min);
     }
 }

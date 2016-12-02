@@ -24,7 +24,7 @@ public final class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
         this.byteSet= Arrays.copyOfRange(byteSet,offset,length);
     }
     public ByteSet(String hex){
-        hex = hex.replace(" ", "");
+        hex = hex.replace(Str.SPACE, Str.EMPTY);
         if(hex.indexOf("{")==-1) {
             this.byteSet = new byte[hex.length() / 2];
             for (int i = 0; i < this.length(); i++) {
@@ -197,7 +197,7 @@ public final class ByteSet implements Iterable<Byte>,Cloneable,Serializable {
             }
             stringBuilder.append(b);
             if(i<this.length()-1) {
-                stringBuilder.append(" ");
+                stringBuilder.append(Str.SPACE);
             }
         }
         return stringBuilder.toString();

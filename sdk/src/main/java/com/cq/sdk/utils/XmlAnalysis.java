@@ -24,11 +24,11 @@ public final class XmlAnalysis {
      * @return
      */
     private static Node analysis(Node node,String xml){
-        xml=xml.replaceAll("<!--[\\S|\\s]*?-->",StringUtils.EMPTY).replaceAll("<![\\S|\\s]*?>",StringUtils.EMPTY).replaceAll("<\\?.*?\\?>",StringUtils.EMPTY);
+        xml=xml.replaceAll("<!--[\\S|\\s]*?-->", Str.EMPTY).replaceAll("<![\\S|\\s]*?>", Str.EMPTY).replaceAll("<\\?.*?\\?>", Str.EMPTY);
         int leftIndex=xml.indexOf("<");
         int rightIndex=xml.indexOf(">");
         String tag=xml.substring(leftIndex+1,rightIndex);
-        int endIndex=tag.indexOf(StringUtils.SPACE);
+        int endIndex=tag.indexOf(Str.SPACE);
         String endTag;
         String attributeText=null;
         if(endIndex!=-1){
@@ -53,7 +53,7 @@ public final class XmlAnalysis {
             XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
             return node;
         }
-        String temp=StringUtils.subStringSymmetric(xml,"<"+tag+">",endTag);
+        String temp= Str.subStringSymmetric(xml,"<"+tag+">",endTag);
         if(temp==null){
             XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
             return node;
@@ -95,10 +95,10 @@ public final class XmlAnalysis {
         if(leftIndex==-1){
             leftIndex=xml.length();
         }
-        parent.setText((parent.getText()==null?StringUtils.EMPTY:parent.getText())+XmlAnalysis.escape(xml.substring(rightIndex+1,leftIndex)));
+        parent.setText((parent.getText()==null? Str.EMPTY:parent.getText())+XmlAnalysis.escape(xml.substring(rightIndex+1,leftIndex)));
     }
     private static String escape(String text){
-        return text.replace("&amp;","&").replace("&lt;","<").replace("&gt;",">").replace("&quot;","\"").replace("&apos","'").replaceAll("\\s*",StringUtils.EMPTY);
+        return text.replace("&amp;","&").replace("&lt;","<").replace("&gt;",">").replace("&quot;","\"").replace("&apos","'").replaceAll("\\s*", Str.EMPTY);
     }
     /**
      * 根据xml内容获取根节点下一级子节点内容
@@ -108,7 +108,7 @@ public final class XmlAnalysis {
     private static List<String> getTagText(String xml){
         List<String> list=new ArrayList<>();
         while (true) {
-            String tag = StringUtils.subString(xml, "<", ">", true);
+            String tag = Str.subString(xml, "<", ">", true);
             if(tag==null){
                 return list;
             }else if(tag.charAt(tag.length()-2)=='/'){
@@ -116,14 +116,14 @@ public final class XmlAnalysis {
                 xml=xml.substring(xml.indexOf("/>")+2);
                 continue;
             }
-            int endIndex = tag.indexOf(StringUtils.SPACE);
+            int endIndex = tag.indexOf(Str.SPACE);
             String endTag;
             if (endIndex != -1) {
                 endTag = "</" + tag.substring(1, endIndex) + ">";
             } else {
                 endTag = "</" + tag.substring(1);
             }
-            int index=StringUtils.subStringInt(xml,tag,endTag);
+            int index= Str.subStringInt(xml,tag,endTag);
             if(index!=-1) {
                 list.add(tag + xml.substring(xml.indexOf(tag) + tag.length(), index) + endTag);
                 xml = xml.substring(index + endTag.length());
@@ -133,7 +133,7 @@ public final class XmlAnalysis {
                 if(leftIndex==-1){
                     leftIndex=xml.length();
                 }
-                list.add(tag+xml.substring(0,leftIndex).replaceAll("\\s*",StringUtils.EMPTY));
+                list.add(tag+xml.substring(0,leftIndex).replaceAll("\\s*", Str.EMPTY));
                 xml=xml.substring(leftIndex);
             }
         }

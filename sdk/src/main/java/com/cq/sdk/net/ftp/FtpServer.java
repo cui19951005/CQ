@@ -4,6 +4,7 @@ import com.cq.sdk.net.socket.SocketReceiveData;
 import com.cq.sdk.net.socket.SocketServer;
 import com.cq.sdk.net.socket.SocketSession;
 import com.cq.sdk.utils.*;
+import com.cq.sdk.utils.File;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -72,7 +73,7 @@ public class FtpServer implements SocketReceiveData {
     @Override
     public void receive(SocketSession session, ByteSet byteSet, String host, int port) {
         try {
-            String text = new String(byteSet.getByteSet(), SystemUtil.getSystemEncoding()).replace("\r\n", "").replace("\n", "");
+            String text = new String(byteSet.getByteSet(), Sys.getSystemEncoding()).replace("\r\n", "").replace("\n", "");
             String[] array=text.split(" ");
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder.append(array[0]);
@@ -115,7 +116,7 @@ public class FtpServer implements SocketReceiveData {
                     this.sendCommand(session.getSocket(), ServerCommand.ErrorParam.getCode());
                 }
             } else if (this.isCommand(text,ClientCommand.SYST)) {
-                this.sendCommand(session.getSocket(), ServerCommand.SystemTypeReply.getCode(), SystemUtil.getOSName().toString());
+                this.sendCommand(session.getSocket(), ServerCommand.SystemTypeReply.getCode(), Sys.getOSName().toString());
             } else if (this.isCommand(text,ClientCommand.SITE)) {
                 this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
             } else if (this.isCommand(text,ClientCommand.FEAT)) {
@@ -157,7 +158,7 @@ public class FtpServer implements SocketReceiveData {
                     int passivePort = this.ftpUser.passiveModePort();
                     StringBuilder sb = new StringBuilder(Constant.message.get(this.language).get(ServerCommand.PassiveMode.getCode()));
                     sb.append("(");
-                    sb.append(StringUtils.join(",", ipArray));
+                    sb.append(Str.join(",", ipArray));
                     sb.append(",");
                     sb.append(passivePort / 256);
                     sb.append(",");
@@ -171,7 +172,7 @@ public class FtpServer implements SocketReceiveData {
             } else if (this.isCommand(text,ClientCommand.PORT)) {
                 String[] ipArray = text.substring(ClientCommand.PORT.length()).split(",");
                 try {
-                    session.setAttribute(Constant.FILE_SOCKET, new Socket(StringUtils.join(".", Arrays.copyOf(ipArray, 4)), Integer.valueOf(ipArray[4]) * 256 + Integer.valueOf(ipArray[5])));
+                    session.setAttribute(Constant.FILE_SOCKET, new Socket(Str.join(".", Arrays.copyOf(ipArray, 4)), Integer.valueOf(ipArray[4]) * 256 + Integer.valueOf(ipArray[5])));
                     this.sendCommand(session.getSocket(), ServerCommand.Success.getCode());
                 } catch (IOException e) {
                     e.printStackTrace();

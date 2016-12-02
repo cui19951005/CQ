@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
  * Created by CuiYaLei on 2016/8/20.
  */
 public final class Logger {
-     static FileOutputStream outputStream=null;
+    static FileOutputStream outputStream=null;
     public static final void error(Object object) {
         error(object,null);
     }
@@ -26,7 +26,6 @@ public final class Logger {
     }
     private static final String formatMsg(Object object){
         try {
-            StringBuilder stringBuilder = new StringBuilder();
             StackTraceElement nowClass = null;
             for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
                 if (!stackTraceElement.getClassName().equals(Thread.class.getName()) && !stackTraceElement.getClassName().equals(Logger.class.getName())) {
@@ -34,23 +33,18 @@ public final class Logger {
                     break;
                 }
             }
-            stringBuilder.append(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"));
-            stringBuilder.append(":");
-            stringBuilder.append(nowClass.getClassName());
-            stringBuilder.append(".");
-            stringBuilder.append(nowClass.getMethodName());
-            stringBuilder.append("(");
-            stringBuilder.append(nowClass.getFileName());
-            stringBuilder.append(":");
-            stringBuilder.append(nowClass.getLineNumber());
-            stringBuilder.append(")");
-            stringBuilder.append(":");
-            stringBuilder.append(msg(object));
+            String prefix=Str.concat(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"),
+                    ":",nowClass.getClassName(),
+                    ".",nowClass.getMethodName(),
+                    "(",nowClass.getFileName(),
+                    ":",String.valueOf(nowClass.getLineNumber()),
+                    "):",msg(object)
+                    );
             if (outputStream == null) {
                 outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Date().toString("yyyy-MM-dd")+".log");
             }
-            outputStream.write((stringBuilder.toString()+"\r\n").getBytes("utf-8"));
-            return stringBuilder.toString();
+            outputStream.write((Str.concat(prefix,"\r\n").getBytes("utf-8")));
+            return prefix;
         }catch (Exception e){
             Logger.error(e);
             return null;
@@ -117,15 +111,6 @@ public final class Logger {
             return sb.toString();
         }else if(object.getClass().isPrimitive()){
             return object.toString();
-        }else{
-            try {
-                Method method=object.getClass().getMethod("toString");
-                if(method.isAnnotationPresent(Override.class)){
-                    return object.toString();
-                }
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
         }
         return object.toString();
     }

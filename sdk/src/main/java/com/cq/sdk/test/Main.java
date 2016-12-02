@@ -2,11 +2,11 @@ package com.cq.sdk.test;
 import com.cq.sdk.android.qq.UserService;
 import com.cq.sdk.potential.annotation.*;
 import com.cq.sdk.potential.utils.InjectionType;
+import com.cq.sdk.potential.validate.Validator;
 import com.cq.sdk.utils.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
+import com.cq.sdk.utils.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -20,6 +20,9 @@ public class Main {
     public Integer value=1;
     @Autowired
     private UserService userService;
+    private static String dateToString(java.util.Date date){
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
     public static void main(String[] args) throws Exception {
         /*UserService userService=trusteeship.get(UserService.class);
         userService.login("2534549160", "sj17839969220", (msgType,qq) -> {
@@ -36,8 +39,7 @@ public class Main {
             }
             Logger.info(msgType);
         });*/
-        Node node=HtmlAnalysis.analysis(FileUtils.read("F:\\test.html","gbk"));
-        List<Node> list=HtmlAnalysis.getNode(node,"ul li:even");
-        Logger.info(list.size());
+        File file=new File("D:\\data\\teach-edu-admin\\app");
+        Logger.info(file.getParentFile());
     }
 }

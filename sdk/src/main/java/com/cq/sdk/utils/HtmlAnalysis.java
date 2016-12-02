@@ -20,7 +20,7 @@ public final class HtmlAnalysis {
         String[] classList = clazz.split(" ");
         String nowClass=classList[0];
         if (HtmlAnalysis.classCompare(node,nowClass)) {
-            clazz=StringUtils.join(" ", 1, classList.length - 1, classList);
+            clazz= Str.join(" ", 1, classList.length - 1, classList);
             if(clazz.length()==0){
                 nodeList.add(node);
                 return nodeList;
@@ -120,7 +120,7 @@ public final class HtmlAnalysis {
     private static final int isMatcher(Pattern pattern,String text,Node node){
         Matcher matcher;
         if((matcher=pattern.matcher(text))!=null&&matcher.find()&&matcher.group().equals(text)){
-            String val=StringUtils.subString(text,"(",")");
+            String val= Str.subString(text,"(",")");
             int number=Integer.valueOf(val==null?"0":val);
             boolean isTrue=false;
             for(int i=0;i<node.getParent().getNodes().size();i++){
