@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CQ.iml" filepath="$PROJECT_DIR$/.idea/modules/CQ.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk.iml" group="sdk" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk_main.iml" group="sdk" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk/sdk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk/sdk_test.iml" group="sdk" />
+      <module fileurl="file://$PROJECT_DIR$/sdk/com.cq.sdk.iml" filepath="$PROJECT_DIR$/sdk/com.cq.sdk.iml" />
     </modules>
   </component>
 </project>

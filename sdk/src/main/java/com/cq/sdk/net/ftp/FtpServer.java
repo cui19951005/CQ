@@ -222,7 +222,7 @@ public class FtpServer implements SocketReceiveData {
             } else if (this.isCommand(text,ClientCommand.MDTM)) {
                 File file = new File(this.path(session.getAttribute(Constant.PATH).toString(),text.substring(ClientCommand.MDTM.length())));
                 if (file.exists()) {
-                    this.sendCommand(session.getSocket(), ServerCommand.FileStateReply.getCode(), new Date(file.lastModified()).toString(Constant.FTP_DATE_FORMAT, Locale.ENGLISH));
+                    this.sendCommand(session.getSocket(), ServerCommand.FileStateReply.getCode(), new Time(file.lastModified()).toString(Constant.FTP_DATE_FORMAT, Locale.ENGLISH));
                 } else {
                     this.sendCommand(session.getSocket(), ServerCommand.FileNotAvailable.getCode());
                 }
@@ -375,7 +375,7 @@ public class FtpServer implements SocketReceiveData {
                 }
                 sb.append(file.length());
                 sb.append(" ");
-                sb.append(new Date(file.lastModified()).toString(Constant.FTP_DATE_FORMAT, Locale.ENGLISH));
+                sb.append(new Time(file.lastModified()).toString(Constant.FTP_DATE_FORMAT, Locale.ENGLISH));
                 sb.append(" ");
                 sb.append(file.getName());
                 sb.append(this.newline);

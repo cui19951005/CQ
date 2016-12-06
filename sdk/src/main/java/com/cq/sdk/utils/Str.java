@@ -1,5 +1,7 @@
 package com.cq.sdk.utils;
 
+import java.math.BigDecimal;
+
 /**
  * Created by admin on 2016/9/2.
  */
@@ -100,5 +102,8 @@ public final class Str {
             stringBuilder.append(item);
         }
         return stringBuilder.toString();
+    }
+    public static final String decimal(BigDecimal bigDecimal,int decimal){
+        return String.format("%."+decimal+"f",bigDecimal.doubleValue());
     }
 }

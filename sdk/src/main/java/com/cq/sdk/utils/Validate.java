@@ -36,7 +36,7 @@ public final class Validate {
     }
     public static final boolean date(String format,String val){
         try {
-            Date.toDate(val,format);
+            Time.toDate(val,format);
             return true;
         }catch (Exception e){
             return false;

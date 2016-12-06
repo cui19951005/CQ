@@ -17,8 +17,17 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="com.cq.sdk" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="com.cq.sdk" target="1.8" />
+      <module name="CQ" target="1.5" />
       <module name="CQ-sdk-service,hibernate_main" target="1.8" />
       <module name="CQ-sdk-service,hibernate_test" target="1.8" />
       <module name="CQ-sdk-service_,_hibernate_main" target="1.8" />

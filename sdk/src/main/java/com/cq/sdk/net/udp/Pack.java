@@ -16,7 +16,7 @@ public class Pack {
 
     public Pack(int size, ByteSet byteSet){
         ByteSet sum=Number.intToByte4(size).append(byteSet);
-        ByteSet md5= Encryption.MD5(sum);
+        ByteSet md5= Encryption.md5(sum);
         this.data=md5.append(sum);
     }
 }

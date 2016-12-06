@@ -1,7 +1,6 @@
 package com.cq.sdk.utils;
 
 import java.io.FileOutputStream;
-import java.lang.reflect.Method;
 
 /**
  * Created by CuiYaLei on 2016/8/20.
@@ -33,7 +32,7 @@ public final class Logger {
                     break;
                 }
             }
-            String prefix=Str.concat(new Date().toString("yyyy-MM-dd HH:mm:ss EEE"),
+            String prefix=Str.concat(new Time().toString("yyyy-MM-dd HH:mm:ss EEE"),
                     ":",nowClass.getClassName(),
                     ".",nowClass.getMethodName(),
                     "(",nowClass.getFileName(),
@@ -41,7 +40,7 @@ public final class Logger {
                     "):",msg(object)
                     );
             if (outputStream == null) {
-                outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Date().toString("yyyy-MM-dd")+".log");
+                outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Time().toString("yyyy-MM-dd")+".log");
             }
             outputStream.write((Str.concat(prefix,"\r\n").getBytes("utf-8")));
             return prefix;

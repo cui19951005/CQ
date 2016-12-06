@@ -1,6 +1,6 @@
 package com.cq.sdk.utils;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import com.cq.sdk.sum.ParameterizedTypeImpl;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -66,7 +66,7 @@ public final class Json {
             sb.append(value);
         }else if(value instanceof java.util.Date){
             sb.append("\"");
-            sb.append(new Date((java.util.Date)value));
+            sb.append(new Time((java.util.Date)value));
             sb.append("\"");
         }else if (type.isArray()){
             sb.append(baseTypeArray(type,value));

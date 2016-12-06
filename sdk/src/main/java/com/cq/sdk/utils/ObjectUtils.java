@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Created by admin on 2016/10/24.
@@ -69,5 +70,24 @@ public final class ObjectUtils {
             e.printStackTrace();
             return null;
         }
+    }
+    public static <T> T copyBean(Map<String,Object> map,Class<T> clazz){
+        try{
+            Object o=clazz.newInstance();
+            for(Map.Entry<String,Object> entry : map.entrySet()){
+                Object[] toArray=Stream.of(clazz.getDeclaredFields()).filter(field -> field.getName().equals(entry.getKey())).limit(1).toArray();
+                if(toArray.length>0){
+                    Field field= ((Field)toArray[0]);
+                    field.setAccessible(true);
+                    field.set(o,entry.getValue());
+                }
+            }
+            return (T) o;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

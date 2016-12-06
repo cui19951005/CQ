@@ -76,7 +76,7 @@ public class UDP {
                     while (pack.isNotEnd()){
                         pack.add(this.getData());
                     }
-                    if(pack.getMd5().equals(Encryption.MD5(byteSet.subByteSet(16)))) {
+                    if(pack.getMd5().equals(Encryption.md5(byteSet.subByteSet(16)))) {
                         this.udp.receiveData.receive(this.udp,pack.getData(), this.datagramPacket.getAddress().getHostAddress(),this.datagramPacket.getPort());
                         this.lastData=pack.getSurplusData();
                     }

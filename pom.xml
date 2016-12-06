@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cq.sdk</groupId>
+	<artifactId>CQ</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>CQ</name>
+ 	<modules>
+		<module>sdk</module>
+    </modules>
+ 	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+		<springframework.version>4.0.0.RELEASE</springframework.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<jackson.version>2.3.1</jackson.version>
+		<shiro.version>1.2.3</shiro.version>
+	</properties>
+	<repositories>
+		<repository>
+			<id>mvnrepository</id>
+			<name>mvnrepository</name>
+			<releases><enabled>true</enabled></releases>
+			<url>https://mvnrepository.com/artifact/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+		<repository>
+			<id>githup</id>
+			<url>https://github.com/cui19951005/maven/tree/master/</url>
+			<layout>default</layout>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>local</id>
+			<url>file://D:\mvn_repository\fundStore_mvn</url>
+		</repository>
+	</distributionManagement>
+
+</project>

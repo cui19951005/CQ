@@ -7,26 +7,26 @@ import java.util.Locale;
  * 时间扩展类
  * Created by Administrator on 2016/7/13 0013.
  */
-public final class Date extends java.util.Date{
+public final class Time extends java.util.Date{
     private long time;
     private static final int[] MONTHS =new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    private static final long BASE_DATE=Date.convert(new Date.DateTime(1970,1,1,8,0,0));
-    public Date(){
-        this(System.currentTimeMillis()+Date.BASE_DATE);
+    private static final long BASE_DATE= Time.convert(new Time.DateTime(1970,1,1,8,0,0));
+    public Time(){
+        this(System.currentTimeMillis()+ Time.BASE_DATE);
     }
-    public Date(long time){
+    public Time(long time){
         this.setTime(time);
     }
-    public Date(java.util.Date date){
-        this(date.getTime()+Date.BASE_DATE);
+    public Time(java.util.Date date){
+        this(date.getTime()+ Time.BASE_DATE);
     }
-    public Date(DateTime dateTime){
+    public Time(DateTime dateTime){
         this(convert(dateTime));
     }
-    public Date(int year,int month,int day,int hour,int minutes,int second){
+    public Time(int year, int month, int day, int hour, int minutes, int second){
         this(new DateTime(year,month,day,hour,minutes,second));
     }
-    public Date(int year,int month,int day){
+    public Time(int year, int month, int day){
         this(year,month,day,0,0,0);
     }
 
@@ -42,7 +42,7 @@ public final class Date extends java.util.Date{
 
     public void setTime(long time) {
         this.time=time;
-        super.setTime(time-Date.BASE_DATE);
+        super.setTime(time- Time.BASE_DATE);
     }
 
     @Override
@@ -52,7 +52,7 @@ public final class Date extends java.util.Date{
 
     @Override
     public Object clone() {
-        return new Date(Date.convert(this.getDateTime()));
+        return new Time(Time.convert(this.getDateTime()));
     }
     public String toString(String format){
         return this.toString(format, Locale.getDefault());
@@ -62,19 +62,19 @@ public final class Date extends java.util.Date{
         return simpleDateFormat.format(new java.util.Date(this.getTime()-this.BASE_DATE));
     }
     public DateTime getDateTime(){
-        return Date.convert(this.time);
+        return Time.convert(this.time);
     }
-    public Date add(Date date){
-        return Date.calculate(this.getDateTime(),date.getDateTime(),DateCalculateType.plus);
+    public Time add(Time date){
+        return Time.calculate(this.getDateTime(),date.getDateTime(),DateCalculateType.plus);
     }
-    public Date minus(Date date){
-        return Date.calculate(this.getDateTime(),date.getDateTime(),DateCalculateType.reduce);
+    public Time minus(Time date){
+        return Time.calculate(this.getDateTime(),date.getDateTime(),DateCalculateType.reduce);
     }
     /*静态*/
     public static int[] getMonths(){
         return MONTHS;
     }
-    public static Date toDate(String dateStr){
+    public static Time toDate(String dateStr){
         String[] dateFormats=new String[]{
                 "yyyy-MM-dd HH:mm:ss",
                 "yyyy-MM-dd",
@@ -90,8 +90,8 @@ public final class Date extends java.util.Date{
         }
         return null;
     }
-    public static Date toDate(String date,String format) throws ParseException {
-        return new Date(new SimpleDateFormat(format).parse(date).getTime()+Date.BASE_DATE);
+    public static Time toDate(String date, String format) throws ParseException {
+        return new Time(new SimpleDateFormat(format).parse(date).getTime()+ Time.BASE_DATE);
     }
     public static DateTime convert(long timeSpan){
         DateTime dateTime=new DateTime();
@@ -130,26 +130,26 @@ public final class Date extends java.util.Date{
         dateTime.setSecond((int)surplus);
         dateTime.setMonth(dateTime.getMonth()+1);
         dateTime.setDay(dateTime.getDay()+1);
-        Date.setMM(dateTime);
-        Date.setDD(dateTime);
+        Time.setMonth(dateTime);
+        Time.setDay(dateTime);
         return dateTime;
     }
     public static long convert(DateTime dateTime){
         long sum=-(8*60*60);//北京时间1月1日8点
         for(int i=0;i<dateTime.getYear();i++){
-            for(int j = 0; j<Date.MONTHS.length; j++){
+            for(int j = 0; j< Time.MONTHS.length; j++){
                 if(((i%4==0&&i%100!=0) || i%400==0)&& j==1){
-                    sum+=(Date.MONTHS[j]+1)*24*60*60;
+                    sum+=(Time.MONTHS[j]+1)*24*60*60;
                 }else{
-                    sum+=Date.MONTHS[j]*24*60*60;
+                    sum+= Time.MONTHS[j]*24*60*60;
                 }
             }
         }
         for(int j=0;j<dateTime.getMonth()-1;j++){
             if(((dateTime.getYear()%4==0&&dateTime.getYear()%100!=0) || (dateTime.getYear()%400==0))&& j==1){
-                sum+=(Date.MONTHS[j]+1)*24*60*60;
+                sum+=(Time.MONTHS[j]+1)*24*60*60;
             }else {
-                sum+=Date.MONTHS[j]*24*60*60;
+                sum+= Time.MONTHS[j]*24*60*60;
             }
         }
         sum+=(dateTime.getDay()-1)*24*60*60;
@@ -160,22 +160,22 @@ public final class Date extends java.util.Date{
         sum+=dateTime.getMillisecond();
         return sum;
     }
-    public static Date calculate(DateTime date1,DateTime date2,DateCalculateType dateCalculateType){
-        return new Date(DateTime.calculate(date1,date2,dateCalculateType));
+    public static Time calculate(DateTime date1, DateTime date2, DateCalculateType dateCalculateType){
+        return new Time(DateTime.calculate(date1,date2,dateCalculateType));
     }
-    private static void setMM(DateTime dateTime){
+    private static void setMonth(DateTime dateTime){
         if(dateTime.getMonth()<1){
             dateTime.setYear(dateTime.getYear()-1);
-            dateTime.setMonth(Date.MONTHS.length+dateTime.getMonth());
-            dateTime.setDay(Date.MONTHS[dateTime.getMonth()-1]+dateTime.getDay());
-            setDD(dateTime);
+            dateTime.setMonth(Time.MONTHS.length+dateTime.getMonth());
+            dateTime.setDay(Time.MONTHS[dateTime.getMonth()-1]+dateTime.getDay());
+            setDay(dateTime);
         }else if(dateTime.getMonth()>12){
             dateTime.setYear(dateTime.getYear()+1);
-            dateTime.setMonth(dateTime.getMonth()-Date.MONTHS.length);
+            dateTime.setMonth(dateTime.getMonth()- Time.MONTHS.length);
         }
     }
-    private static void setDD(DateTime dateTime){
-        int day= Date.getMonths()[(dateTime.getMonth()<1?Date.MONTHS.length+dateTime.getMonth():(dateTime.getMonth()>12?dateTime.getMonth()-Date.MONTHS.length:dateTime.getMonth()))-1];
+    private static void setDay(DateTime dateTime){
+        int day= Time.getMonths()[(dateTime.getMonth()<1? Time.MONTHS.length+dateTime.getMonth():(dateTime.getMonth()>12?dateTime.getMonth()- Time.MONTHS.length:dateTime.getMonth()))-1];
         if(dateTime.getDay()>day){
             dateTime.setMonth(dateTime.getMonth()+1);
             dateTime.setDay(dateTime.getDay()-day);
@@ -183,7 +183,7 @@ public final class Date extends java.util.Date{
             dateTime.setMonth(dateTime.getMonth()-1);
             dateTime.setDay(dateTime.getDay()+day);
         }
-        setMM(dateTime);
+        setMonth(dateTime);
     }
     public enum DateCalculateType{
         plus(1),reduce(2);
@@ -321,8 +321,8 @@ public final class Date extends java.util.Date{
                 dateTime.setDay(dateTime.getDay()-1);
                 dateTime.setHour(dateTime.getHour()-24);
             }
-            setMM(dateTime);
-            setDD(dateTime);
+            setMonth(dateTime);
+            setDay(dateTime);
             return dateTime;
         }
 
