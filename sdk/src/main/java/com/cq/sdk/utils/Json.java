@@ -1,11 +1,9 @@
 package com.cq.sdk.utils;
 
-import com.cq.sdk.sum.ParameterizedTypeImpl;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * json转换
@@ -215,25 +213,14 @@ public final class Json {
     }
 
     public static final <T> T fromJson(String json,Class<T> type){
+        if(json.length()==0)return null;
         Map<String, Object> map = new HashMap<>();
-        Json.analysis(json, 0, "", map);
-        return (T)field(map.get(Json.emptyName+"0"),null,new ClassSuper(type),new ArrayList<>());
+        Json.analysis(json, 0, Str.EMPTY, map);
+        return (T)field(map,null,new ClassSuper(type),new ArrayList<>());
     }
     private static <T> T field(Object json,Field field,ClassSuper type,List<String> name){
         try {
-            if (type.getClazz().isAssignableFrom(String.class)
-                    || type.getClazz().isAssignableFrom(Byte.class)
-                    || type.getClazz().isAssignableFrom(Short.class)
-                    || type.getClazz().isAssignableFrom(Integer.class)
-                    || type.getClazz().isAssignableFrom(Long.class)
-                    || type.getClazz().isAssignableFrom(Float.class)
-                    || type.getClazz().isAssignableFrom(Double.class)
-                    || type.getClazz().isAssignableFrom(Boolean.class)
-                    || type.getClazz().isAssignableFrom(Character.class)
-                    || type.getName().equals("int") || type.getName().equals("byte") || type.getName().equals("short")
-                    || type.getName().equals("long") || type.getName().equals("char") || type.getName().equals("float")
-                    || type.getName().equals("double") || type.getName().equals("boolean")
-                    ) {
+            if (ClassUtils.isPrimitive(type.getClazz())!=null || type.getClazz().isAssignableFrom(String.class)){
                 if (name == null) {
                     if (json instanceof Map) {
                         for(Map.Entry<String,Object> entry: ((Map<String,Object>)json).entrySet()) {
@@ -327,11 +314,18 @@ public final class Json {
                         || type.getClazz().isAssignableFrom(String[].class)
                         ) {
                     try {
-                        Object object = Class.forName(type.getName().substring(2, type.getName().length() - 1));
-                        Method method = type.getClazz().getMethod("valueOf", String.class);
-                        Object[] temp = (Object[]) Array.newInstance(object.getClass(), list.size());
+                        Class clazz = Class.forName(type.getName().substring(2, type.getName().length() - 1));
+                        Method method = null;
+                        if(!( clazz.isAssignableFrom(String.class))){
+                            method=type.getClazz().getMethod("valueOf", String.class);
+                        }
+                        Object[] temp = (Object[]) Array.newInstance(clazz, list.size());
                         for (int i = 0; i < temp.length; i++) {
-                            temp[i] = method.invoke(object, list.get(i));
+                            if(method==null){
+                                temp[i]=list.get(i);
+                            }else {
+                                temp[i] = method.invoke(null, list.get(i));
+                            }
                         }
                         return (T) temp;
                     } catch (Exception e) {
@@ -386,7 +380,7 @@ public final class Json {
                                 listClazz = new ClassSuper(temp.getRawType());
                                 listClazz.setParams(temp.getActualTypeArguments());
                             }else{//无嵌套
-                                listClazz = new ClassSuper(Class.forName(itemType.toString()));
+                                listClazz = new ClassSuper(Class.forName(itemType.getTypeName()));
                             }
                         }
                     }else if(fieldType instanceof  Class){//泛型无参数
@@ -505,7 +499,7 @@ public final class Json {
             } else if (type.getClazz().isAssignableFrom(Character.class) || type.getName().equals("char")) {
                 return obj.toString().charAt(0);
             }  else {
-                return Json.field(obj, null, type, null);
+                return Json.field(obj, null, type, new ArrayList<>());
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -562,40 +556,46 @@ public final class Json {
                 Json.analysis(json, index+1,"", map);//继续下一个
             }
         }else if(type.equals("[")) {//数组类型
-            List<Object> list=new ArrayList<Object>();
-            rightIndex=Json.findRight(json,baseIndex+1,"[","]")+1;//+1到]
+            List<Object> list=new ArrayList<>();
+            rightIndex=Json.findRight(json,baseIndex,"[","]")+1;//+1到]
             String arrayText=json.substring(baseIndex,rightIndex);
-            Pattern pattern=Pattern.compile("\\[(\\d|\"\\w\"|,|-)+\\]");
-            Matcher matcher=pattern.matcher(arrayText);
-            if(matcher.find()&&matcher.group().equals(arrayText)){
-                String[] array=arrayText.substring(1,arrayText.length()-1).split(",");
-                for(String val : array){
-                    list.add(val);
+            StringBuffer sb=new StringBuffer();
+            for(int i=1;i<arrayText.length()-1;i++){
+                if(arrayText.charAt(i)=='{'){
+                    Map<String,Object> temp=new HashMap<String,Object>();
+                   int objRightIndex = Json.findRight(arrayText, i, "{", "}") + 1;
+                    Json.analysis(arrayText.substring(i, objRightIndex),0,"",temp);
+                    list.add(temp);
+                    if(arrayText.charAt(objRightIndex)==']'){
+                        break;
+                    }else {
+                        i=objRightIndex+1;
+                    }
+                }else if(arrayText.charAt(i)==','){
+                    String value=sb.toString();
+                    if(value.charAt(0)=='"'){
+                        value=value.substring(1,value.length()-1);
+                    }
+                 list.add(value);
+                 sb=new StringBuffer();
+                }else{
+                    sb.append(arrayText.substring(i,i+1));
+                    if(arrayText.length()-2==i){
+                        list.add(sb.toString());
+                    }
                 }
-                if(name.length()==0){
-                    name=emptyName+baseIndex;
-                }
-                map.put(name,list);
-                Json.analysis(json,rightIndex+1,"",map);//+1 ,到"
-            }else {
-                Map<String,Object> temp=new HashMap<String,Object>();
-                Json.analysis(arrayText.substring(1,arrayText.length()-1), 0,name, temp);
-                for(Map.Entry<String,Object> entry : temp.entrySet()){
-                    list.add(entry.getValue());
-                }
-                if(name.length()==0){
-                    name=emptyName+baseIndex;
-                }
-                map.put(name,list);
             }
+            map.put(name,list);
+            Json.analysis(json,rightIndex+1,"",map);//+1 ,到"
         }else if(type.equals("{")){//对象
-            if(name.length()==0){
-                name=Json.emptyName+baseIndex;
-            }
             Map<String, Object> temp = new HashMap<>();
-            rightIndex = Json.findRight(json, baseIndex+1, "{", "}");
-            Json.analysis(json.substring(baseIndex+1, rightIndex), 0, "", temp);//解析对象baseIndex没过{第一次
-            map.put(name,temp);//将解析的对象添加到属性
+            rightIndex = Json.findRight(json, baseIndex, "{", "}");
+            if(name.length()==0){
+                Json.analysis(json.substring(baseIndex+1, rightIndex), 0, "", map);//解析对象baseIndex没过{第一次
+            }else{
+                Json.analysis(json.substring(baseIndex+1, rightIndex), 0, "", temp);//解析对象baseIndex没过{第一次
+                map.put(name,temp);//将解析的对象添加到属性
+            }
             Json.analysis(json,rightIndex+2,"",map);//继续下一个+1过}+1过,
         }else{
             char[] text=json.substring(baseIndex).toCharArray();
@@ -607,67 +607,39 @@ public final class Json {
                 }
             }
             String value=json.substring(baseIndex,baseIndex+rightIndex);
-            if(name.length()==0) {
-                map.put(emptyName + baseIndex, value);
-            }else{
-                map.put(name,value);
-            }
+            map.put(name,value);
             Json.analysis(json,baseIndex+value.length()+1,"",map);
         }
     }
-    /**
-     * 递归找出对应的字符，解决嵌套问题
-     * @param text 文本
-     * @param baseIndex 基础位置要+1过匹配的符号[123,123]位置1
-     * @param left 左边文本
-     * @param right 右边文本
-     * @return
-     */
-    private static int findRight(String text,int baseIndex,String left,String right,int count){
-        int rightIndex;
-        rightIndex = text.indexOf(right, baseIndex);
-        if(rightIndex!=-1) {
-            count--;
-        }
-        String temp=text.substring(baseIndex,rightIndex);
-        int index=0;
-        do{
-            index=temp.indexOf(left,index+1);
-            if(index!=-1){
-                count++;
-            }else{
-                break;
-            }
-        }while (true);
-        index=0;
-        do{
-            index=temp.indexOf(right,index+1);
-            if(index!=-1){
-                count--;
-            }else{
-                break;
-            }
-        }while (true);
-        if(count==0){
-            return rightIndex;
-        }else{
-            return findRight(text,rightIndex+1,left,right,count);
-        }
-    }
     private static final int findRight(String text,int baseIndex,String left,String right){
-        int index=text.indexOf(left, baseIndex);
-        int rightIndex=text.indexOf(right,baseIndex);
-        if(index>rightIndex){
-            return rightIndex;
+//        int index=text.indexOf(left, baseIndex);
+//        int rightIndex=text.indexOf(right,baseIndex);
+//        if(index>rightIndex){
+//            return rightIndex;
+//        }
+//        if(index!=-1){
+//            return  findRight(text,index,left,right,2);
+//        }else{
+//            return  findRight(text,baseIndex,left,right,1);
+//        }
+        baseIndex=text.indexOf(left,baseIndex)+1;
+        text=text.substring(baseIndex);
+        int count=0;
+        for(int i=0;i<text.length()-right.length()+1;i++){
+            if(text.substring(i,i+right.length()).equals(right)){
+                if(count==0){
+                    return baseIndex+i;
+                }else{
+                    count--;
+                }
+            }else if(text.substring(i,i+left.length()).equals(left)){
+                count++;
+            }
         }
-        if(index!=-1){
-            return  findRight(text,index,left,right,2);
-        }else{
-            return  findRight(text,baseIndex,left,right,1);
-        }
-
+        return -1;
     }
     private static final Object exists(Map<String,Object> map,List<String> name,int level){
+    if(name.size()==0)   for(Map.Entry<String,Object> entry : map.entrySet()){return entry.getValue();}
         for(Map.Entry<String,Object> entry : map.entrySet()){
             if(entry.getKey().equals(name.get(level))){
                 if(level+1==name.size()) {

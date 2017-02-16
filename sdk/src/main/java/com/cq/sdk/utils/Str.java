@@ -46,34 +46,22 @@ public final class Str {
         return text.substring(0,text.indexOf(left));
     }
     public static final int subStringInt(String text, String left, String right){
-        int index=text.indexOf(left);
-        int baseIndex=-1,count=0;
-        int rightIndex=text.indexOf(right);
-        if(rightIndex==-1){
-            return -1;
-        }
-        String temp=text.substring(index,rightIndex+right.length());
-        while (true){
-            baseIndex=temp.indexOf(left,baseIndex+1);
-            if(baseIndex!=-1){
+        int baseIndex=text.indexOf(left)+left.length();
+        text=text.substring(baseIndex);
+        int count=0;
+        for(int i=0;i<text.length()-right.length()+1;i++){
+            String rightStr=text.substring(i,i+right.length());
+            if (rightStr.equals(right)) {
+                if (count == 0) {
+                    return baseIndex + i;
+                } else {
+                    count--;
+                }
+            } else if (text.length() - i - 1 >= left.length() && text.substring(i, i + left.length()).equals(left)) {
                 count++;
-            }else{
-                break;
             }
         }
-        baseIndex=-1;
-        while (true){
-            int indexOf=text.indexOf(right,baseIndex+1);
-            if(count==0){
-                break;
-            }else if(indexOf!=-1){
-                count--;
-                baseIndex=indexOf;
-            }else{
-                break;
-            }
-        }
-        return baseIndex;
+        return -1;
     }
     public static final String subStringSymmetric(String text, String left, String right){
         int index= Str.subStringInt(text,left,right);

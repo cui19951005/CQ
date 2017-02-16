@@ -53,14 +53,16 @@ public final class XmlAnalysis {
             XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
             return node;
         }
-        String temp= Str.subStringSymmetric(xml,"<"+tag+">",endTag);
+        String temp= Str.subStringSymmetric(xml,"<"+node.getName(),endTag);
         if(temp==null){
             XmlAnalysis.setParentText(xml,rightIndex,node.getParent());
             return node;
         }else{
+            temp = temp.substring(temp.indexOf(">") + 1);
             xml=temp;
         }
-        if(xml.indexOf("<")!=-1){
+        rightIndex=xml.indexOf("<");
+        if(rightIndex!=-1){
             if(xml.indexOf("<![CDATA[")!=-1){
                 StringBuilder sb=new StringBuilder();
                 String[] array=xml.split("<!\\[CDATA\\[");
@@ -79,6 +81,7 @@ public final class XmlAnalysis {
                 }
                 node.setText(sb.toString());
             }else {
+                node.setText(xml.substring(0,rightIndex));
                 node.setNodes(XmlAnalysis.getTagText(xml).stream().map(item -> {
                     Node n=new Node();
                     n.setParent(node);
@@ -123,7 +126,7 @@ public final class XmlAnalysis {
             } else {
                 endTag = "</" + tag.substring(1);
             }
-            int index= Str.subStringInt(xml,tag,endTag);
+            int index= Str.subStringInt(xml,tag.substring(0,endIndex==-1?tag.length()-1:endIndex),endTag);
             if(index!=-1) {
                 list.add(tag + xml.substring(xml.indexOf(tag) + tag.length(), index) + endTag);
                 xml = xml.substring(index + endTag.length());
@@ -138,4 +141,52 @@ public final class XmlAnalysis {
             }
         }
     }
+   public static class Node {
+        private String name;
+        private Map<String,String> attributes;
+        private String text;
+        private Node parent;
+        private List<Node> nodes;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Map<String, String> getAttributes() {
+            return attributes;
+        }
+
+        public void setAttributes(Map<String, String> attributes) {
+            this.attributes = attributes;
+        }
+
+        public List<Node> getNodes() {
+            return nodes;
+        }
+
+        public void setNodes(List<Node> nodes) {
+            this.nodes = nodes;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public Node getParent() {
+            return parent;
+        }
+
+        public void setParent(Node parent) {
+            this.parent = parent;
+        }
+    }
 }
+

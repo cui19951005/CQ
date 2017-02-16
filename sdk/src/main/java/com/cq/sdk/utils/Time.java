@@ -130,8 +130,8 @@ public final class Time extends java.util.Date{
         dateTime.setSecond((int)surplus);
         dateTime.setMonth(dateTime.getMonth()+1);
         dateTime.setDay(dateTime.getDay()+1);
-        Time.setMonth(dateTime);
-        Time.setDay(dateTime);
+        Time.setDateTimeMonth(dateTime);
+        Time.setDateTimeDay(dateTime);
         return dateTime;
     }
     public static long convert(DateTime dateTime){
@@ -163,18 +163,18 @@ public final class Time extends java.util.Date{
     public static Time calculate(DateTime date1, DateTime date2, DateCalculateType dateCalculateType){
         return new Time(DateTime.calculate(date1,date2,dateCalculateType));
     }
-    private static void setMonth(DateTime dateTime){
+    private static void setDateTimeMonth(DateTime dateTime){
         if(dateTime.getMonth()<1){
             dateTime.setYear(dateTime.getYear()-1);
             dateTime.setMonth(Time.MONTHS.length+dateTime.getMonth());
             dateTime.setDay(Time.MONTHS[dateTime.getMonth()-1]+dateTime.getDay());
-            setDay(dateTime);
+            setDateTimeDay(dateTime);
         }else if(dateTime.getMonth()>12){
             dateTime.setYear(dateTime.getYear()+1);
             dateTime.setMonth(dateTime.getMonth()- Time.MONTHS.length);
         }
     }
-    private static void setDay(DateTime dateTime){
+    private static void setDateTimeDay(DateTime dateTime){
         int day= Time.getMonths()[(dateTime.getMonth()<1? Time.MONTHS.length+dateTime.getMonth():(dateTime.getMonth()>12?dateTime.getMonth()- Time.MONTHS.length:dateTime.getMonth()))-1];
         if(dateTime.getDay()>day){
             dateTime.setMonth(dateTime.getMonth()+1);
@@ -183,7 +183,7 @@ public final class Time extends java.util.Date{
             dateTime.setMonth(dateTime.getMonth()-1);
             dateTime.setDay(dateTime.getDay()+day);
         }
-        setMonth(dateTime);
+        setDateTimeMonth(dateTime);
     }
     public enum DateCalculateType{
         plus(1),reduce(2);
@@ -321,8 +321,8 @@ public final class Time extends java.util.Date{
                 dateTime.setDay(dateTime.getDay()-1);
                 dateTime.setHour(dateTime.getHour()-24);
             }
-            setMonth(dateTime);
-            setDay(dateTime);
+            setDateTimeMonth(dateTime);
+            setDateTimeDay(dateTime);
             return dateTime;
         }
 

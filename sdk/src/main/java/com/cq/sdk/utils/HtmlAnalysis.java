@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
  */
 public final class HtmlAnalysis {
 
-    public static Node analysis(String html){
+    public static XmlAnalysis.Node analysis(String html){
         return XmlAnalysis.toObject(html);
     }
-    public static List<Node> getNode(Node root,String expr){
+    public static List<XmlAnalysis.Node> getNode(XmlAnalysis.Node root,String expr){
         return findNode(new ArrayList<>(),root,expr);
     }
-    public static List<Node> findNode(List<Node> nodeList,Node node, String clazz){
+    public static List<XmlAnalysis.Node> findNode(List<XmlAnalysis.Node> nodeList,XmlAnalysis.Node node, String clazz){
         String[] classList = clazz.split(" ");
         String nowClass=classList[0];
         if (HtmlAnalysis.classCompare(node,nowClass)) {
@@ -28,7 +28,7 @@ public final class HtmlAnalysis {
         }
         if(node.getNodes()!=null) {
             for (int i = 0; i < node.getNodes().size(); i++) {
-                Node n = node.getNodes().get(i);
+                XmlAnalysis.Node n = node.getNodes().get(i);
                 findNode(nodeList,n, clazz);
             }
         }
@@ -52,8 +52,8 @@ public final class HtmlAnalysis {
         this.add(":reset");
         this.add(":submit");
     }};
-    private static boolean classCompare(Node node,String clazz2){
-        Matcher matcher=Pattern.compile("[:|#|\\.]([\\w|\\d|=|'|\"|\\(|\\)]*)|\\[\\S*?\\]|\\w+").matcher(clazz2);
+    private static boolean classCompare(XmlAnalysis.Node node,String clazz2){
+        Matcher matcher=Pattern.compile("[:|#|\\.]([\\w|\\d|=|'|\"|\\(|\\)|-]*)|\\[\\S*?\\]|\\w+").matcher(clazz2);
         while (matcher.find()){
             String group=matcher.group();
             switch (group.charAt(0)){
@@ -85,11 +85,17 @@ public final class HtmlAnalysis {
                     }
                     break;
                 case '.':
-                    String clazz;
-                    if(node.getAttributes()==null || (clazz=node.getAttributes().get("class"))==null ||!clazz.equals(group.substring(1))){
+                    String clazzStr;
+                    if(node.getAttributes()==null || (clazzStr=node.getAttributes().get("class"))==null){
                         return false;
                     }
-                    break;
+                    String[] clazzList=clazzStr.split(Str.SPACE);
+                    for(String clazz : clazzList){
+                        if(clazz.equals(group.substring(1))){
+                            return true;
+                        }
+                    }
+                    return false;
                 case '[':
                     String[] attrStr=group.substring(1,group.length()-1).split("=");
                     if(attrStr.length==1)return false;
@@ -117,7 +123,7 @@ public final class HtmlAnalysis {
      * @param node 节点
      * @return -1不匹配0匹配2没有匹配正则表达式
      */
-    private static final int isMatcher(Pattern pattern,String text,Node node){
+    private static final int isMatcher(Pattern pattern,String text,XmlAnalysis.Node node){
         Matcher matcher;
         if((matcher=pattern.matcher(text))!=null&&matcher.find()&&matcher.group().equals(text)){
             String val= Str.subString(text,"(",")");
