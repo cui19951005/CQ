@@ -18,12 +18,17 @@ public final class Timer {
         Timer.timerVector.get(id).interval=interval;
         return id;
     }
+    public static boolean isClose(int id){
+        TimerTaskThread timerTaskThread=Timer.timerVector.get(id);
+        return timerTaskThread.close;
+    }
     public static void close(int id){
         TimerTaskThread timerTaskThread=Timer.timerVector.get(id);
         timerTaskThread.close=true;
     }
     public interface TimerTask {
         void execute(int id);
+
     }
     private static class TimerTaskThread extends Thread{
         private boolean close;
@@ -42,11 +47,16 @@ public final class Timer {
             while (!this.close){
                 this.timerTask.execute(this.id);
                 try {
-                    Thread.sleep(interval);
+                    if(this.interval<0){
+                        break;
+                    }else {
+                        Thread.sleep(interval);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            this.close=true;
         }
     }
 }

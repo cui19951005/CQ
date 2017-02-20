@@ -14,25 +14,32 @@ public final class HtmlAnalysis {
         return XmlAnalysis.toObject(html);
     }
     public static List<XmlAnalysis.Node> getNode(XmlAnalysis.Node root,String expr){
-        return findNode(new ArrayList<>(),root,expr);
+        List<XmlAnalysis.Node> nodeList=new ArrayList<>();
+        findNode(nodeList,root,expr,0);
+        return nodeList;
     }
-    public static List<XmlAnalysis.Node> findNode(List<XmlAnalysis.Node> nodeList,XmlAnalysis.Node node, String clazz){
+    private static int findNode(List<XmlAnalysis.Node> nodeList,XmlAnalysis.Node node, String clazz,int last){
         String[] classList = clazz.split(" ");
         String nowClass=classList[0];
-        if (HtmlAnalysis.classCompare(node,nowClass)) {
+        Integer result=HtmlAnalysis.classCompare(node,nowClass,last);
+        if (result!=null&&result==0) {
             clazz= Str.join(" ", 1, classList.length - 1, classList);
             if(clazz.length()==0){
                 nodeList.add(node);
-                return nodeList;
+                return result+last;
             }
+        }else if(result==null){
+            result=0;
         }
+        result+=last;
         if(node.getNodes()!=null) {
+            int lastCount=0;
             for (int i = 0; i < node.getNodes().size(); i++) {
                 XmlAnalysis.Node n = node.getNodes().get(i);
-                findNode(nodeList,n, clazz);
+                lastCount=findNode(nodeList,n, clazz,lastCount);
             }
         }
-        return nodeList;
+        return result;
     }
     private final static Pattern EQ=Pattern.compile(":eq\\(\\d+\\)");
     private final static Pattern LT=Pattern.compile(":lt\\(\\d+\\)");
@@ -52,68 +59,75 @@ public final class HtmlAnalysis {
         this.add(":reset");
         this.add(":submit");
     }};
-    private static boolean classCompare(XmlAnalysis.Node node,String clazz2){
+    private static Integer classCompare(XmlAnalysis.Node node,String clazz2,int last){
         Matcher matcher=Pattern.compile("[:|#|\\.]([\\w|\\d|=|'|\"|\\(|\\)|-]*)|\\[\\S*?\\]|\\w+").matcher(clazz2);
         while (matcher.find()){
             String group=matcher.group();
             switch (group.charAt(0)){
                 case ':':
                     int result;
-                    if((result=HtmlAnalysis.isMatcher(HtmlAnalysis.EQ,group,node))<2
-                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.LT,group,node))<2
-                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.GT,group,node))<2
-                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.NOT,group,node))<2
-                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.EVEN,group,node))<2
-                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.ODD,group,node))<2
+                    if((result=HtmlAnalysis.isMatcher(HtmlAnalysis.EQ,group,node,last))<2
+                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.LT,group,node,last))<2
+                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.GT,group,node,last))<2
+                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.NOT,group,node,last))<2
+                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.EVEN,group,node,last))<2
+                            || (result=HtmlAnalysis.isMatcher(HtmlAnalysis.ODD,group,node,last))<2
                             ) {
-                        return result==0;
+                        if(result!=0){
+                            return 1;
+                        }else {
+                            return 0;
+                        }
                     }else{
                         for(String item : HtmlAnalysis.INPUT){
-                            if(item.equals(group) && HtmlAnalysis.classCompare(node,"[type='"+item.substring(1)+"']")){
-                                return true;
+                            if(item.equals(group) && HtmlAnalysis.classCompare(node,"[type='"+item.substring(1)+"']",0)==0){
+                                return 0;
                             }
                         }
                     }
                     if(!node.getName().equals(group.substring(1))){
-                        return false;
+                        return null;
                     }
                     break;
                 case '#':
                     String id;
                     if(node.getAttributes()==null || (id=node.getAttributes().get("id"))==null ||!id.equals(group.substring(1))){
-                        return false;
+                        return null;
                     }
                     break;
                 case '.':
                     String clazzStr;
                     if(node.getAttributes()==null || (clazzStr=node.getAttributes().get("class"))==null){
-                        return false;
+                        return null;
                     }
+                    boolean isTrue=false;
                     String[] clazzList=clazzStr.split(Str.SPACE);
                     for(String clazz : clazzList){
                         if(clazz.equals(group.substring(1))){
-                            return true;
+                            isTrue=true;
+                            break;
                         }
                     }
-                    return false;
+                    if(isTrue)continue;
+                    else return null;
                 case '[':
                     String[] attrStr=group.substring(1,group.length()-1).split("=");
-                    if(attrStr.length==1)return false;
+                    if(attrStr.length==1)return null;
                     String attrName=attrStr[0];
                     String value=attrStr[1].replace("'","").replace("\"","");
                     String attr;
                     if(node.getAttributes()==null || (attr=node.getAttributes().get(attrName))==null ||!attr.equals(value)){
-                        return false;
+                        return null;
                     }
                     break;
                 default:
                     if(!node.getName().equals(group)){
-                        return false;
+                        return null;
                     }
                     break;
             }
         }
-        return true;
+        return 0;
     }
 
     /**
@@ -123,31 +137,23 @@ public final class HtmlAnalysis {
      * @param node 节点
      * @return -1不匹配0匹配2没有匹配正则表达式
      */
-    private static final int isMatcher(Pattern pattern,String text,XmlAnalysis.Node node){
+    private static final int isMatcher(Pattern pattern,String text,XmlAnalysis.Node node,int count){
         Matcher matcher;
         if((matcher=pattern.matcher(text))!=null&&matcher.find()&&matcher.group().equals(text)){
             String val= Str.subString(text,"(",")");
             int number=Integer.valueOf(val==null?"0":val);
-            boolean isTrue=false;
-            for(int i=0;i<node.getParent().getNodes().size();i++){
-                if(node.getParent().getNodes().get(i).equals(node)){
-                    isTrue=true;
-                    if(HtmlAnalysis.EQ.equals(pattern)&&number!=i
-                            || HtmlAnalysis.LT.equals(pattern)&& number<=i
-                            || HtmlAnalysis.GT.equals(pattern)&& number>=i
-                            || HtmlAnalysis.NOT.equals(pattern)&&number==i
-                            || HtmlAnalysis.EVEN.equals(pattern)&& i%2!=0
-                            || HtmlAnalysis.ODD.equals(pattern)&& i%2==0
-                            ){
-                        return -1;
-                    }
-                }
-            }
-            if(isTrue){
-                return 0;
-            }else{
+            if(HtmlAnalysis.EQ.equals(pattern)&&number!=count
+                    || HtmlAnalysis.LT.equals(pattern)&& number<=count
+                    || HtmlAnalysis.GT.equals(pattern)&& number>=count
+                    || HtmlAnalysis.NOT.equals(pattern)&&number==count
+                    || HtmlAnalysis.EVEN.equals(pattern)&& count%2!=0
+                    || HtmlAnalysis.ODD.equals(pattern)&& count%2==0
+                    ){
                 return -1;
+            }else {
+                return 0;
             }
+
         } else{
             return 2;
         }

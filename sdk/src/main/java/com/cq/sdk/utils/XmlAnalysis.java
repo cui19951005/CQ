@@ -41,11 +41,11 @@ public final class XmlAnalysis {
         }
         if(attributeText!=null){
             Map<String,String> map=new HashMap<>();
-            Matcher matcher=Pattern.compile("\\w[\\w|\\S]*?=\".*?\"").matcher(attributeText);
+            Matcher matcher=Pattern.compile("\\w[\\w|\\S]*?=[\"|'].*?[\"|']").matcher(attributeText);
             while (matcher.find()){
                 String kV=matcher.group();
-                String[] array=kV.split("=");
-                map.put(array[0],array[1].substring(1,array[1].length()-1));
+                int split=kV.indexOf("=");
+                map.put(kV.substring(0,split),kV.substring(split+2,kV.length()-1));
             }
             node.setAttributes(map);
         }
@@ -81,8 +81,10 @@ public final class XmlAnalysis {
                 }
                 node.setText(sb.toString());
             }else {
-                node.setText(xml.substring(0,rightIndex));
-                node.setNodes(XmlAnalysis.getTagText(xml).stream().map(item -> {
+                StringBuffer sb=new StringBuffer();
+                List<String> xmlLIst=XmlAnalysis.getTagText(xml,sb);
+                node.setText(sb.toString());
+                node.setNodes(xmlLIst.stream().map(item -> {
                     Node n=new Node();
                     n.setParent(node);
                     return XmlAnalysis.analysis(n,item);
@@ -108,17 +110,23 @@ public final class XmlAnalysis {
      * @param xml
      * @return
      */
-    private static List<String> getTagText(String xml){
+    private static List<String> getTagText(String xml,StringBuffer sb){
         List<String> list=new ArrayList<>();
         while (true) {
-            String tag = Str.subString(xml, "<", ">", true);
+            //String tag = Str.subString(xml, "<", ">", true);
+            Matcher matcher=Pattern.compile("<[\\w\\d]").matcher(xml);
+            String tag=null;
+            if(matcher.find())tag=Str.subString(xml,matcher.group(),">",true);
             if(tag==null){
+                sb.append(xml);
                 return list;
             }else if(tag.charAt(tag.length()-2)=='/'){
                 list.add(tag);
                 xml=xml.substring(xml.indexOf("/>")+2);
                 continue;
             }
+            int tagIndex=xml.indexOf(tag);
+            sb.append(xml.substring(0,tagIndex));
             int endIndex = tag.indexOf(Str.SPACE);
             String endTag;
             if (endIndex != -1) {
@@ -128,16 +136,11 @@ public final class XmlAnalysis {
             }
             int index= Str.subStringInt(xml,tag.substring(0,endIndex==-1?tag.length()-1:endIndex),endTag);
             if(index!=-1) {
-                list.add(tag + xml.substring(xml.indexOf(tag) + tag.length(), index) + endTag);
+                list.add(tag + xml.substring( tagIndex+ tag.length(), index) + endTag);
                 xml = xml.substring(index + endTag.length());
             }else{
                 xml=xml.substring(xml.indexOf(tag)+tag.length());
-                int leftIndex=xml.indexOf("<");
-                if(leftIndex==-1){
-                    leftIndex=xml.length();
-                }
-                list.add(tag+xml.substring(0,leftIndex).replaceAll("\\s*", Str.EMPTY));
-                xml=xml.substring(leftIndex);
+                list.add(tag);
             }
         }
     }

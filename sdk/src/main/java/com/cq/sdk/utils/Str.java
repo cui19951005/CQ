@@ -1,6 +1,7 @@
 package com.cq.sdk.utils;
 
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 /**
  * Created by admin on 2016/9/2.
@@ -31,15 +32,19 @@ public final class Str {
         return text.substring(text.indexOf(left)+left.length(),text.indexOf(right));
     }
     public static final String subString(String text,String left,String right,boolean lr){
-        if(lr){
-            int leftIndex=text.indexOf(left);
-            int rightIndex=text.indexOf(right)+right.length();
-            if(leftIndex==-1 || rightIndex==-1){
+        if (lr) {
+            int leftIndex = text.indexOf(left);
+            int rightIndex = text.indexOf(right,leftIndex) + right.length();
+            if (leftIndex == -1 || rightIndex == -1) {
                 return null;
             }
-            return text.substring(leftIndex,rightIndex);
-        }else {
-            return Str.subString(text,left,right);
+            try {
+                return text.substring(leftIndex, rightIndex);
+            }catch (Exception e){
+                return  null;
+            }
+        } else {
+            return Str.subString(text, left, right);
         }
     }
     public static final String left(String text,String left){
