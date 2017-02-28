@@ -20,10 +20,10 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>central</id>
-			<name>central</name>
+			<id>aliyun-public</id>
+			<name>aliyun-public</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 			<releases><enabled>true</enabled></releases>
-			<url>http://central.maven.org/maven2</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<repository>
@@ -37,7 +37,7 @@
 	<distributionManagement>
 		<repository>
 			<id>local</id>
-			<url>file://F:\Java\mvn_repository</url>
+			<url>file://C:\Users\CYL\.m2\repository\</url>
 		</repository>
 	</distributionManagement>
 <dependencies>

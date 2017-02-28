@@ -99,4 +99,12 @@ public final class Str {
     public static final String decimal(BigDecimal bigDecimal,int decimal){
         return String.format("%."+decimal+"f",bigDecimal.doubleValue());
     }
+    public static String unicode(String unicode){
+        String[] array=unicode.split("////u");
+        StringBuffer sb=new StringBuffer();
+        for(int i=1;i<array.length;i++){
+            sb.append((char)(int)Integer.valueOf(array[i]));
+        }
+        return sb.toString();
+    }
 }

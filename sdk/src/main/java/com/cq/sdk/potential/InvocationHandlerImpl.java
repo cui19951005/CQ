@@ -38,18 +38,20 @@ public class InvocationHandlerImpl implements MethodInterceptor {
         enhancer.setCallback(this);
         enhancer.setClassLoader(this.object.getClass().getClassLoader());
         Object object = enhancer.create();
-        Stream.of(this.object.getClass().getDeclaredFields()).filter(f->(f.getModifiers() & Modifier.FINAL)==0 && (f.getModifiers() & Modifier.STATIC)==0).forEach(f->{
-            try {
-                Field field=object.getClass().getSuperclass().getDeclaredField(f.getName());
-                f.setAccessible(true);
-                field.setAccessible(true);
-                field.set(object,f.get(this.object));
-            } catch (NoSuchFieldException e) {
-                Logger.error("no find field",e);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        for(Field f : this.object.getClass().getDeclaredFields()){
+            if((f.getModifiers() & Modifier.FINAL)==0 && (f.getModifiers() & Modifier.STATIC)==0){
+                try {
+                    Field field=object.getClass().getSuperclass().getDeclaredField(f.getName());
+                    f.setAccessible(true);
+                    field.setAccessible(true);
+                    field.set(object,f.get(this.object));
+                } catch (NoSuchFieldException e) {
+                    Logger.error("no find field",e);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }
         return object;
     }
     @Override

@@ -2,18 +2,8 @@ package com.cq.sdk.utils;
 
 
 import com.google.gson.Gson;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
 import java.io.*;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -192,14 +182,11 @@ public final class Http {
     }
     public static String download(String location, String filePath, DownloadSchedule downloadSchedule)  {
         try {
-            Logger.info(location);
             FileOutputStream fileOutputStream;
             File file=new File(filePath);
             fileOutputStream = new FileOutputStream(file);
             URL url = new URL(location);
             URLConnection connection = url.openConnection();
-
-            connection.setConnectTimeout(60000);
             connection.setRequestProperty("Content-Type", "multipart/form-data");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 UBrowser/6.0.1471.913 Safari/537.36");
             connection.setRequestProperty("Content-Disposition","attachment;fileName="+file.getName());
@@ -224,7 +211,6 @@ public final class Http {
     }
 
     public static String download(String location, String encoding) throws IOException {
-        Logger.info(location);
         DownloadSchedule downloadSchedule = null;
         return new String(Http.download(location, downloadSchedule).getByteSet(), encoding);
     }

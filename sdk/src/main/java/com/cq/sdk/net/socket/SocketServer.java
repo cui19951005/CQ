@@ -29,13 +29,17 @@ public class SocketServer extends java.net.ServerSocket {
 
     }
     public void startup(SocketReceiveData receiveData){
-        Timer.open((acceptId)->{
+        Timer.open(new Timer.TimerTask() {
+            @Override
+            public void execute(int id) {
             try {
-                Socket socket=this.accept();
-                this.socketVector.add(socket);
+                Socket socket=SocketServer.this.accept();
+                SocketServer.this.socketVector.add(socket);
                 SocketSession socketSession=new SocketSession(socket,new HashMap());
                 receiveData.connection(socketSession);
-                Timer.open((streamId)->{
+                Timer.open(new Timer.TimerTask() {
+                    @Override
+                    public void execute(int streamId) {
                     try {
                         InputStream inputStream=socket.getInputStream();
                         byte[] bytes=new byte[8192];
@@ -62,16 +66,16 @@ public class SocketServer extends java.net.ServerSocket {
                         try {
                             socket.close();
                             Timer.close(streamId);
-                            this.socketVector.remove(socket);
+                            SocketServer.this.socketVector.remove(socket);
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
                     }
-                },0);
+                }},0);
             } catch (IOException e) {
                 Logger.error("server accept fail",e);
             }
-        },0);
+        }},0);
     }
 
     public String getEncoding() {

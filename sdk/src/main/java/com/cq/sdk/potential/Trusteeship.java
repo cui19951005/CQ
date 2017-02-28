@@ -54,12 +54,14 @@ public final class Trusteeship {
             if(entrance.method().length()>0){
                 this.mainMethod=mainClass.getName()+"."+entrance.method();
             }
-            Stream.of(mainClass.getDeclaredMethods()).filter(s->s.isAnnotationPresent(Execute.class)).limit(1).forEach(method->{
-                        Execute execute=method.getAnnotation(Execute.class);
-                        if(execute !=null){
-                            this.mainMethod=mainClass.getName()+"."+method.getName();
-                        }
-                    });
+            for(Method method : mainClass.getDeclaredMethods()){
+                if(method.isAnnotationPresent(Execute.class)){
+                    Execute execute=method.getAnnotation(Execute.class);
+                    if(execute !=null){
+                        this.mainMethod=mainClass.getName()+"."+method.getName();
+                    }
+                }
+            }
             this.injectionType=entrance.injectionType();
             this.addNetObject(mainClass);
             this.init();
@@ -77,14 +79,14 @@ public final class Trusteeship {
             annotationList.add(Service.class);
             annotationList.add(Component.class);
             annotationList.add(Repository.class);
-            Stream.of(netAddress.value()).forEach(ipPort->{
+            for(String ipPort : netAddress.value()){
                 String[] array=ipPort.split(":");
                 NetObject netObject=new NetObject(netAddress.port(),array[0],Integer.valueOf(array[1]));
                 netObject.messageHandle(this.objectMap);
                 this.netObjectList.add(netObject);
                 List<NetClass> list=netObject.getList(this.packagePath,annotationList);
                 ClassPool classPool=ClassPool.getDefault();
-                list.stream().forEach(netClass->{
+                for(NetClass netClass : list){
                     try {
                         CtClass ctClass = classPool.makeClass(netClass.getName()+"$");
                         CtField ctField=new CtField(classPool.get(netObject.getClass().getName()),"netObject",ctClass);
@@ -105,70 +107,72 @@ public final class Trusteeship {
                         for(int i=0;i<interfaceList.length;i++){
                             interfaceList[i]=classPool.get(netClass.getInterfaceName()[i]);
                             CtMethod[] ctMethods=interfaceList[i].getMethods();
-                            Stream.of(ctMethods).filter(method-> method.getModifiers()==Modifier.PUBLIC || method.getModifiers()==Modifier.ABSTRACT+Modifier.PUBLIC).forEach(item->{
-                                try {
-                                    CtMethod ctMethod = new CtMethod(item.getReturnType(), item.getName(), item.getParameterTypes(), ctClass);
-                                    sb.setLength(0);
-                                    sb.append("{");
-                                    sb.append("Object object=this.netObject.invoke(this.clazz+\".");
-                                    sb.append(ctMethod.getName());
-                                    if (ctMethod.getParameterTypes().length > 0) {
-                                        sb.append("\",new Object[]{");
-                                        for (int j = 0; j < ctMethod.getParameterTypes().length; j++) {
-                                            sb.append("$");
-                                            sb.append(j + 1);
-                                            if (j != ctMethod.getParameterTypes().length - 1) {
-                                                sb.append(",");
+                            for(CtMethod method : ctMethods){
+                                if(method.getModifiers()==Modifier.PUBLIC || method.getModifiers()==Modifier.ABSTRACT+Modifier.PUBLIC){
+                                    try {
+                                        CtMethod ctMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), ctClass);
+                                        sb.setLength(0);
+                                        sb.append("{");
+                                        sb.append("Object object=this.netObject.invoke(this.clazz+\".");
+                                        sb.append(ctMethod.getName());
+                                        if (ctMethod.getParameterTypes().length > 0) {
+                                            sb.append("\",new Object[]{");
+                                            for (int j = 0; j < ctMethod.getParameterTypes().length; j++) {
+                                                sb.append("$");
+                                                sb.append(j + 1);
+                                                if (j != ctMethod.getParameterTypes().length - 1) {
+                                                    sb.append(",");
+                                                }
+                                            }
+                                            sb.append("}");
+                                        } else {
+                                            sb.append("\",new Object[0]");
+                                        }
+                                        sb.append(");");
+                                        if (!ctMethod.getReturnType().getName().equals("void")) {
+                                            sb.append("return ");
+                                            if(ctMethod.getReturnType().isPrimitive()){
+                                                if(ctMethod.getReturnType().getName().equals("int")){
+                                                    sb.append("java.lang.Integer.valueOf(object.toString()).intValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("byte")){
+                                                    sb.append("java.lang.Byte.valueOf(object.toString()).byteValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("short")){
+                                                    sb.append("java.lang.Short.valueOf(object.toString()).shortValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("char")){
+                                                    sb.append("object.toString().toCharArray()[0];");
+                                                }else if(ctMethod.getReturnType().getName().equals("boolean")){
+                                                    sb.append("java.lang.Boolean.valueOf(object.toString()).booleanValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("float")){
+                                                    sb.append("java.lang.Float.valueOf(object.toString()).floatValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("double")){
+                                                    sb.append("java.lang.Double.valueOf(object.toString()).doubleValue();");
+                                                }else if(ctMethod.getReturnType().getName().equals("long")){
+                                                    sb.append("java.lang.Long.valueOf(object.toString()).longValue();");
+                                                }else {
+                                                    sb.append("object;");
+                                                }
+                                            }else{
+                                                if(ctMethod.getReturnType().getName().equals(String.class.getName())){
+                                                    sb.append("object.toString();");
+                                                }else {
+                                                    sb.append("object;");
+                                                }
                                             }
                                         }
                                         sb.append("}");
-                                    } else {
-                                        sb.append("\",new Object[0]");
+                                        ctMethod.setBody(sb.toString());
+                                        ctClass.addMethod(ctMethod);
+                                    }catch (Exception e){
+                                        e.printStackTrace();
                                     }
-                                    sb.append(");");
-                                    if (!ctMethod.getReturnType().getName().equals("void")) {
-                                        sb.append("return ");
-                                        if(ctMethod.getReturnType().isPrimitive()){
-                                            if(ctMethod.getReturnType().getName().equals("int")){
-                                                sb.append("java.lang.Integer.valueOf(object.toString()).intValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("byte")){
-                                                sb.append("java.lang.Byte.valueOf(object.toString()).byteValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("short")){
-                                                sb.append("java.lang.Short.valueOf(object.toString()).shortValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("char")){
-                                                sb.append("object.toString().toCharArray()[0];");
-                                            }else if(ctMethod.getReturnType().getName().equals("boolean")){
-                                                sb.append("java.lang.Boolean.valueOf(object.toString()).booleanValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("float")){
-                                                sb.append("java.lang.Float.valueOf(object.toString()).floatValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("double")){
-                                                sb.append("java.lang.Double.valueOf(object.toString()).doubleValue();");
-                                            }else if(ctMethod.getReturnType().getName().equals("long")){
-                                                sb.append("java.lang.Long.valueOf(object.toString()).longValue();");
-                                            }else {
-                                                sb.append("object;");
-                                            }
-                                        }else{
-                                            if(ctMethod.getReturnType().getName().equals(String.class.getName())){
-                                                sb.append("object.toString();");
-                                            }else {
-                                                sb.append("object;");
-                                            }
-                                        }
-                                    }
-                                    sb.append("}");
-                                    ctMethod.setBody(sb.toString());
-                                    ctClass.addMethod(ctMethod);
-                                }catch (Exception e){
-                                    e.printStackTrace();
                                 }
-                            });
+                            }
                         }
                         ctClass.setInterfaces(interfaceList);
                         AnnotationsAttribute annotationsAttribute=new AnnotationsAttribute(ctClass.getClassFile().getConstPool(),AnnotationsAttribute.visibleTag);
-                        Stream.of(netClass.getAnnotationList()).forEach(annotation->{
+                        for(String annotation : netClass.getAnnotationList()){
                             annotationsAttribute.addAnnotation(new Annotation(annotation,ctClass.getClassFile().getConstPool()));
-                        });
+                        }
                         ctClass.getClassFile().addAttribute(annotationsAttribute);
                         this.addAutowiredManager(ctClass.toClass());
                     } catch (NotFoundException e) {
@@ -182,8 +186,9 @@ public final class Trusteeship {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-                });
-            });
+                }
+            }
+
         }
     }
     private void init(){
@@ -192,17 +197,19 @@ public final class Trusteeship {
             String absPath=this.rootDir+packagePath.replace(".","/").replace("*","");
             LoadProperties loadProperties= (LoadProperties) this.mainClass.getAnnotation(LoadProperties.class);
             if(loadProperties!=null){//加载属性文件
-                Stream.of(loadProperties.value()).filter(file->Thread.currentThread().getClass().getResource("/"+file)!=null).forEach(file->{
-                    try {
-                        Properties properties = new Properties();
-                        properties.load(new FileInputStream(this.getClass().getResource("/" + file).getFile()));
-                        this.propertiesList.add(properties);
-                    }catch (FileNotFoundException e) {
-                        Logger.error("properties file not find",e);
-                    } catch (IOException e) {
-                        Logger.error("properties file stream open error",e);
+                for(String file : loadProperties.value()){
+                    if(Thread.currentThread().getClass().getResource("/"+file)!=null){
+                        try {
+                            Properties properties = new Properties();
+                            properties.load(new FileInputStream(this.getClass().getResource("/" + file).getFile()));
+                            this.propertiesList.add(properties);
+                        }catch (FileNotFoundException e) {
+                            Logger.error("properties file not find",e);
+                        } catch (IOException e) {
+                            Logger.error("properties file stream open error",e);
+                        }
                     }
-                });
+                }
             }
             this.addManager(this.mainClass);
             this.loadClass(Thread.currentThread().getClass().getResource("/"+this.getClass().getPackage().getName().replace(".","/")).getFile());

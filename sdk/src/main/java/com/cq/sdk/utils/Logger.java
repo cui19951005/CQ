@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
  * Created by CuiYaLei on 2016/8/20.
  */
 public final class Logger {
-    static FileOutputStream outputStream=null;
     public static final void error(Object object) {
         error(object,null);
     }
@@ -39,10 +38,6 @@ public final class Logger {
                     ":",String.valueOf(nowClass.getLineNumber()),
                     "):",msg(object)
                     );
-            if (outputStream == null) {
-                outputStream = new FileOutputStream(System.getProperty("user.dir")+"/"+new Time().toString("yyyy-MM-dd")+".log");
-            }
-            outputStream.write((Str.concat(prefix,"\r\n").getBytes("utf-8")));
             return prefix;
         }catch (Exception e){
             Logger.error(e);

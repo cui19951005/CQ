@@ -17,14 +17,7 @@ import java.util.Map;
 //@NetAddress(port=2020,value = "localhost:2021")
 public class Main {
     public static void main(String[] args) throws Exception{
-        Timer.open(new Timer.TimerTask() {
-            @Override
-            public void execute(int id) {
-                File file=new File("e:/123.apk");
-                Http.download("http://121.42.139.147/app/10008/4/?f=118&r=118-1487483792-634805-4954&m=10d192ea02493481a275a673bad98c91&p=3054651401&d=http://imtt.dd.qq.com/16891/0B558C168BF35B5C2E37090CFDAFDD93.apk",file.getAbsolutePath(),null);
-                Logger.info(file.length());
-            }
-        },-1);
+
 
     }
 }
